@@ -3,6 +3,7 @@ package Rodney::Dispatcher;
 use strict;
 use warnings;
 use Rodney::Command::Recent;
+use Rodney::Command::Noscum;
 use Rodney::Command::Gamesby;
 use Rodney::Command::Rot13;
 use Rodney::Command::Ascensions;
@@ -27,6 +28,14 @@ on qr{^!r\s+(.*)}i => sub {
 
 on qr{^!r(\w+)\b\s*(.*)}i => sub {
     Rodney::Command::Recent->run(@_, "!$1 $2")
+};
+
+on qr{^!noscum\s+(.*)}i => sub {
+    Rodney::Command::Noscum->run(@_, $1)
+};
+
+on qr{^!noscum(\w+)\b\s*(.*)}i => sub {
+    Rodney::Command::Noscum->run(@_, "!$1 $2")
 };
 
 my @rules;
