@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Rodney::Command::Recent;
 use Rodney::Command::Noscum;
+use Rodney::Command::Asconly;
 use Rodney::Command::Gamesby;
 use Rodney::Command::Rot13;
 use Rodney::Command::Ascensions;
@@ -36,6 +37,14 @@ on qr{^!noscum\s+(.*)}i => sub {
 
 on qr{^!noscum(\w+)\b\s*(.*)}i => sub {
     Rodney::Command::Noscum->run(@_, "!$1 $2")
+};
+
+on qr{^!asconly\s+(.*)}i => sub {
+    Rodney::Command::Asconly->run(@_, $1)
+};
+
+on qr{^!asconly(\w+)\b\s*(.*)}i => sub {
+    Rodney::Command::Asconly->run(@_, "!$1 $2")
 };
 
 my @rules;
