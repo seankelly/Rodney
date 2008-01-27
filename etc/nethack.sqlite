@@ -1,0 +1,25 @@
+CREATE TABLE games (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  ,
+  player varchar NOT NULL  ,
+  version varchar(10) NOT NULL  ,
+  score integer NOT NULL DEFAULT 0 ,
+  dungeon varchar(20) NOT NULL  ,
+  curlvl integer NOT NULL  ,
+  maxlvl integer NOT NULL  ,
+  curhp integer NOT NULL  ,
+  maxhp integer NOT NULL  ,
+  deaths integer NOT NULL  ,
+  enddate varchar(20) NOT NULL  ,
+  startdate varchar(20) NOT NULL  ,
+  uid integer NOT NULL  ,
+  role varchar(3) NOT NULL  ,
+  race varchar(3) NOT NULL  ,
+  gender varchar(3) NOT NULL  ,
+  alignment varchar(3) NOT NULL  ,
+  death varchar NOT NULL  ,
+  ascended boolean NOT NULL DEFAULT 'f'
+);
+CREATE TABLE players (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  ,
+  name varchar NOT NULL
+);
