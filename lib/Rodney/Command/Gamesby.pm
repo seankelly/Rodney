@@ -39,10 +39,10 @@ sub gamesby {
         ++$quits      if $game->quit;
         ++$escapes    if $game->escaped;
 
-        $livesaves += $game->livesaves;
+        $lifesaves += $game->lifesaves;
 
-        $start ||= $game->started;
-        $end = $game->ended;
+        $start ||= $game->startdate;
+        $end = $game->enddate;
 
         $high = $game->score
             if !defined($high) || $game->score > $high;
