@@ -114,6 +114,11 @@ sub ended {
     $self->_inflate_date($self->ended);
 }
 
+sub is_scum {
+    my $self = shift;
+    $self->score < 1000 && ($self->quit || $self->escaped);
+}
+
 sub _inflate_date {
     my $self = shift;
     my $date = shift;
