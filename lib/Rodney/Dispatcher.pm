@@ -25,7 +25,7 @@ on qr{^!r\s+(.*)}i => sub {
     Rodney::Command::Recent->run(@_, $1)
 };
 
-on qr{^!r(asc|gamesby)\b\s*(.*)}i => sub {
+on qr{^!r(\w+)\b\s*(.*)}i => sub {
     Rodney::Command::Recent->run(@_, "!$1 $2")
 };
 
