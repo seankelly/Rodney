@@ -43,6 +43,11 @@ sub games {
     my $args = shift;
 
     my $games = Rodney::GameCollection->new(handle => $args->{handle});
+
+    for (@{ $args->{games_callback} || [] }) {
+        $_->($self, $games);
+    }
+
     return $games;
 }
 
