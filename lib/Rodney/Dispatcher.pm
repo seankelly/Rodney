@@ -11,7 +11,7 @@ use Rodney::Command::Ascensions;
 
 sub on;
 
-on qr{^!gamesby\b}i => sub {
+on qr{^!g(?:ames(?:by)?)?\b}i => sub {
     Rodney::Command::Gamesby->run(@_)
 };
 
