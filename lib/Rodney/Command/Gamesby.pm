@@ -28,12 +28,12 @@ sub gamesby {
 
     undef $nick;
 
-    my ($games, $start, $end, $high, $ascensions, $deaths, $lifesaves, $quits, $escapes);
+    my ($start, $end, $high, $ascensions, $deaths,
+        $lifesaves, $quits, $escapes);
 
     while (my $game = $games->next) {
         $nick ||= $game->player->name;
 
-        ++$games;
         ++$ascensions if $game->ascended;
         ++$deaths     if $game->died;
         ++$quits      if $game->quit;
@@ -57,9 +57,9 @@ sub gamesby {
 
     return sprintf '%s has played %s, between %s and %s, highest score %s, %s.',
         $nick,
-        $self->plural($games, 'game'),
-        $start->ymd,
-        $end->ymd,
+        $self->plural($games->count, 'game'),
+        $start,
+        $end,
         $high,
         join ', ', @parts;
 }
