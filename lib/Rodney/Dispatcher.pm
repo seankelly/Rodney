@@ -23,6 +23,8 @@ on qr{^!rot13\s+(.*)}i => sub {
     Rodney::Command::Rot13->run(@_, text => $1)
 };
 
+# meta commands
+
 on qr{^!r\s+(.*)}i => sub {
     Rodney::Command::Recent->run(@_, $1)
 };
