@@ -24,18 +24,27 @@ sub run {
         value  => 1,
     );
 
-    $self->ascensions($ascs, $games, $nick);
+    $self->ascensions($args, $ascs, $games, $nick);
 }
 
 sub ascensions {
     my $self  = shift;
+    my $args  = shift;
     my $ascs  = shift;
     my $games = shift;
     my $nick  = shift;
 
-    return "No games for $nick." if $games->count == 0;
+    if ($games->count == 0) {
+        return "No matches for $nick." if $args->{games_modified};
+        return "No games for $nick.";
+    }
+
     $nick = $games->first->player->name;
-    return "No ascensions for $nick." if $ascs->count == 0;
+
+    if ($ascs->count == 0) {
+        return "No matches for $nick." if $args->{games_modified};
+        return "No ascensions for $nick.";
+    }
 
     my %role;
 

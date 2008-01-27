@@ -45,6 +45,7 @@ sub games {
     my $games = Rodney::GameCollection->new(handle => $args->{handle});
 
     for (@{ $args->{games_callback} || [] }) {
+        $args->{games_modified}++;
         $_->($self, $games);
     }
 

@@ -16,15 +16,19 @@ sub run {
         value  => $nick,
     );
 
-    $self->gamesby($games, $nick);
+    $self->gamesby($args, $games, $nick);
 }
 
 sub gamesby {
     my $self  = shift;
+    my $args  = shift;
     my $games = shift;
     my $nick  = shift;
 
-    return "No games for $nick." if $games->count == 0;
+    if ($games->count == 0) {
+        return "No matches for $nick." if $args->{games_modified};
+        return "No games for $nick.";
+    }
 
     undef $nick;
 
