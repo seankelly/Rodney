@@ -12,7 +12,7 @@ on qr{^!gamesby\b}i => sub {
     Rodney::Command::Gamesby->run(@_)
 };
 
-on qr{^!asc(?:ensions?)\b}i => sub {
+on qr{^!asc(?:ensions?)?\b}i => sub {
     Rodney::Command::Ascensions->run(@_)
 };
 
