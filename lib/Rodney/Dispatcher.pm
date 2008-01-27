@@ -4,11 +4,21 @@ use strict;
 use warnings;
 use Rodney::Command::Gamesby;
 use Rodney::Command::Rot13;
+use Rodney::Command::Ascensions;
 
 sub on;
 
-on qr{^!gamesby\b}i => sub { Rodney::Command::Gamesby->run(@_) };
-on qr{^!rot13\s+(.*)}i => sub { Rodney::Command::Rot13->run(@_, text => $1) };
+on qr{^!gamesby\b}i => sub {
+    Rodney::Command::Gamesby->run(@_)
+};
+
+on qr{^!asc(?:ensions?)\b}i => sub {
+    Rodney::Command::Ascensions->run(@_)
+};
+
+on qr{^!rot13\s+(.*)}i => sub {
+    Rodney::Command::Rot13->run(@_, text => $1)
+};
 
 my @rules;
 sub on {
