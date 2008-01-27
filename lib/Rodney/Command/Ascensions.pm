@@ -51,7 +51,7 @@ sub ascensions {
         $nick,
         $self->plural($ascs->count, 'ascension'),
         $self->plural($games->count, 'game'),
-        $ascs->count / $games->count,
+        100 * $ascs->count / $games->count,
         join ' ', @parts;
 }
 
