@@ -2,6 +2,7 @@
 package Rodney::Command;
 use strict;
 use warnings;
+use Rodney::Game;
 
 =head2 target Args
 
@@ -28,7 +29,8 @@ sub games {
     my $self = shift;
     my $args = shift;
 
-    return bless [], 'Rodney::GameCollection';
+    my $games = Rodney::GameCollection->new(handle => $args->{handle});
+    return $games;
 }
 
 =head2 plural count, singular[, plural]
