@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-package Rodney::Command::Ascension;
+package Rodney::Command::Ascensions;
 use strict;
 use warnings;
 use parent 'Rodney::Command';
