@@ -5,7 +5,8 @@ use inc::Module::Install;
 name           'Rodney';
 all_from       'lib//Rodney.pm';
 
-requires       '';
+requires       'Bot::BasicBot';
+requires       'parent';
 
 build_requires 'Test::More';
 
