@@ -2,6 +2,7 @@
 package Rodney::Dispatcher;
 use strict;
 use warnings;
+use Rodney::Command::Recent;
 use Rodney::Command::Gamesby;
 use Rodney::Command::Rot13;
 use Rodney::Command::Ascensions;
@@ -18,6 +19,10 @@ on qr{^!asc(?:ensions?)?\b}i => sub {
 
 on qr{^!rot13\s+(.*)}i => sub {
     Rodney::Command::Rot13->run(@_, text => $1)
+};
+
+on qr{^!r\s+(.*)}i => sub {
+    Rodney::Command::Recent->run(@_, $1)
 };
 
 my @rules;
