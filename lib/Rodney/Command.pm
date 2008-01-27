@@ -44,7 +44,23 @@ sub plural {
     my $singular = shift;
     my $plural = shift || "${singular}s";
 
-    return $count == 1 ? $singular : $plural;
+    return $count == 1 ? "1 $singular" : "$count $plural";
+}
+
+=head2 once count
+
+Returns a string of the form "once", "twice", "thrice", or "N times".
+
+=cut
+
+sub once {
+    my $self = shift;
+    my $count = shift;
+
+    return "once"   if $count == 1;
+    return "twice"  if $count == 2;
+    return "thrice" if $count == 3;
+    return "$count times";
 }
 
 1;

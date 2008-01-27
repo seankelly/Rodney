@@ -49,11 +49,11 @@ sub gamesby {
     }
 
     my @parts;
-    push @parts, "ascended $ascensions" if $ascensions;
-    push @parts, "died $deaths"         if $deaths;
-    push @parts, "livesaved $lifesaves" if $lifesaves;
-    push @parts, "quit $quits"          if $quits;
-    push @parts, "escaped $escapes"     if $escapes;
+    push @parts, "ascended "  . $self->once($ascensions) if $ascensions;
+    push @parts, "died "      . $self->once($deaths)     if $deaths;
+    push @parts, "lifesaved " . $self->once($lifesaves)  if $lifesaves;
+    push @parts, "quit "      . $self->once($quits)      if $quits;
+    push @parts, "escaped "   . $self->once($escapes)    if $escapes;
 
     return sprintf '%s has played %s, between %s and %s, highest score %s, %s.',
         $nick,
