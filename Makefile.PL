@@ -7,6 +7,9 @@ all_from       'lib//Rodney.pm';
 
 requires       'Bot::BasicBot';
 requires       'parent';
+requires       'Jifty::DBI';
+requires       'NetHack::Logfile';
+requires       'DBD::SQLite';
 
 build_requires 'Test::More';
 
