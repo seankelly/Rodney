@@ -15,7 +15,7 @@ sub target {
     my $args = shift;
 
     # this can't be just "\b\w+\b" because "-Mal" is not a nick
-    return $1 if $args->{message} =~ /(?:^| )(\w+)(?: |$)/;
+    return $1 if $args->{body} =~ /(?:^| )(\w+)(?: |$)/;
     return $args->{who};
 }
 
