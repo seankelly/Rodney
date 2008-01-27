@@ -49,9 +49,25 @@ sub plural {
     return $count == 1 ? "1 $singular" : "$count $plural";
 }
 
-=head2 once count
+=head2 ntimes count
 
 Returns a string of the form "once", "twice", "thrice", or "N times".
+
+=cut
+
+sub ntimes {
+    my $self = shift;
+    my $count = shift;
+
+    return "once"   if $count == 1;
+    return "twice"  if $count == 2;
+    return "thrice" if $count == 3;
+    return "$count times";
+}
+
+=head2 once count
+
+Returns a string of the form "once", "twice", "thrice", or "N".
 
 =cut
 
@@ -62,7 +78,7 @@ sub once {
     return "once"   if $count == 1;
     return "twice"  if $count == 2;
     return "thrice" if $count == 3;
-    return "$count times";
+    return $count;
 }
 
 1;
