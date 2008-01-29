@@ -8,6 +8,7 @@ use Rodney::Command::Asconly;
 use Rodney::Command::Gamesby;
 use Rodney::Command::Rot13;
 use Rodney::Command::Ascensions;
+use Rodney::Command::Num;
 
 sub on;
 
@@ -17,6 +18,10 @@ on qr{^!g(?:ames(?:by)?)?\b}i => sub {
 
 on qr{^!asc(?:ensions?)?\b}i => sub {
     Rodney::Command::Ascensions->run(@_)
+};
+
+on qr{^!num\b}i => sub {
+    Rodney::Command::Num->run(@_)
 };
 
 on qr{^!rot13\s+(.*)}i => sub {
