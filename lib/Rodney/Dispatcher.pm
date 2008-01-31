@@ -9,6 +9,7 @@ use Rodney::Command::Gamesby;
 use Rodney::Command::Rot13;
 use Rodney::Command::Ascensions;
 use Rodney::Command::Num;
+use Rodney::Command::Grep;
 
 sub on;
 
@@ -22,6 +23,10 @@ on qr{^!asc(?:ensions?)?\b}i => sub {
 
 on qr{^!num\b}i => sub {
     Rodney::Command::Num->run(@_)
+};
+
+on qr{^!grep\s*(.*)?}i => sub {
+    Rodney::Command::Grep->run(@_, text => $1)
 };
 
 on qr{^!rot13\s+(.*)}i => sub {
