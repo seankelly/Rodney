@@ -137,6 +137,58 @@ sub _inflate_date {
     );
 }
 
+sub to_string {
+    my $self = shift;
+    my $verbosity = shift || 0;
+
+    my $result = sprintf '%s (%s %s %s %s), %s, %d points',
+        $self->player->name,
+        $self->role, $self->race, $self->gender, $self->alignment,
+        $self->death, $self->score;
+
+    if ($verbosity > 2) {
+        $result .= ', HP ' . $self->curhp;
+        $result .= '(' . $self->maxhp . ')' if $self->maxhp != $self->curhp;
+    }
+
+    if ($verbosity > 1) {
+        $result .= ', ';
+        if ($self->death eq 'ascended') {
+            $result .= 'max depth: ' . $self->maxlvl;
+        }
+        else {
+            if ($self->curlvl == -10) {
+                $result .= 'Heaven';
+            }
+            elsif ($self->curlvl < 0) {
+                $result .= 'Foo Plane';
+            }
+            else {
+                $result .= sprintf 'level %d (%s)', $self->curlvl,
+                            ucfirst $self->dungeon;
+            }
+
+            if ($self->curlvl != $self->maxlvl) {
+                $result .= ', max depth: ' . $self->maxlvl;
+            }
+        }
+    }
+
+    if ($verbosity > 3 && $self->lifesaves) {
+        $result .= ', died ' . Rodney::Command::ntimes(0, $self->lifesaves);
+    }
+
+    if ($verbosity > 4) {
+        $result .= ', between ' . $self->startdate . ' and ' . $self->enddate;
+    }
+
+    if ($verbosity > 5) {
+        $result .= ' on NH v' . $self->version;
+    }
+
+    return $result;
+}
+
 package Rodney::GameCollection;
 use parent 'Jifty::DBI::Collection';
 
