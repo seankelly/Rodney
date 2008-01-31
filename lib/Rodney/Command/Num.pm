@@ -41,6 +41,12 @@ sub run {
             per_page     => 1,
         ) if $num;
     }
+    # ROFL HAHA
+    # yeah, sort it by date
+    $games->order_by(
+        column => 'enddate',
+        order  => 'asc',
+    );
 
     if ($num)
     {
