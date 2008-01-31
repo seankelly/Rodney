@@ -2,6 +2,7 @@ package Rodney::Game;
 use strict;
 use warnings;
 use DateTime;
+use Rodney::Util qw/ntimes/;
 
 use Jifty::DBI::Schema;
 use Jifty::DBI::Record schema {
@@ -175,7 +176,7 @@ sub to_string {
     }
 
     if ($verbosity > 3 && $self->lifesaves) {
-        $result .= ', died ' . Rodney::Command::ntimes(0, $self->lifesaves);
+        $result .= ', died ' . ntimes(0, $self->lifesaves);
     }
 
     if ($verbosity > 4) {

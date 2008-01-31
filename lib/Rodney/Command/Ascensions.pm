@@ -3,6 +3,7 @@ package Rodney::Command::Ascensions;
 use strict;
 use warnings;
 use parent 'Rodney::Command';
+use Rodney::Util qw/plural/;
 
 sub run {
     my $self = shift;
@@ -58,8 +59,8 @@ sub ascensions {
 
     return sprintf '%s has %s in %s (%.2f%%): %s',
         $nick,
-        $self->plural($ascs->count, 'ascension'),
-        $self->plural($games->count, 'game'),
+        plural($ascs->count, 'ascension'),
+        plural($games->count, 'game'),
         100 * $ascs->count / $games->count,
         join ' ', @parts;
 }

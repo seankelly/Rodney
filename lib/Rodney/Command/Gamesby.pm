@@ -3,6 +3,7 @@ package Rodney::Command::Gamesby;
 use strict;
 use warnings;
 use parent 'Rodney::Command';
+use Rodney::Util qw/plural once/;
 
 sub run {
     my $self = shift;
@@ -53,17 +54,17 @@ sub gamesby {
     }
 
     my @parts;
-    push @parts, "ascended "  . $self->once($ascensions) if $ascensions;
-    push @parts, "died "      . $self->once($deaths)     if $deaths;
-    push @parts, "lifesaved " . $self->once($lifesaves)  if $lifesaves;
-    push @parts, "quit "      . $self->once($quits)      if $quits;
-    push @parts, "escaped "   . $self->once($escapes)    if $escapes;
+    push @parts, "ascended "  . once($ascensions) if $ascensions;
+    push @parts, "died "      . once($deaths)     if $deaths;
+    push @parts, "lifesaved " . once($lifesaves)  if $lifesaves;
+    push @parts, "quit "      . once($quits)      if $quits;
+    push @parts, "escaped "   . once($escapes)    if $escapes;
 
     my $date = $start eq $end ? "on $start" : "between $start and $end";
 
     return sprintf '%s has played %s, %s, highest score %s, %s.',
         $nick,
-        $self->plural($games->count, 'game'),
+        plural($games->count, 'game'),
         $date,
         $high,
         join ', ', @parts;

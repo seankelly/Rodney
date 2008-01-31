@@ -52,53 +52,5 @@ sub games {
     return $games;
 }
 
-=head2 plural count, singular[, plural]
-
-Returns a string of the form "N foos". The plural is optional, if it's absent
-an "s" will be appended to the singular.
-
-=cut
-
-sub plural {
-    my $self = shift;
-    my $count = shift;
-    my $singular = shift;
-    my $plural = shift || "${singular}s";
-
-    return $count == 1 ? "1 $singular" : "$count $plural";
-}
-
-=head2 ntimes count
-
-Returns a string of the form "once", "twice", "thrice", or "N times".
-
-=cut
-
-sub ntimes {
-    my $self = shift;
-    my $count = shift;
-
-    return "once"   if $count == 1;
-    return "twice"  if $count == 2;
-    return "thrice" if $count == 3;
-    return "$count times";
-}
-
-=head2 once count
-
-Returns a string of the form "once", "twice", "thrice", or "N".
-
-=cut
-
-sub once {
-    my $self = shift;
-    my $count = shift;
-
-    return "once"   if $count == 1;
-    return "twice"  if $count == 2;
-    return "thrice" if $count == 3;
-    return $count;
-}
-
 1;
 
