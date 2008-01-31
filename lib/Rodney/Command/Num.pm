@@ -44,7 +44,14 @@ sub run {
 
     if ($num)
     {
-        $result = 'Found the game! (demunge here)';
+        if ($games->first)
+        {
+            $result = $games->first->to_string(100);
+        }
+        else
+        {
+            $result = 'Game not found.';
+        }
     }
     elsif ($games->count > 1)
     {
@@ -55,7 +62,7 @@ sub run {
     }
     else
     {
-        $result = 'No game found.';
+        $result = 'No games found.';
     }
     return $result;
 }
