@@ -59,7 +59,7 @@ sub Grep {
 
     my $nick = $self->target($args);
     my %regex = regex($opts->{text});
-    print Dumper(\%regex);
+    #print Dumper(\%regex);
 
     # first check that something was given...
     return "Syntax is: !grep PERSON /DEATH/" if @{$regex{regex}} == 0;
