@@ -36,11 +36,13 @@ sub run {
             column => 'player',
             value  => $nick
         );
-        if ($num)
-        {
-        }
+        $games->set_page_info(
+            current_page => $num,
+            per_page     => 1,
+        ) if $num;
     }
-    if ($games->count == 1)
+
+    if ($num)
     {
         $result = 'Found the game! (demunge here)';
     }
