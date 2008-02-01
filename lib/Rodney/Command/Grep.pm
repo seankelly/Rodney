@@ -30,12 +30,22 @@ sub regex {
         my $regex = $4;
         push @regex, [$type, $regex, $5, $1];
     }
-    if ($message =~ s!(/([^/]*)/([ir]*))!!) {
-        push @regex, ['death', $2, $3, $1];
+    if ($message =~ s#((!)?/([^/]*)/([ir]*))##) {
+        push @regex, ['death', $3, $4, $2, $1];
     }
 
     if (@regex == 0 && @sort == 0 && length($message) > 0) {
-        @regex = ['death', $message, "", "/$message/"];
+        my $first = substr $message, 0, 1;
+        if ($first eq '!') {
+            # doesn't matter if sort is included
+            # just need regex pointing to an empty array
+            return (regex => []) if length $message == 1;
+            $message = substr $message, 1;
+        }
+        else {
+            $first = undef;
+        }
+        @regex = ['death', $message, "", $first, "/$message/"];
         $message = '';
     }
 
@@ -77,7 +87,9 @@ sub Grep {
         $games->limit(
             column   => $_->[0],
             value    => $_->[1],
-            operator => ($_->[2] =~ /i/) ? '~*' : '~',
+            # this is ugly, I know!
+            operator => ($_->[3] ? '!' : '')
+                        . ($_->[2] =~ /i/ ? '~*' : '~'),
         );
     }
     # and then sorting..
