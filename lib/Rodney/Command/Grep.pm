@@ -10,7 +10,6 @@ sub run {
     my %opts = @_;
 
     my $games = $self->games($args);
-    $args->{handle}->clear_sql_statement_log;
 
     $self->Grep($args, $games, \%opts);
 }
@@ -44,7 +43,7 @@ sub regex {
 }
 
 sub Grep {
-    use Data::Dumper;
+    #use Data::Dumper;
     my $self  = shift;
     my $args  = shift;
     my $games = shift;
