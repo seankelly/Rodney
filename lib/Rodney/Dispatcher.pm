@@ -25,8 +25,8 @@ on qr{^!num\b}i => sub {
     Rodney::Command::Num->run(@_)
 };
 
-on qr{^!grep\s*(.*)?}i => sub {
-    Rodney::Command::Grep->run(@_, text => $1)
+on qr{^!grep(\s+(.*))?$}i => sub {
+    Rodney::Command::Grep->run(@_, text => $2)
 };
 
 on qr{^!rot13\s+(.*)}i => sub {

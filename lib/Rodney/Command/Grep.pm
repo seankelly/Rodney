@@ -59,7 +59,10 @@ sub Grep {
     my $games = shift;
     my $opts  = shift;
 
-    my $NAO = $args->{body} =~ s/\*//;
+    # first check that something was given...
+    return "Syntax is: !grep PERSON /DEATH/" unless $opts->{text};
+
+    my $NAO = $opts->{text} =~ s/\*//;
     my $sort;
 
     my %fields = map { $_ => 1 }
@@ -68,10 +71,9 @@ sub Grep {
 
     my $nick = $self->target($args);
     my %regex = regex($opts->{text});
+    return "Syntax is: !grep PERSON /DEATH/" unless @{$regex{regex}} > 0;
     #print Dumper(\%regex);
 
-    # first check that something was given...
-    return "Syntax is: !grep PERSON /DEATH/" if @{$regex{regex}} == 0;
     # next check that the fields are valid
     for (@{$regex{regex}},@{$regex{sort}}) {
         next if $fields{$_->[0]};
