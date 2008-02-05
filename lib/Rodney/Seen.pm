@@ -9,8 +9,8 @@ use Jifty::DBI::Record schema {
         type is 'varchar',
         is mandatory;
 
-    column time =>
-        type is 'integer',
+    column lastseen =>
+        type is 'timestamp',
         is mandatory;
 
     column message =>
@@ -21,7 +21,7 @@ use Jifty::DBI::Record schema {
 sub seen {
     my $self = shift;
     my %args = (
-        time => time,
+        lastseen => ~~localtime,
         @_,
     );
 
@@ -32,12 +32,12 @@ sub seen {
     unless ($seen->nick) {
         return $seen->create(
             nick => $args{nick},
-            time => $args{time},
+            lastseen  => $args{lastseen},
             message => $args{message},
         );
     };
 
-    $seen->set_time($args{time});
+    $seen->set_lastseen($args{lastseen});
     $seen->set_message($args{message});
 }
 
