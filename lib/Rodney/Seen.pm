@@ -25,9 +25,11 @@ sub seen {
         @_,
     );
 
+
     my $seen = Rodney::Seen->new(handle => $args{handle});
 
-    $seen->load_by_cols(nick => $args{nick}) or do {
+    $seen->load_by_cols(nick => $args{nick});
+    unless ($seen->nick) {
         return $seen->create(
             nick => $args{nick},
             time => $args{time},
