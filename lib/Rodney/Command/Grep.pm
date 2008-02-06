@@ -8,6 +8,7 @@ sub run {
     my $self = shift;
     my $args = shift;
 
+    $args->{args} = $args->{text};
     my $games = $self->games($args);
 
     $self->Grep($args, $games);
@@ -58,7 +59,7 @@ sub Grep {
     my $games = shift;
 
     # first check that something was given...
-    return "Syntax is: !grep PERSON /DEATH/" unless $args->{text};
+    return "Syntax is: !grep PERSON /DEATH/" unless $args->{args};
 
     my $sort;
 
@@ -67,7 +68,7 @@ sub Grep {
         startdate role race gender alignment nick death ascended uid/;
 
     my $nick = $self->target($args);
-    my %regex = regex($args->{text});
+    my %regex = regex($args->{args});
     return "Syntax is: !grep PERSON /DEATH/" unless @{$regex{regex}} > 0;
     #print Dumper(\%regex);
 
