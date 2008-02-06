@@ -5,8 +5,8 @@ use lib 'lib';
 use Rodney;
 
 my $rodney = Rodney->new(
-    server   => "irc.efnet.net",
-    channels => ["#netmonster"],
+    server   => "irc.freenode.org",
+    channels => ["#rodney"],
     nick     => "Rodney4",
 );
 
