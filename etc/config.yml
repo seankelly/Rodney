@@ -1,0 +1,9 @@
+---
+server: irc.freenode.org
+channels:
+    - "#rodney"
+nick: Rodney4
+database:
+    driver: SQLite
+    database: nethack
+

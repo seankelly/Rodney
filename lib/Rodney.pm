@@ -8,15 +8,25 @@ use Jifty::DBI::Handle;
 
 use Rodney::Dispatcher;
 use Rodney::Seen;
+use Rodney::Config;
 
 sub new {
     my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    Rodney::Config->init;
+
+    my %args = (
+        server   => Rodney::Config->server,
+        channels => Rodney::Config->channels,
+        nick     => Rodney::Config->nick,
+        @_,
+    );
+
+    my $self = $class->SUPER::new(%args);
 
     $self->{handle} = Jifty::DBI::Handle->new;
     $self->{handle}->connect(
-        driver => 'SQLite',
-        database => 'nethack',
+        driver   => Rodney::Config->database->{driver},
+        database => Rodney::Config->database->{database},
     );
 
     return $self;
