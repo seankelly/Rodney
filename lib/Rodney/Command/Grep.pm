@@ -84,6 +84,11 @@ sub Grep {
         column => 'player',
         value  => $nick,
     ) unless $NAO;
+    $games->order_by(
+        column => 'id',
+        order  => 'asc',
+    );
+
     # now do the limiting based on the regex
     for (@{$regex{regex}}) {
         $games->limit(
@@ -96,7 +101,11 @@ sub Grep {
     }
     # and then sorting..
     if (@{$regex{sort}} > 0) {
-        my @sort;
+        # make sure it continues to sort by id
+        my @sort = ( {
+                column => 'id',
+                order  => 'asc',
+            });
         $sort = 1;
         for (@{$regex{sort}}) {
             push @sort, {
