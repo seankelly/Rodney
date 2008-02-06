@@ -11,12 +11,10 @@ sub run {
 
     my $nick  = $self->target($args);
     my $num   = $1 if $args->{body} =~ s/\s*#(\d+)\s*//;
-    my $NAO   = $args->{body} =~ s/\*//;
     my $games = $self->games($args);
 
-    if ($NAO)
+    if ($self->target_is_server($args))
     {
-        $nick = 'nethack.alt.org';
         if ($num)
         {
             $games->limit(
@@ -31,11 +29,6 @@ sub run {
     }
     else
     {
-        # limit to just $nick
-        $games->limit(
-            column => 'player',
-            value  => $nick
-        );
         $games->set_page_info(
             current_page => $num,
             per_page     => 1,

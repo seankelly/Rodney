@@ -77,10 +77,6 @@ sub Grep {
         return 'Invalid field: ' . $_->[0];
     }
 
-    $games->limit(
-        column => 'player',
-        value  => $nick,
-    ) unless $NAO;
     $games->order_by(
         column => 'id',
         order  => 'asc',

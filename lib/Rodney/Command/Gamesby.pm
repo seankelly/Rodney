@@ -9,13 +9,10 @@ sub run {
     my $self = shift;
     my $args = shift;
 
+    $args->{server_denied} = 1;
+
     my $nick = $self->target($args);
     my $games = $self->games($args);
-
-    $games->limit(
-        column => 'player',
-        value  => $nick,
-    );
 
     $self->gamesby($args, $games, $nick);
 }
