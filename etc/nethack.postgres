@@ -27,7 +27,8 @@ CREATE TABLE players (
 );
 
 CREATE TABLE seens (
-  nicks varchar(30) PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
+  nick varchar(30),
   lastseen timestamp(0) with time zone DEFAULT 'now',
   message varchar
 );
