@@ -1,0 +1,14 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+my @repos = qw{
+    http://sartak.org/code/cpan/Rodney/
+    http://katron.org/projects/rodney/
+};
+
+for (@repos) {
+    print "Pulling from $_...\n";
+    system("darcs pull $_");
+}
+
