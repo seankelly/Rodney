@@ -3,7 +3,7 @@ package Rodney::Command::Ascensions;
 use strict;
 use warnings;
 use parent 'Rodney::Command';
-use Rodney::Util qw/plural/;
+use Rodney::Util qw/plural stats/;
 
 sub run {
     my $self = shift;
@@ -53,16 +53,12 @@ sub ascensions {
         $role{ $asc->role }++;
     }
 
-    my @parts = map  { "$role{$_}x$_" }
-                sort { $role{$b} <=> $role{$a} || $a cmp $b }
-                keys %role;
-
     return sprintf '%s has %s in %s (%.2f%%): %s',
         $nick,
         plural($ascs->count, 'ascension'),
         plural($games->count, 'game'),
         100 * $ascs->count / $games->count,
-        join ' ', @parts;
+        stats(%role);
 }
 
 1;

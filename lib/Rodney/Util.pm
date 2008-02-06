@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Exporter 'import';
-our @EXPORT_OK = qw/plural ntimes once/;
+our @EXPORT_OK = qw/plural ntimes once stats/;
 
 =head2 plural count, singular[, plural]
 
@@ -49,6 +49,22 @@ sub once {
     return "twice"  if $count == 2;
     return "thrice" if $count == 3;
     return $count;
+}
+
+=head2 stats hash
+
+Returns a string of the form "9xFoo 4xBar 4xBaz"
+
+=cut
+
+sub stats {
+    my %stats = @_;
+
+    my @parts = map  { "$stats{$_}x$_" }
+                sort { $stats{$b} <=> $stats{$a} || $a cmp $b }
+                keys %stats;
+
+    return join ' ', @parts;
 }
 
 1;
