@@ -23,3 +23,10 @@ CREATE TABLE players (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  ,
   name varchar NOT NULL
 );
+CREATE TABLE seens (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  ,
+  nick varchar NOT NULL,
+  lastseen varchar NOT NULL,
+  message varchar NOT NULL
+);
+
