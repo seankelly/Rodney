@@ -13,7 +13,7 @@ sub run {
             $self->can('games_callback');
     }
 
-    $args->{body} = $args->{subcommand};
+    $args->{body} = $args->{subcommand} || $args->{args};
     Rodney->dispatch($args) || "Invalid command.";
 }
 

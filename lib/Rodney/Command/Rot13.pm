@@ -8,8 +8,8 @@ sub run {
     my $self = shift;
     my $args = shift;
 
-    $args->{text} =~ tr[a-zA-Z][n-za-mN-ZA-M];
-    return "rot13: $args->{text}";
+    $args->{args} =~ tr[a-zA-Z][n-za-mN-ZA-M];
+    return "rot13: $args->{args}";
 }
 
 1;

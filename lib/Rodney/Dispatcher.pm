@@ -13,38 +13,26 @@ use Rodney::Command::Grep;
 
 sub on;
 
-on qr{^!g(?:ames(?:by)?)?\b}i => "Rodney::Command::Gamesby";
-on qr{^!asc(?:ensions?)?\b}i => "Rodney::Command::Ascensions";
-on qr{^!num\b}i => "Rodney::Command::Num";
+on qr{^!g(?:ames(?:by)?)?\b\s*}i => "Rodney::Command::Gamesby";
+on qr{^!asc(?:ensions?)?\b\s*}i  => "Rodney::Command::Ascensions";
+on qr{^!num\b\s*}i               => "Rodney::Command::Num";
+on qr{^!rot13\b\s*}i             => "Rodney::Command::Rot13";
 
 on qr{^!grep(\s+(.*))?$}i => sub {
     ("Rodney::Command::Grep", text => $2);
 };
 
-on qr{^!rot13\s+(.*)}i => sub {
-    ("Rodney::Command::Rot13", text => $1);
-};
-
 # meta commands
+on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
+on qr{^!noscum\s+}i      => "Rodney::Command::Noscum";
+on qr{^!asconly\s+}i     => "Rodney::Command::Asconly";
 
-on qr{^!r\s+(.*)}i => sub {
-    ("Rodney::Command::Recent", subcommand => $1);
-};
-
-on qr{^!r(\w+)\b\s*(.*)}i => sub {
+on qr{^!r(?:ecent)?(\w+)\b\s*(.*)}i => sub {
     ("Rodney::Command::Recent", subcommand => "!$1 $2");
-};
-
-on qr{^!noscum\s+(.*)}i => sub {
-    ("Rodney::Command::Noscum", subcommand => $1);
 };
 
 on qr{^!noscum(\w+)\b\s*(.*)}i => sub {
     ("Rodney::Command::Noscum", subcommand => "!$1 $2");
-};
-
-on qr{^!asconly\s+(.*)}i => sub {
-    ("Rodney::Command::Asconly", subcommand => $1);
 };
 
 on qr{^!asconly(\w+)\b\s*(.*)}i => sub {
