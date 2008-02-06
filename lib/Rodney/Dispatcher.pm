@@ -10,6 +10,7 @@ use Rodney::Command::Rot13;
 use Rodney::Command::Ascensions;
 use Rodney::Command::Num;
 use Rodney::Command::Grep;
+use Rodney::Command::Help;
 
 sub on;
 
@@ -17,6 +18,7 @@ on qr{^!g(?:ames(?:by)?)?\b\s*}i => "Rodney::Command::Gamesby";
 on qr{^!asc(?:ensions?)?\b\s*}i  => "Rodney::Command::Ascensions";
 on qr{^!num\b\s*}i               => "Rodney::Command::Num";
 on qr{^!rot13\b\s*}i             => "Rodney::Command::Rot13";
+on qr{^!help\b\s*}i              => "Rodney::Command::Help";
 
 on qr{^!grep(\s+(.*))?$}i => sub {
     ("Rodney::Command::Grep", text => $2);

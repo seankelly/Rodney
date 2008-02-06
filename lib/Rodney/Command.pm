@@ -83,5 +83,15 @@ sub games {
     return $games;
 }
 
+=head 2 help
+
+Override this for command specific help.
+
+=cut
+
+sub help {
+    return 'No help for this command.';
+}
+
 1;
 
