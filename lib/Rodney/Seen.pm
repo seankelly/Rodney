@@ -28,7 +28,7 @@ sub seen {
     my $seen = Rodney::Seen->new(handle => $args{handle});
 
     $seen->load_by_cols(nick => $args{nick});
-    unless ($seen->nick) {
+    unless ($seen->id) {
         return $seen->create(
             nick => $args{nick},
             lastseen  => $args{lastseen},
