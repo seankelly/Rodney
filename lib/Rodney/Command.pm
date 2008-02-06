@@ -47,7 +47,7 @@ sub target_is_server {
 
     return 0 if $args->{server_denied};
 
-    return $args->{args} =~ /^\s*\*\s*$/;
+    return $args->{args} =~ /\s*\*\s*/;
 }
 
 =head2 games Args
