@@ -2,24 +2,15 @@
 package Rodney::Command::Recent;
 use strict;
 use warnings;
-use parent 'Rodney::Command';
+use parent 'Rodney::Command::Meta';
 
-sub run {
-    my $self = shift;
-    my $args = shift;
-    my $subcmd = shift;
-
-    push @{ $args->{games_callback} }, sub {
-        my ($self, $games) = @_;
-        $games->limit(
-            column => 'enddate',
-            value => year_ago(),
-            operator => '>=',
-        );
-    };
-
-    $args->{body} = $subcmd;
-    Rodney->dispatch($args) || "Invalid command.";
+sub games_callback {
+    my ($self, $games) = @_;
+    $games->limit(
+        column => 'enddate',
+        value => year_ago(),
+        operator => '>=',
+    );
 }
 
 sub year_ago {
