@@ -13,50 +13,42 @@ use Rodney::Command::Grep;
 
 sub on;
 
-on qr{^!g(?:ames(?:by)?)?\b}i => sub {
-    Rodney::Command::Gamesby->run(@_)
-};
-
-on qr{^!asc(?:ensions?)?\b}i => sub {
-    Rodney::Command::Ascensions->run(@_)
-};
-
-on qr{^!num\b}i => sub {
-    Rodney::Command::Num->run(@_)
-};
+on qr{^!g(?:ames(?:by)?)?\b}i => "Rodney::Command::Gamesby";
+on qr{^!asc(?:ensions?)?\b}i => "Rodney::Command::Ascensions";
+on qr{^!num\b}i => "Rodney::Command::Num";
 
 on qr{^!grep(\s+(.*))?$}i => sub {
-    Rodney::Command::Grep->run(@_, text => $2)
+    ("Rodney::Command::Grep", text => $2);
 };
 
 on qr{^!rot13\s+(.*)}i => sub {
-    Rodney::Command::Rot13->run(@_, text => $1)
+    ("Rodney::Command::Rot13", text => $1);
 };
 
 # meta commands
 
 on qr{^!r\s+(.*)}i => sub {
-    Rodney::Command::Recent->run(@_, $1)
+    ("Rodney::Command::Recent", $1);
 };
 
 on qr{^!r(\w+)\b\s*(.*)}i => sub {
-    Rodney::Command::Recent->run(@_, "!$1 $2")
+    ("Rodney::Command::Recent", "!$1 $2");
 };
 
 on qr{^!noscum\s+(.*)}i => sub {
-    Rodney::Command::Noscum->run(@_, $1)
+    ("Rodney::Command::Noscum", $1);
 };
 
 on qr{^!noscum(\w+)\b\s*(.*)}i => sub {
-    Rodney::Command::Noscum->run(@_, "!$1 $2")
+    ("Rodney::Command::Noscum", "!$1 $2");
 };
 
 on qr{^!asconly\s+(.*)}i => sub {
-    Rodney::Command::Asconly->run(@_, $1)
+    ("Rodney::Command::Asconly", $1);
 };
 
 on qr{^!asconly(\w+)\b\s*(.*)}i => sub {
-    Rodney::Command::Asconly->run(@_, "!$1 $2")
+    ("Rodney::Command::Asconly", "!$1 $2");
 };
 
 my @rules;
@@ -73,8 +65,7 @@ sub dispatch {
     for my $rule (@rules) {
         my ($re, $code) = @$rule;
         if ($_ =~ $re) {
-            return $code->($args);
-            last;
+            return ref($code) ? $code->($args) : $code;
         }
     }
 

@@ -19,7 +19,7 @@ sub run {
     };
 
     $args->{body} = $subcmd;
-    Rodney::Dispatcher->dispatch($args) || "Invalid command.";
+    Rodney->dispatch($args) || "Invalid command.";
 }
 
 sub year_ago {

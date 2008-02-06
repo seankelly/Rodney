@@ -47,7 +47,10 @@ sub dispatch {
 
     Module::Refresh->refresh;
 
-    return Rodney::Dispatcher->dispatch($args);
+    my ($package, @args) = Rodney::Dispatcher->dispatch($args);
+    return unless $package;
+
+    $package->run($args, @args);
 }
 
 1;
