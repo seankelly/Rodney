@@ -28,7 +28,7 @@ sub target {
 
     # this can't be just "\b\w+\b" because "-Mal" is not a nick
     return $self->canonicalize_name($1)
-        if $args->{body} =~ /(?:^| )(\w+)(?: |$)/;
+        if $args->{args} =~ /(?:^| )(\w+)(?: |$)/;
     return $self->canonicalize_name($args->{who});
 }
 

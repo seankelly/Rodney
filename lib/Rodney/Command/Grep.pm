@@ -7,11 +7,10 @@ use parent 'Rodney::Command';
 sub run {
     my $self = shift;
     my $args = shift;
-    my %opts = @_;
 
     my $games = $self->games($args);
 
-    $self->Grep($args, $games, \%opts);
+    $self->Grep($args, $games);
 }
 
 sub regex {
@@ -57,12 +56,10 @@ sub Grep {
     my $self  = shift;
     my $args  = shift;
     my $games = shift;
-    my $opts  = shift;
 
     # first check that something was given...
-    return "Syntax is: !grep PERSON /DEATH/" unless $opts->{text};
+    return "Syntax is: !grep PERSON /DEATH/" unless $args->{text};
 
-    my $NAO = $opts->{text} =~ s/\*//;
     my $sort;
 
     my %fields = map { $_ => 1 }
@@ -70,7 +67,7 @@ sub Grep {
         startdate role race gender alignment nick death ascended uid/;
 
     my $nick = $self->target($args);
-    my %regex = regex($opts->{text});
+    my %regex = regex($args->{text});
     return "Syntax is: !grep PERSON /DEATH/" unless @{$regex{regex}} > 0;
     #print Dumper(\%regex);
 

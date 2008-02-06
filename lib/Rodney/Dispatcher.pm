@@ -28,27 +28,27 @@ on qr{^!rot13\s+(.*)}i => sub {
 # meta commands
 
 on qr{^!r\s+(.*)}i => sub {
-    ("Rodney::Command::Recent", $1);
+    ("Rodney::Command::Recent", subcommand => $1);
 };
 
 on qr{^!r(\w+)\b\s*(.*)}i => sub {
-    ("Rodney::Command::Recent", "!$1 $2");
+    ("Rodney::Command::Recent", subcommand => "!$1 $2");
 };
 
 on qr{^!noscum\s+(.*)}i => sub {
-    ("Rodney::Command::Noscum", $1);
+    ("Rodney::Command::Noscum", subcommand => $1);
 };
 
 on qr{^!noscum(\w+)\b\s*(.*)}i => sub {
-    ("Rodney::Command::Noscum", "!$1 $2");
+    ("Rodney::Command::Noscum", subcommand => "!$1 $2");
 };
 
 on qr{^!asconly\s+(.*)}i => sub {
-    ("Rodney::Command::Asconly", $1);
+    ("Rodney::Command::Asconly", subcommand => $1);
 };
 
 on qr{^!asconly(\w+)\b\s*(.*)}i => sub {
-    ("Rodney::Command::Asconly", "!$1 $2");
+    ("Rodney::Command::Asconly", subcommand => "!$1 $2");
 };
 
 my @rules;
@@ -65,7 +65,8 @@ sub dispatch {
     for my $rule (@rules) {
         my ($re, $code) = @$rule;
         if ($_ =~ $re) {
-            return ref($code) ? $code->($args) : $code;
+            return (ref($code) ? $code->($args) : $code),
+                   args => $';
         }
     }
 
