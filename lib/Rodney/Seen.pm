@@ -21,10 +21,9 @@ use Jifty::DBI::Record schema {
 sub seen {
     my $self = shift;
     my %args = (
-        lastseen => ~~localtime,
+        lastseen => time,
         @_,
     );
-
 
     my $seen = Rodney::Seen->new(handle => $args{handle});
 
