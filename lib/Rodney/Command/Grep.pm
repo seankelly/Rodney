@@ -90,11 +90,7 @@ sub Grep {
     }
     # and then sorting..
     if (@{$regex{sort}} > 0) {
-        # make sure it continues to sort by id
-        my @sort = ( {
-                column => 'id',
-                order  => 'asc',
-            });
+        my @sort;
         $sort = 1;
         for (@{$regex{sort}}) {
             push @sort, {
