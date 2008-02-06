@@ -14,6 +14,7 @@ sub run {
     my $self = shift;
     my $args = shift;
 
+    $args->{body} = $args->{args};
     my ($package, %args) = Rodney::Dispatcher->dispatch($args);
     return unless $package;
     $package->help({%$args, %args});
