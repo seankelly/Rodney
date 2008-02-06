@@ -118,25 +118,29 @@ sub Grep {
 
     my $result;
     my @results;
+    my $count = $games->count;
+
+    # in case several thousand or more rows will be returned, limit to
+    # just the first 25
+    $games->set_page_info(
+        per_page => 25
+    ) if $count > 25;
+
     while (my $g = $games->next) {
         push @results, $g->id;
     }
-    if (@results == 1 || ($sort && @results > 0)) {
+
+    if ($count == 1 || ($sort && $count > 0)) {
         $result = $games->first->to_string(100);
     }
-    elsif (@results == 0) {
+    elsif ($count == 0) {
         $result = 'No games found.';
     }
-    elsif (@results > 1) {
-        $result = $#results + 1 . ' games found: #';
-        if (@results > 30) {
-            $result .= join(', #', @results[0..15],)
-                    . ', ..., #'
-                    .  join(', #', @results[-15..-1]);
-        }
-        else {
-            $result .= join ', #', @results;
-        }
+    elsif ($count > 1) {
+        $result = sprintf '%d games found: #%s',
+                    $count,
+                    join ', #', @results;
+        $result .= ', ...' if $count > 25;
     }
 
     return $result;
