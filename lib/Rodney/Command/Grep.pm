@@ -19,11 +19,8 @@ sub regex {
     my @regex;
     my @sort;
     while ($message =~ s!({(?:\s*(min|max):\s*)?\s*(\w+)(?:\s*/([^/]*)/\s*([ri]*))?\s*})!!) {
-        #if (defined($2) && @sort == 0) {
         if (defined($2)) {
             push @sort, [lc ($3), $2];
-            #$sort_field = lc($3);
-            #$sort_order = $2;
         }
         next if !defined($4);
         my $type = lc($3);
@@ -53,7 +50,6 @@ sub regex {
 }
 
 sub Grep {
-    #use Data::Dumper;
     my $self  = shift;
     my $args  = shift;
     my $games = shift;
@@ -70,7 +66,6 @@ sub Grep {
     my $nick = $self->target($args);
     my %regex = regex($args->{args});
     return "Syntax is: !grep PERSON /DEATH/" unless @{$regex{regex}} > 0;
-    #print Dumper(\%regex);
 
     # next check that the fields are valid
     for (@{$regex{regex}},@{$regex{sort}}) {
