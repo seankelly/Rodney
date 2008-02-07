@@ -10,7 +10,7 @@ use Jifty::DBI::Record schema {
         is mandatory;
 
     column lastseen =>
-        type is 'timestamp',
+        type is 'integer',
         is mandatory;
 
     column message =>

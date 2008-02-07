@@ -42,7 +42,7 @@ sub said {
     Rodney::Seen->seen(
         handle  => $args->{handle},
         nick    => $args->{who},
-        message => "$args->{who} saying '$args->{body}'.",
+        message => "saying '$args->{body}'.",
     );
 
     my $ret = eval { $self->dispatch($args) };
