@@ -20,7 +20,7 @@ sub regex {
     my $message = shift;
     my @regex;
     my @sort;
-    while ($message =~ s!({(?:\s*(min|max):\s*)?\s*(\w+)(?:\s*/([^/]*)/\s*([ri]*)|([<=>])(-?\d+))?\s*})!!) {
+    while ($message =~ s!({(?:\s*(min|max):\s*)?\s*(\w+)(?:\s*/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})!!) {
         if (defined($2)) {
             push @sort, [lc ($3), $2];
         }
