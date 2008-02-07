@@ -29,6 +29,6 @@ CREATE TABLE players (
 CREATE TABLE seens (
   id SERIAL PRIMARY KEY,
   nick varchar(30),
-  lastseen timestamp(0) with time zone DEFAULT 'now',
+  lastseen integer,
   message varchar
 );
