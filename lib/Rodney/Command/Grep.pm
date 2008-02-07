@@ -20,9 +20,12 @@ sub regex {
     my $message = shift;
     my @regex;
     my @sort;
-    while ($message =~ s!({(?:\s*(min|max):\s*)?\s*(\w+)(?:\s*/([^/]*)/\s*([ri]*))?\s*})!!) {
+    while ($message =~ s!({(?:\s*(min|max):\s*)?\s*(\w+)(?:\s*/([^/]*)/\s*([ri]*)|([<=>])(-?\d+))?\s*})!!) {
         if (defined($2)) {
             push @sort, [lc ($3), $2];
+        }
+        elsif (defined($6) && defined($7)) {
+            push @sort, [lc ($3), $6, $7];
         }
         next if !defined($4);
         my $type = lc($3);
@@ -90,12 +93,21 @@ sub Grep {
     # and then sorting..
     if (@{$regex{sort}} > 0) {
         my @sort;
-        $sort = 1;
         for (@{$regex{sort}}) {
-            push @sort, {
-                column => $_->[0],
-                order  => ($_->[1] eq 'min') ? 'asc' : 'desc',
-            };
+            if (defined($_->[2]) && Rodney::Game->column($_->[0])->is_numeric) {
+                $games->limit(
+                    column   => $_->[0],
+                    operator => $_->[1],
+                    value    => $_->[2],
+                );
+            }
+            else {
+                $sort = 1;
+                push @sort, {
+                    column => $_->[0],
+                    order  => ($_->[1] eq 'min') ? 'asc' : 'desc',
+                };
+            }
         }
         $games->order_by(@sort);
     }
