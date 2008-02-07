@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use parent 'Rodney::Command';
 
+use Rodney::Game;
+
 sub run {
     my $self = shift;
     my $args = shift;
@@ -59,17 +61,14 @@ sub Grep {
 
     my $sort;
 
-    my %fields = map { $_ => 1 }
-        qw/version score dungeon curlvl maxlvl curhp maxhp deaths enddate
-        startdate role race gender alignment nick death ascended uid/;
-
     my $nick = $self->target($args);
     my %regex = regex($args->{args});
     return "Syntax is: !grep PERSON /DEATH/" unless @{$regex{regex}} > 0;
 
     # next check that the fields are valid
     for (@{$regex{regex}},@{$regex{sort}}) {
-        next if $fields{$_->[0]};
+        my $c = Rodney::Game->column($_->[0]);
+        next if $c;
         return 'Invalid field: ' . $_->[0];
     }
 
