@@ -13,6 +13,9 @@ sub help {
     return 'Available columns: ' . join ', ', Rodney::Game->readable_attributes
         if $args->{text} && $args->{text} =~ /^(?:fields?|columns?)$/;
 
+    return 'Syntax is: !grep PERSON /DEATH/'
+        if $args->{text} eq 'usage';
+
     return 'Greps the database for games matching the arguments.';
 }
 
