@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Exporter 'import';
-our @EXPORT_OK = qw/plural ntimes once stats/;
+our @EXPORT_OK = qw/plural ntimes once stats plane/;
 
 =head2 plural count, singular[, plural]
 
@@ -65,6 +65,21 @@ sub stats {
                 keys %stats;
 
     return join ' ', @parts;
+}
+
+=head2 planes
+
+Returns which plane corresponds to the given level.
+
+=cut
+
+sub plane {
+    my $level = shift;
+    return 'Astral Plane' if $level == -5;
+    return 'Water Plane'  if $level == -4;
+    return 'Fire Plane'   if $level == -3;
+    return 'Air Plane'    if $level == -2;
+    return 'Earth Plane'  if $level == -1;
 }
 
 1;

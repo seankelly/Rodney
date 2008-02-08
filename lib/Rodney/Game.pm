@@ -2,7 +2,7 @@ package Rodney::Game;
 use strict;
 use warnings;
 use DateTime;
-use Rodney::Util qw/ntimes/;
+use Rodney::Util qw/ntimes plane/;
 
 use Jifty::DBI::Schema;
 use Jifty::DBI::Record schema {
@@ -163,7 +163,7 @@ sub to_string {
                 $result .= 'Heaven';
             }
             elsif ($self->curlvl < 0) {
-                $result .= 'Foo Plane';
+                $result .= plane($self->curlvl);
             }
             else {
                 $result .= sprintf 'level %d (%s)', $self->curlvl,
