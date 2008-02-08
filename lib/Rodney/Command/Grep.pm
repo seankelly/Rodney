@@ -30,7 +30,7 @@ sub games_callback {
     $error = 0;
 
     $args->{args} = $args->{text};
-    my $grep = Grep(0, $games, $args);
+    my $grep = Grep($games, $args);
     return $grep if $grep;
 }
 
@@ -117,7 +117,6 @@ sub regex {
 # just limits the collection
 # DOES silently fail in meta-command mode
 sub Grep {
-    my $self  = shift;
     my $games = shift;
     my $args  = shift;
 
