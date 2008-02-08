@@ -12,6 +12,7 @@ use Rodney::Command::Num;
 use Rodney::Command::Grep;
 use Rodney::Command::Help;
 use Rodney::Command::Seen;
+use Rodney::Command::Where;
 
 sub on;
 
@@ -21,6 +22,7 @@ on qr{^!num\b\s*}i               => "Rodney::Command::Num";
 on qr{^!rot13\b\s*}i             => "Rodney::Command::Rot13";
 on qr{^!help\b\s*}i              => "Rodney::Command::Help";
 on qr{^!seen\b\s*}i              => "Rodney::Command::Seen";
+on qr{^!where\b\s*}i             => "Rodney::Command::Where";
 
 on qr{^!grep(\s+(.*))?$}i => sub {
     ("Rodney::Command::Grep", text => $2);
