@@ -7,6 +7,7 @@ use parent 'Rodney::Command::Meta';
 use Rodney::Game;
 
 my $sort;
+my $error;
 
 sub help {
     my $self = shift;
@@ -26,6 +27,8 @@ sub games_callback {
     my $games = shift;
     my $args = shift;
 
+    $error = 0;
+
     $args->{args} = $args->{text};
     my $grep = Grep(0, $games, $args);
     return $grep if $grep;
@@ -38,8 +41,7 @@ sub cant_redispatch {
     $args->{args} = $args->{text};
     my $games = $self->games($args);
 
-    my $grep = $self->Grep($games, $args);
-    return $grep if $grep;
+    return $error if $error;
 
     my $result;
     my @results;
@@ -120,16 +122,20 @@ sub Grep {
     my $args  = shift;
 
     # first check that something was given...
-    return "Syntax is: !grep PERSON /DEATH/" unless $args->{args};
+    unless ($args->{args}) {
+        return ($error = 'Syntax is: !grep PERSON /DEATH/');
+    }
 
     my %regex = regex($args->{args});
-    return "Syntax is: !grep PERSON /DEATH/" unless @{$regex{regex}} > 0;
+    unless (@{$regex{regex}} > 0) {
+        return ($error = 'Syntax is: !grep PERSON /DEATH/');
+    }
 
     # next check that the fields are valid
     for (@{$regex{regex}},@{$regex{sort}}) {
         my $c = Rodney::Game->column($_->[0]);
         next if $c;
-        return 'Invalid field: ' . $_->[0];
+        return ($error = 'Invalid field: ' . $_->[0]);
     }
 
     $games->order_by(
