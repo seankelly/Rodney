@@ -91,7 +91,7 @@ sub Grep {
             # this is ugly, I know!
             operator => ($_->[3] ? '!' : '')
                         . ($_->[2] =~ /i/ ? '~*' : '~'),
-        );
+        ) if length($_->[1]) > 0;
     }
     # and then sorting..
     if (@{$regex{sort}} > 0) {
