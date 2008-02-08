@@ -14,8 +14,10 @@ sub run {
     }
 
     $args->{body} = $args->{subcommand} || $args->{args};
-    Rodney->dispatch($args) || "Invalid command.";
+    Rodney->dispatch($args) || $self->cant_redispatch($args);
 }
+
+sub cant_redispatch { "Invalid command." }
 
 1;
 
