@@ -102,6 +102,7 @@ sub Grep {
                     column   => $_->[0],
                     operator => $_->[1],
                     value    => $_->[2],
+                    entry_aggregator => 'and',
                 );
             }
             else {
