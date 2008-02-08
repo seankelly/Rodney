@@ -20,17 +20,20 @@ sub regex {
     my $message = shift;
     my @regex;
     my @sort;
-    while ($message =~ s!({(?:\s*(min|max):\s*)?\s*(\w+)(?:\s*/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})!!) {
+    while ($message =~ s#({(?:\s*(min|max):\s*)?\s*(\w+)(?:\s*(!)?/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})##) {
         if (defined($2)) {
+            # column, min|max
             push @sort, [lc ($3), $2];
         }
-        elsif (defined($6) && defined($7)) {
-            push @sort, [lc ($3), $6, $7];
+        elsif (defined($7) && defined($8)) {
+            # column, operator, compared to what
+            push @sort, [lc ($3), $7, $8];
         }
-        next if !defined($4);
+        next if !defined($5);
         my $type = lc($3);
-        my $regex = $4;
-        push @regex, [$type, $regex, $5, $1];
+        my $regex = $5;
+        # column, regex, modifiers, negated, entire thing
+        push @regex, [$type, $regex, $6, $4, $1];
     }
     if ($message =~ s#((!)?/([^/]*)/([ir]*))##) {
         push @regex, ['death', $3, $4, $2, $1];
