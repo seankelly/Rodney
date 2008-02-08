@@ -142,7 +142,8 @@ sub to_string {
     my $self = shift;
     my $verbosity = shift || 0;
 
-    my $result = sprintf '%s (%s %s %s %s), %s, %d points',
+    my $result = sprintf '%d. %s (%s %s %s %s), %s, %d points',
+        $self->id,
         $self->player->name,
         $self->role, $self->race, $self->gender, $self->alignment,
         $self->death, $self->score;
