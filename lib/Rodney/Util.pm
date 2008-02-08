@@ -75,11 +75,11 @@ Returns which plane corresponds to the given level.
 
 sub plane {
     my $level = shift;
-    return 'Astral Plane' if $level == -5;
-    return 'Water Plane'  if $level == -4;
-    return 'Fire Plane'   if $level == -3;
-    return 'Air Plane'    if $level == -2;
-    return 'Earth Plane'  if $level == -1;
+    my $verbosity = shift || 2;
+    my @planes = qw/Astral Water Fire Air Earth/;
+    my $name = $planes[$level] || 'Foo';
+    $name .= ' Plane' if $verbosity == 2;
+    return $name;
 }
 
 1;
