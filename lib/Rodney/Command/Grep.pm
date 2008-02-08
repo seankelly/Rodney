@@ -6,6 +6,15 @@ use parent 'Rodney::Command';
 
 use Rodney::Game;
 
+sub help {
+    my $self = shift;
+    my $args = shift;
+
+    return 'Available columns: ' . join ', ', keys %{Rodney::Game->COLUMNS} if $args->{text} && $args->{text} =~ /^(?:fields?|columns?)$/;
+
+    return 'Greps the database for games matching the arguments.';
+}
+
 sub run {
     my $self = shift;
     my $args = shift;
