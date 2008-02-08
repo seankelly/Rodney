@@ -176,7 +176,7 @@ sub to_string {
     }
 
     if ($verbosity > 3 && $self->lifesaves) {
-        $result .= ', died ' . ntimes(0, $self->lifesaves);
+        $result .= ', died ' . ntimes($self->lifesaves);
     }
 
     if ($verbosity > 4) {
