@@ -10,7 +10,8 @@ sub help {
     my $self = shift;
     my $args = shift;
 
-    return 'Available columns: ' . join ', ', keys %{Rodney::Game->COLUMNS} if $args->{text} && $args->{text} =~ /^(?:fields?|columns?)$/;
+    return 'Available columns: ' . join ', ', Rodney::Game->readable_attributes
+        if $args->{text} && $args->{text} =~ /^(?:fields?|columns?)$/;
 
     return 'Greps the database for games matching the arguments.';
 }
