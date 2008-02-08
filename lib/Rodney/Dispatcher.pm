@@ -24,14 +24,23 @@ on qr{^!help\b\s*}i              => "Rodney::Command::Help";
 on qr{^!seen\b\s*}i              => "Rodney::Command::Seen";
 on qr{^!where\b\s*}i             => "Rodney::Command::Where";
 
-on qr{^!grep(\s+(.*))?$}i => sub {
-    ("Rodney::Command::Grep", text => $2);
-};
-
 # meta commands
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
 on qr{^!noscum\s+}i      => "Rodney::Command::Noscum";
 on qr{^!asconly\s+}i     => "Rodney::Command::Asconly";
+on qr{^!grep\s+(?:(.+)((?<!\?|<)!\w+\b.*)$|(.+)$)}i => sub {
+    my @a = ("Rodney::Command::Grep");
+    if (defined($1)) {
+        @a = (@a, text => $1);
+    }
+    else {
+        @a = (@a, text => $3);
+    }
+    if (defined($2)) {
+        @a = (@a, subcommand => $2);
+    }
+    return @a;
+};
 
 on qr{^!r(?:ecent)?(\w+)\b\s*(.*)}i => sub {
     ("Rodney::Command::Recent", subcommand => "!$1 $2");

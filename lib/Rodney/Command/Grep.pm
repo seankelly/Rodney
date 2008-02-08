@@ -2,9 +2,11 @@
 package Rodney::Command::Grep;
 use strict;
 use warnings;
-use parent 'Rodney::Command';
+use parent 'Rodney::Command::Meta';
 
 use Rodney::Game;
+
+my $sort;
 
 sub help {
     my $self = shift;
@@ -19,14 +21,54 @@ sub help {
     return 'Greps the database for games matching the arguments.';
 }
 
-sub run {
+sub games_callback {
+    my $self = shift;
+    my $games = shift;
+    my $args = shift;
+
+    $args->{args} = $args->{text};
+    my $grep = Grep(0, $games, $args);
+    return $grep if $grep;
+}
+
+sub cant_redispatch {
     my $self = shift;
     my $args = shift;
 
     $args->{args} = $args->{text};
     my $games = $self->games($args);
 
-    $self->Grep($args, $games);
+    my $grep = $self->Grep($games, $args);
+    return $grep if $grep;
+
+    my $result;
+    my @results;
+    my $count = $games->count;
+
+    # in case several thousand or more rows will be returned, limit to
+    # just the first 25
+    $games->set_page_info(
+        per_page => 25
+    ) if $count > 25;
+
+    while (my $g = $games->next) {
+        push @results, $g->id;
+    }
+
+    if ($count == 1 || ($sort && $count > 0)) {
+        $result = $games->first->to_string(100);
+    }
+    elsif ($count == 0) {
+        $result = 'No games found.';
+    }
+    elsif ($count > 1) {
+        $result = sprintf '%d games found: #%s',
+                    $count,
+                    join ', #', @results;
+        $result .= ', ...' if $count > 25;
+    }
+
+    return $result;
 }
 
 sub regex {
@@ -70,17 +112,16 @@ sub regex {
     return (sort => \@sort, regex => \@regex);
 }
 
+# just limits the collection
+# DOES silently fail in meta-command mode
 sub Grep {
     my $self  = shift;
-    my $args  = shift;
     my $games = shift;
+    my $args  = shift;
 
     # first check that something was given...
     return "Syntax is: !grep PERSON /DEATH/" unless $args->{args};
 
-    my $sort;
-
-    my $nick = $self->target($args);
     my %regex = regex($args->{args});
     return "Syntax is: !grep PERSON /DEATH/" unless @{$regex{regex}} > 0;
 
@@ -129,34 +170,8 @@ sub Grep {
         $games->order_by(@sort);
     }
 
-    my $result;
-    my @results;
-    my $count = $games->count;
-
-    # in case several thousand or more rows will be returned, limit to
-    # just the first 25
-    $games->set_page_info(
-        per_page => 25
-    ) if $count > 25;
-
-    while (my $g = $games->next) {
-        push @results, $g->id;
-    }
-
-    if ($count == 1 || ($sort && $count > 0)) {
-        $result = $games->first->to_string(100);
-    }
-    elsif ($count == 0) {
-        $result = 'No games found.';
-    }
-    elsif ($count > 1) {
-        $result = sprintf '%d games found: #%s',
-                    $count,
-                    join ', #', @results;
-        $result .= ', ...' if $count > 25;
-    }
-
-    return $result;
+    # return 0 for success
+    return 0;
 }
 
 1;
