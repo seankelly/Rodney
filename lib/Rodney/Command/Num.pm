@@ -35,9 +35,9 @@ sub run {
         ) if $num;
     }
     # ROFL HAHA
-    # yeah, sort it by date
+    # yeah, sort it by id
     $games->order_by(
-        column => 'enddate',
+        column => 'id',
         order  => 'asc',
     );
 
