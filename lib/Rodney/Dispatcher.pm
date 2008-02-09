@@ -13,6 +13,7 @@ use Rodney::Command::Grep;
 use Rodney::Command::Help;
 use Rodney::Command::Seen;
 use Rodney::Command::Where;
+use Rodney::Command::Roles;
 
 sub on;
 
@@ -23,6 +24,7 @@ on qr{^!rot13\b\s*}i             => "Rodney::Command::Rot13";
 on qr{^!help\b\s*}i              => "Rodney::Command::Help";
 on qr{^!seen\b\s*}i              => "Rodney::Command::Seen";
 on qr{^!where\b\s*}i             => "Rodney::Command::Where";
+on qr{^!roles?\b\s*}i            => "Rodney::Command::Roles";
 
 # meta commands
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
