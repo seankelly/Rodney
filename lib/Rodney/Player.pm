@@ -9,5 +9,8 @@ use Jifty::DBI::Record schema {
         is mandatory;
 };
 
+package Rodney::PlayerCollection;
+use parent 'Jifty::DBI::Collection';
+
 1;
 
