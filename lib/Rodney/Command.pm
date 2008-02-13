@@ -13,7 +13,8 @@ sub canonicalize_name {
     my $name = shift;
 
     $name =~ tr[a-zA-Z0-9][]cd;
-    return substr($name, 0, 10);
+    return substr($name, 0, 10) unless @_;
+    return $name;
 }
 
 =head2 target Args
@@ -29,9 +30,9 @@ sub target {
     return "nethack.alt.org" if $self->target_is_server($args);
 
     # this can't be just "\b\w+\b" because "-Mal" is not a nick
-    return $self->canonicalize_name($1)
+    return $self->canonicalize_name($1, @_)
         if $args->{args} =~ /(?:^| )(\w+)(?: |$)/;
-    return $self->canonicalize_name($args->{who});
+    return $self->canonicalize_name($args->{who}, @_);
 }
 
 =head2 target_is_server Args
