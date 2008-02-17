@@ -34,7 +34,7 @@ sub run {
 
     my $zscore = sum values %score;
 
-    return sprintf '%s has a Z-score of %.10s over %s: ',
+    return sprintf '%s has a Z-score of %.10s over %s: %s',
         $nick,
         $zscore,
         plural($games->count, 'ascension'),
