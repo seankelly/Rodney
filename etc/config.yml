@@ -6,4 +6,5 @@ nick: Rodney4
 database:
     driver: SQLite
     database: nethack
+other_config: etc/site_config.yml
 
