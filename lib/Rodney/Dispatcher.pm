@@ -18,6 +18,7 @@ use Rodney::Command::Player;
 use Rodney::Command::Date;
 use Rodney::Command::Zscore;
 use Rodney::Command::Monsterify;
+use Rodney::Command::Rng;
 
 sub on;
 
@@ -34,6 +35,7 @@ on qr{^!date\b\s*}i              => "Rodney::Command::Date";
 on qr{^!time\b\s*}i              => "Rodney::Command::Date";
 on qr{^!zscore\b\s*}i            => "Rodney::Command::Zscore";
 on qr{^!monsterify\b\s*}i        => "Rodney::Command::Monsterify";
+on qr{^!rng\b\s*}i               => "Rodney::Command::Rng";
 
 # meta commands
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
