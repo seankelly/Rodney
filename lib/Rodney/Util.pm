@@ -67,6 +67,12 @@ sub stats {
     return join ' ', @parts;
 }
 
+=head2 fstats hash
+
+Returns a string of the form "Foo(float) Bar(float) Baz(float)"
+
+=cut
+
 sub fstats {
     my %stats = @_;
 
