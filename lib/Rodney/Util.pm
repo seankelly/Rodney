@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Exporter 'import';
-our @EXPORT_OK = qw/plural ntimes once stats plane/;
+our @EXPORT_OK = qw/plural ntimes once stats fstats plane/;
 
 =head2 plural count, singular[, plural]
 
@@ -65,6 +65,17 @@ sub stats {
                 keys %stats;
 
     return join ' ', @parts;
+}
+
+sub fstats {
+    my %stats = @_;
+
+    my @parts = map { sprintf("%s(%.4f)", $_, $stats{$_})}
+                sort { $stats{$b} <=> $stats{$a} || $a cmp $b }
+                keys %stats;
+
+    return join ' ', @parts;
+
 }
 
 =head2 planes
