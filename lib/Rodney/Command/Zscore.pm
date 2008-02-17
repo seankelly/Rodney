@@ -3,7 +3,7 @@ package Rodney::Command::Zscore;
 use strict;
 use warnings;
 use parent 'Rodney::Command';
-use Rodney::Util qw/plural stats/;
+use Rodney::Util qw/plural stats fstats/;
 use List::Util qw/sum/;
 
 sub run {
@@ -34,11 +34,11 @@ sub run {
 
     my $zscore = sum values %score;
 
-    return sprintf '%s has a Z-score of %.10s over %s: %s',
+    return sprintf '%s has a Z-score of %.6f over %s: %s',
         $nick,
         $zscore,
         plural($games->count, 'ascension'),
-        stats(%role);
+        fstats(%score);
 }
 
 1;
