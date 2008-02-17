@@ -15,6 +15,8 @@ use Rodney::Command::Seen;
 use Rodney::Command::Where;
 use Rodney::Command::Roles;
 use Rodney::Command::Player;
+use Rodney::Command::Date;
+use Rodney::Command::Zscore;
 
 sub on;
 
@@ -27,6 +29,9 @@ on qr{^!seen\b\s*}i              => "Rodney::Command::Seen";
 on qr{^!where\b\s*}i             => "Rodney::Command::Where";
 on qr{^!roles?\b\s*}i            => "Rodney::Command::Roles";
 on qr{^!plr\b\s*}i               => "Rodney::Command::Player";
+on qr{^!date\b\s*}i              => "Rodney::Command::Date";
+on qr{^!time\b\s*}i              => "Rodney::Command::Date";
+on qr{^!zscore\b\s*}i            => "Rodney::Command::Zscore";
 
 # meta commands
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
