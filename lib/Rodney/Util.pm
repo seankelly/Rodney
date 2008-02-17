@@ -4,7 +4,8 @@ use strict;
 use warnings;
 
 use Exporter 'import';
-our @EXPORT_OK = qw/plural ntimes once stats fstats plane/;
+our @EXPORT_OK = qw/plural ntimes once stats fstats plane races roles genders
+                    alignments/;
 
 =head2 plural count, singular[, plural]
 
@@ -99,5 +100,44 @@ sub plane {
     return $name;
 }
 
-1;
+=head2 roles
 
+Returns the list of roles
+
+=cut
+
+sub roles {
+    return qw/Arc Bar Cav Hea Kni Mon Pri Ran Rog Sam Tou Val Wiz/;
+}
+
+=head2 races
+
+Returns the list of races
+
+=cut
+
+sub races {
+    return qw/Hum Dwa Elf Gno Orc/;
+}
+
+=head2 genders
+
+Returns the list of genders
+
+=cut
+
+sub genders {
+    return qw/Mal Fem/;
+}
+
+=head2 races
+
+Returns the list of alignments
+
+=cut
+
+sub alignments {
+    return qw/Law Neu Cha/;
+}
+
+1;
