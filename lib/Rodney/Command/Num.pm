@@ -45,7 +45,7 @@ sub run {
     {
         if ($games->first)
         {
-            $result = $games->first->to_string(100);
+            $result = $games->first->to_string(100, $num);
         }
         else
         {
