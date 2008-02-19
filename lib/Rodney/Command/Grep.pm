@@ -65,9 +65,7 @@ sub cant_redispatch {
     }
 
     if ($count == 1 || ($sort && $count > 0) || $offset) {
-        $result = $games->first->to_string(100,
-            ($target eq 'nethack.alt.org' ? 0 : $offset),
-            $count);
+        $result = $games->first->to_string(100, $offset, $count);
     }
     elsif ($count == 0) {
         $result = 'No games found.';
