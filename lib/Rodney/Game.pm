@@ -141,9 +141,23 @@ sub _inflate_date {
 sub to_string {
     my $self = shift;
     my $verbosity = shift || 0;
+    my $id = shift || 0;
+    my $count = shift || 0;
+    my $num;
 
-    my $result = sprintf '%d. %s (%s %s %s %s), %s, %d points',
-        $self->id,
+    if ($count) {
+        $id = 1 unless $id;
+        $num = "$id/$count";
+    }
+    elsif ($id) {
+        $num = $id;
+    }
+    else {
+        $num = $self->id;
+    }
+
+    my $result = sprintf '%s. %s (%s %s %s %s), %s, %d points',
+        $num,
         $self->player->name,
         $self->role, $self->race, $self->gender, $self->alignment,
         $self->death, $self->score;
