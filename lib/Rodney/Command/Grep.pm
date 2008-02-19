@@ -8,6 +8,7 @@ use Rodney::Game;
 
 my $sort;
 my $error;
+my $offset;
 
 sub help {
     my $self = shift;
@@ -28,6 +29,8 @@ sub games_callback {
     my $args = shift;
 
     $error = 0;
+    $sort = 0;
+    $offset = 0;
 
     $args->{args} = $args->{text};
     my $grep = Grep($games, $args);
@@ -40,25 +43,31 @@ sub cant_redispatch {
 
     $args->{args} = $args->{text};
     my $games = $self->games($args);
+    my $target = $self->target($args);
 
     return $error if $error;
+
 
     my $result;
     my @results;
     my $count = $games->count;
+    my $id = 1;
 
     # in case several thousand or more rows will be returned, limit to
     # just the first 25
     $games->set_page_info(
         per_page => 25
-    ) if $count > 25;
+    ) if $count > 25 && $offset == 0;
 
     while (my $g = $games->next) {
         push @results, $g->id;
+        ++$id;
     }
 
-    if ($count == 1 || ($sort && $count > 0)) {
-        $result = $games->first->to_string(100);
+    if ($count == 1 || ($sort && $count > 0) || $offset) {
+        $result = $games->first->to_string(100,
+            ($target eq 'nethack.alt.org' ? 0 : $offset),
+            $count);
     }
     elsif ($count == 0) {
         $result = 'No games found.';
@@ -77,7 +86,7 @@ sub regex {
     my $message = shift;
     my @regex;
     my @sort;
-    while ($message =~ s#({(?:\s*(min|max):\s*)?\s*(\w+)(?:\s*(!)?/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})##) {
+    while ($message =~ s#({(?:\s*(num|min|max):\s*)?\s*(\w+)(?:\s*(!)?/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})##) {
         if (defined($2)) {
             # column, min|max
             push @sort, [lc ($3), $2];
@@ -133,7 +142,7 @@ sub Grep {
     # next check that the fields are valid
     for (@{$regex{regex}},@{$regex{sort}}) {
         my $c = Rodney::Game->column($_->[0]);
-        next if $c;
+        next if $c || $_->[1] eq 'num';
         return ($error = 'Invalid field: ' . $_->[0]);
     }
 
@@ -152,10 +161,19 @@ sub Grep {
                         . ($_->[2] =~ /i/ ? '~*' : '~'),
         ) if length($_->[1]) > 0;
     }
+
     # and then sorting..
     if (@{$regex{sort}} > 0) {
         my @sort;
         for (@{$regex{sort}}) {
+            if ($_->[1] eq 'num') {
+                $offset = $_->[0];
+                $games->set_page_info(
+                    current_page => $offset,
+                    per_page     => 1,
+                );
+                next;
+            }
             if (defined($_->[2]) && Rodney::Game->column($_->[0])->is_numeric) {
                 $games->limit(
                     column   => $_->[0],
