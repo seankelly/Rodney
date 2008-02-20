@@ -2,23 +2,25 @@
 package Rodney::Dispatcher;
 use strict;
 use warnings;
-use Rodney::Command::Recent;
-use Rodney::Command::Noscum;
-use Rodney::Command::Asconly;
-use Rodney::Command::Gamesby;
-use Rodney::Command::Rot13;
 use Rodney::Command::Ascensions;
-use Rodney::Command::Num;
+use Rodney::Command::Asconly;
+use Rodney::Command::Date;
+use Rodney::Command::Gamesby;
 use Rodney::Command::Grep;
 use Rodney::Command::Help;
+use Rodney::Command::Max;
+use Rodney::Command::Min;
+use Rodney::Command::Monsterify;
+use Rodney::Command::Noscum;
+use Rodney::Command::Num;
+use Rodney::Command::Player;
+use Rodney::Command::Recent;
+use Rodney::Command::Rng;
+use Rodney::Command::Roles;
+use Rodney::Command::Rot13;
 use Rodney::Command::Seen;
 use Rodney::Command::Where;
-use Rodney::Command::Roles;
-use Rodney::Command::Player;
-use Rodney::Command::Date;
 use Rodney::Command::Zscore;
-use Rodney::Command::Monsterify;
-use Rodney::Command::Rng;
 
 sub on;
 
