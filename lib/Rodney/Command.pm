@@ -91,7 +91,7 @@ Override this for command specific help.
 =cut
 
 sub help {
-    return 'No help for this command.';
+    return 'I need help text written for me!';
 }
 
 1;
