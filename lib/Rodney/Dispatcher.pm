@@ -46,10 +46,10 @@ on qr{^!asconly\s+}i     => "Rodney::Command::Asconly";
 on qr{^!grep\s+(?:(.+)((?<!\?|<)!\w+\b.*)$|(.+)$)}i => sub {
     my @a = ("Rodney::Command::Grep");
     if (defined($1)) {
-        push @a, (grep => $1);
+        push @a, (text => $1);
     }
     else {
-        push @a, (grep => $3);
+        push @a, (text => $3);
     }
     if (defined($2)) {
         push @a, (subcommand => $2);
