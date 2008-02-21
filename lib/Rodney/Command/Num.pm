@@ -36,10 +36,10 @@ sub run {
     }
     # ROFL HAHA
     # yeah, sort it by id
-    $games->order_by(
+    $games->add_order_by(
         column => 'id',
         order  => 'asc',
-    );
+    ) unless $games->_order_clause;
 
     if ($num)
     {

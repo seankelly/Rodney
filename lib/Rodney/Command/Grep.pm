@@ -144,11 +144,6 @@ sub Grep {
         return ($error = 'Invalid field: ' . $_->[0]);
     }
 
-    $games->order_by(
-        column => 'id',
-        order  => 'asc',
-    );
-
     # now do the limiting based on the regex
     for (@{$regex{regex}}) {
         $games->limit(
@@ -188,7 +183,13 @@ sub Grep {
                 };
             }
         }
-        $games->order_by(@sort);
+        $games->add_order_by(@sort);
+    }
+    else {
+        $games->add_order_by(
+            column => 'id',
+            order  => 'asc',
+        );
     }
 
     # return 0 for success
