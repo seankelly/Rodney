@@ -69,6 +69,14 @@ on qr{^!asconly(\w+)\b\s*(.*)}i => sub {
     ("Rodney::Command::Asconly", subcommand => "!$1 $2");
 };
 
+on qr{^!max\b\s*([^!]+)(.*)}i => sub {
+    ("Rodney::Command::Max", text => $1, subcommand => "$2");
+};
+
+on qr{^!min\b\s*([^!]+)(.*)}i => sub {
+    ("Rodney::Command::Min", text => $1, subcommand => "$2");
+};
+
 my @rules;
 sub on {
     my ($re, $code) = @_;
