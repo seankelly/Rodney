@@ -36,6 +36,7 @@ sub run {
     }
     # ROFL HAHA
     # yeah, sort it by id
+    # but only if currently unsorted
     $games->add_order_by(
         column => 'id',
         order  => 'asc',
