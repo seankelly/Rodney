@@ -13,22 +13,18 @@ sub run {
     my $num   = $1 if $args->{body} =~ s/\s*#(\d+)\s*//;
     my $games = $self->games($args);
 
-    if ($self->target_is_server($args))
-    {
-        if ($num)
-        {
+    if ($self->target_is_server($args)) {
+        if ($num) {
             $games->limit(
                 column => 'id',
                 value  => $num
             );
         }
-        else
-        {
+        else {
             $games->unlimit();
         }
     }
-    else
-    {
+    else {
         $games->set_page_info(
             current_page => $num,
             per_page     => 1,
@@ -42,26 +38,20 @@ sub run {
         order  => 'asc',
     ) unless $games->_order_clause;
 
-    if ($num)
-    {
-        if ($games->first)
-        {
-            $result = $games->first->to_string(100, $num);
+    my $count = $games->count;
+
+    if ($num) {
+        if ($games->first) {
+            $result = $games->first->to_string(100, $num, $count);
         }
-        else
-        {
+        else {
             $result = 'Game not found.';
         }
     }
-    elsif ($games->count > 1)
-    {
-        $result = sprintf 'Found %d games for %s.',
-                          $games->count,
-                          $nick
-                          ;
+    elsif ($count > 1) {
+        $result = $games->last->to_string(100, $count, $count);
     }
-    else
-    {
+    else {
         $result = 'No games found.';
     }
     return $result;
