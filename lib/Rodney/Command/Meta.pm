@@ -9,8 +9,12 @@ sub run {
     my $args = shift;
 
     if ($self->can('games_callback')) {
+        my %argscopy = %$args;
         push @{ $args->{games_callback} },
-            $self->can('games_callback');
+            [
+                $self->can('games_callback'),
+                \%argscopy,
+            ];
     }
 
     $args->{body} = $args->{subcommand} || $args->{args};

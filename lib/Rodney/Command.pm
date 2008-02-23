@@ -78,7 +78,8 @@ sub games {
 
     for (@{ $args->{games_callback} || [] }) {
         $args->{games_modified}++;
-        $_->($self, $games, $args);
+        my ($code, $_args) = @{ $_ };
+        $code->($self, $games, $_args);
     }
 
     return $games;
