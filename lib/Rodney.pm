@@ -60,7 +60,7 @@ sub dispatch {
     my ($package, %args) = Rodney::Dispatcher->dispatch($args);
     return unless $package;
 
-    $package->run({ %$args, %args });
+    $package->run({ %$args, subcommand => '', %args });
 }
 
 1;
