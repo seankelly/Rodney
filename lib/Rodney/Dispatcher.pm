@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Rodney::Command::Ascensions;
 use Rodney::Command::Asconly;
+use Rodney::Command::Cmdlist;
 use Rodney::Command::Date;
 use Rodney::Command::Gamesby;
 use Rodney::Command::Grep;
@@ -40,6 +41,7 @@ on qr{^!zscore\b\s*}i            => "Rodney::Command::Zscore";
 on qr{^!monsterify\b\s*}i        => "Rodney::Command::Monsterify";
 on qr{^!rng\b\s*}i               => "Rodney::Command::Rng";
 on qr{^!read\b\s*}i              => "Rodney::Command::Read";
+on qr{^!cmdlist\b\s*}i           => "Rodney::Command::Cmdlist";
 
 # meta commands
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
