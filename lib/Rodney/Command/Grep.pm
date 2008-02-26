@@ -196,5 +196,8 @@ sub Grep {
     return 0;
 }
 
+# so commands can know that grep can be used either way
+sub is_command { 1 }
+
 1;
 

@@ -23,5 +23,7 @@ sub run {
 
 sub cant_redispatch { "Invalid command." }
 
+sub is_command { 0 }
+
 1;
 
