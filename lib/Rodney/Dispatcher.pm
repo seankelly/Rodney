@@ -14,6 +14,7 @@ use Rodney::Command::Min;
 use Rodney::Command::Monsterify;
 use Rodney::Command::Noscum;
 use Rodney::Command::Num;
+use Rodney::Command::Outfoxed;
 use Rodney::Command::Player;
 use Rodney::Command::Read;
 use Rodney::Command::Recent;
@@ -41,6 +42,7 @@ on qr{^!zscore\b\s*}i            => "Rodney::Command::Zscore";
 on qr{^!monsterify\b\s*}i        => "Rodney::Command::Monsterify";
 on qr{^!rng\b\s*}i               => "Rodney::Command::Rng";
 on qr{^!read\b\s*}i              => "Rodney::Command::Read";
+on qr{^!outfoxed\b\s*}i          => "Rodney::Command::Outfoxed";
 on qr{^!cmdlist\b\s*}i           => "Rodney::Command::Cmdlist";
 
 # meta commands
