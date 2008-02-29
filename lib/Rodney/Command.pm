@@ -11,9 +11,12 @@ use Rodney::Game;
 sub canonicalize_name {
     my $self = shift;
     my $name = shift;
+    my %opts = (
+        full => 0,
+    );
 
     $name =~ tr[a-zA-Z0-9][]cd;
-    return substr($name, 0, 10) unless @_;
+    return substr($name, 0, 10) unless $opts{full};
     return $name;
 }
 
@@ -26,13 +29,19 @@ Figures out the most likely target for the command, given the command arg-hash.
 sub target {
     my $self = shift;
     my $args = shift;
+    my %opts = (
+        default => 'nick',
+        @_
+    );
 
     return "nethack.alt.org" if $self->target_is_server($args);
 
     # this can't be just "\b\w+\b" because "-Mal" is not a nick
-    return $self->canonicalize_name($1, @_)
+    return $self->canonicalize_name($1, %opts)
         if $args->{args} =~ /(?:^| )(\w+)(?: |$)/;
-    return $self->canonicalize_name($args->{who}, @_);
+    return 'nethack.alt.org'
+        if $opts{default} eq 'server' && !$args->{server_denied};
+    return $self->canonicalize_name($args->{who}, %opts);
 }
 
 =head2 target_is_server Args
@@ -60,9 +69,13 @@ Gets a GameCollection based on Args. You should use this instead of Rodney::Game
 sub games {
     my $self = shift;
     my $args = shift;
+    my %opts = (
+        @_
+    );
 
-    my $nick = $self->target($args);
-    my $NAO = $self->target_is_server($args);
+    my $nick = $self->target($args, %opts);
+    # XXX: fix so target caches the target and stuff..
+    my $NAO = $nick eq 'nethack.alt.org';
 
     my $games = Rodney::GameCollection->new(handle => $args->{handle});
 
