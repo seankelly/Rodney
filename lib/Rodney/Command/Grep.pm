@@ -190,7 +190,7 @@ sub Grep {
         $games->add_order_by(
             column => 'id',
             order  => 'asc',
-        );
+        ) unless $games->_order_clause;
     }
 
     # return 0 for success
