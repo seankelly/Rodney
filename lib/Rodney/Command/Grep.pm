@@ -152,6 +152,7 @@ sub Grep {
             # this is ugly, I know!
             operator => ($_->[3] ? '!' : '')
                         . ($_->[2] =~ /i/ ? '~*' : '~'),
+            entry_aggregator => 'and',
         ) if length($_->[1]) > 0;
     }
 
