@@ -80,11 +80,13 @@ on qr{^!asconly(\w+)\b\s*(.*)}i => sub {
 };
 
 on qr{^!max\b\s*([^!]+)(.*)}i => sub {
-    ("Rodney::Command::Max", text => $1, subcommand => "$2");
+    ("Rodney::Command::Max",
+        text => $1, subcommand => (length($2) ? $2 : '!num #1'));
 };
 
 on qr{^!min\b\s*([^!]+)(.*)}i => sub {
-    ("Rodney::Command::Min", text => $1, subcommand => "$2");
+    ("Rodney::Command::Min",
+        text => $1, subcommand => (length($2) ? $2 : '!num #1'));
 };
 
 my @rules;
