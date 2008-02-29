@@ -9,6 +9,7 @@ use Rodney::Command::Date;
 use Rodney::Command::Gamesby;
 use Rodney::Command::Grep;
 use Rodney::Command::Help;
+use Rodney::Command::Hsn;
 use Rodney::Command::Max;
 use Rodney::Command::Min;
 use Rodney::Command::Monsterify;
@@ -43,6 +44,9 @@ on qr{^!monsterify\b\s*}i        => "Rodney::Command::Monsterify";
 on qr{^!rng\b\s*}i               => "Rodney::Command::Rng";
 on qr{^!read\b\s*}i              => "Rodney::Command::Read";
 on qr{^!outfoxed\b\s*}i          => "Rodney::Command::Outfoxed";
+on qr{^!hsn\b\s*([^!]*)}i        => sub {
+    ("Rodney::Command::Hsn", message => $1);
+}; 
 on qr{^!cmdlist\b\s*}i           => "Rodney::Command::Cmdlist";
 
 # meta commands
