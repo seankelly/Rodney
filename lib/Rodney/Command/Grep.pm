@@ -20,7 +20,7 @@ sub help {
     return 'Syntax is: !grep PERSON /DEATH/'
         if $args->{text} eq 'usage';
 
-    return 'Greps the database for games matching the arguments.';
+    return 'Greps the database for games matching the arguments. Available subtopics: fields usage';
 }
 
 sub games_callback {
