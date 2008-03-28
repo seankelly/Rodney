@@ -53,13 +53,13 @@ on qr{^!cmdlist\b\s*}i           => "Rodney::Command::Cmdlist";
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
 on qr{^!noscum\s+}i      => "Rodney::Command::Noscum";
 on qr{^!asconly\s+}i     => "Rodney::Command::Asconly";
-on qr{^!grep\s+(?:(.+)((?<!\?|<)!\w+\b.*)$|(.+)$)}i => sub {
+on qr{^!grep(?:\s+(?:(.+)((?<!\?|<)!\w+\b.*)$|(.+)$))?}i => sub {
     my @a = ("Rodney::Command::Grep");
     if (defined($1)) {
         push @a, (text => $1);
     }
     else {
-        push @a, (text => $3);
+        push @a, (text => (defined $3 ? $3 : ''));
     }
     if (defined($2)) {
         push @a, (subcommand => $2);

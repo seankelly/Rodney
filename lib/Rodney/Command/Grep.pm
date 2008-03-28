@@ -128,7 +128,7 @@ sub Grep {
     my $args  = shift;
 
     # first check that something was given...
-    unless ($args->{args}) {
+    unless (defined $args->{args} && $args->{args}) {
         return ($error = 'Syntax is: !grep PERSON /DEATH/');
     }
 
