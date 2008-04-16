@@ -11,6 +11,10 @@ use Jifty::DBI::Record schema {
         type is 'varchar',
         is mandatory;
 
+    column gamenum =>
+        type is 'integer',
+        is mandatory;
+
     column version =>
         type is 'varchar',
         is mandatory;
@@ -48,9 +52,21 @@ use Jifty::DBI::Record schema {
         type is 'varchar',
         is mandatory;
 
+    column endtime =>
+        type is 'integer';
+
     column startdate =>
         type is 'varchar',
         is mandatory;
+
+    column starttime =>
+        type is 'integer';
+
+    column realtime =>
+        type is 'integer';
+
+    column turns =>
+        type is 'integer';
 
     column uid =>
         type is 'integer',
@@ -68,13 +84,25 @@ use Jifty::DBI::Record schema {
         valid_values are qw(Mal Fem),
         is mandatory;
 
+    column startgender =>
+        valid_values are qw(Mal Fem);
+
     column alignment =>
         valid_values are qw(Law Neu Cha),
         is mandatory;
 
+    column startalignment =>
+        valid_values are qw(Law Neo Cha);
+
     column death =>
         type is 'varchar',
         is mandatory;
+
+    column conduct =>
+        type is 'integer';
+
+    column achieve =>
+        type is 'integer';
 
     # stuff we can easily calculate for efficiency/sanity
     column ascended =>
