@@ -40,6 +40,7 @@ while (<>) {
     my %converted = map { $convert{$_} => $game->{$_} } keys %$game;
 
     $converted{ascended} = $converted{death} eq 'ascended' ? 1 : 0;
+    $converted{dungeon}  = $dungeon[$converted{dungeon}];
 
     my $player = Rodney::Player->new(handle => $handle);
     $player->load_by_cols(name => $converted{player});
