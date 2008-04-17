@@ -40,7 +40,7 @@ my %gamenum;
 use Jifty::DBI::Handle;
 my $handle = Jifty::DBI::Handle->new;
 $handle->connect(
-    driver => 'Pg',
+    driver => 'SQLite',
     database => 'nethack',
 );
 
