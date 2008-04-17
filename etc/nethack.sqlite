@@ -1,6 +1,7 @@
 CREATE TABLE games (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  ,
   player varchar NOT NULL  ,
+  gamenum integer NOT NULL,
   version varchar(10) NOT NULL  ,
   score integer NOT NULL DEFAULT 0 ,
   dungeon varchar(20) NOT NULL  ,
@@ -10,13 +11,21 @@ CREATE TABLE games (
   maxhp integer NOT NULL  ,
   deaths integer NOT NULL  ,
   enddate varchar(20) NOT NULL  ,
+  endtime integer DEFAULT NULL,
   startdate varchar(20) NOT NULL  ,
+  starttime integer DEFAULT NULL,
+  realtime integer DEFAULT NULL,
+  turns integer DEFAULT NULL,
   uid integer NOT NULL  ,
   role varchar(3) NOT NULL  ,
   race varchar(3) NOT NULL  ,
   gender varchar(3) NOT NULL  ,
+  startgender varchar(3) DEFAULT NULL,
   alignment varchar(3) NOT NULL  ,
+  startalignment varchar(3) DEFAULT NULL,
   death varchar NOT NULL  ,
+  conduct integer DEFAULT NULL,
+  achieve integer DEFAULT NULL,
   ascended boolean NOT NULL DEFAULT 'f'
 );
 CREATE TABLE players (
