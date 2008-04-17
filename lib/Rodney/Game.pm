@@ -169,23 +169,27 @@ sub _inflate_date {
 sub to_string {
     my $self = shift;
     my $verbosity = shift || 0;
-    my $id = shift || 0;
-    my $count = shift || 0;
-    my $num;
+    my %args = (
+        offset    => 1,
+        count     => 0,
+        total     => 0,
+        @_,
+    );
+    # offset/count (gamenum/total)
+    my $prefix;
 
-    if ($count) {
-        $id = 1 unless $id;
-        $num = "$id/$count";
-    }
-    elsif ($id) {
-        $num = $id;
+    if ($args{count}) {
+        $prefix = "$args{offset}/$args{count}";
+        if ($args{total}) {
+            $prefix .= " ($self->gamenum/$args{total})";
+        }
     }
     else {
-        $num = $self->id;
+        $prefix = $self->id;
     }
 
     my $result = sprintf '%s. %s (%s %s %s %s), %s, %d points',
-        $num,
+        $prefix,
         $self->player->name,
         $self->role, $self->race, $self->gender, $self->alignment,
         $self->death, $self->score;
