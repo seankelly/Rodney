@@ -51,7 +51,6 @@ sub cant_redispatch {
     my $result;
     my @results;
     my $count = $games->count;
-    my $id = 1;
 
     # in case several thousand or more rows will be returned, limit to
     # just the first 25
@@ -60,12 +59,20 @@ sub cant_redispatch {
     ) if $count > 25 && $offset == 0;
 
     while (my $g = $games->next) {
-        push @results, $g->id;
-        ++$id;
+        if ($self->target_is_server($args)) {
+            push @results, $g->id;
+        }
+        else {
+            push @results, $g->gamenum;
+        }
     }
 
-    if ($count == 1 || ($sort && $count > 0) || $offset) {
-        $result = $games->first->to_string(100, $offset, $count);
+    if ($count == 1) {
+        $result = $games->first->to_string(100);
+    }
+    elsif (($sort && $count > 0) || $offset) {
+        $offset = 1 if $offset == 0;
+        $result = $games->first->to_string(100, count => $count, offset => $offset);
     }
     elsif ($count == 0) {
         $result = 'No games found.';
