@@ -42,14 +42,19 @@ sub run {
 
     if ($num) {
         if ($games->first) {
-            $result = $games->first->to_string(100, $num, $count);
+            if ($self->target_is_server($args)) {
+                $result = $games->first->to_string(100);
+            }
+            else {
+                $result = $games->first->to_string(100, offset => $num, count => $count);
+            }
         }
         else {
             $result = 'Game not found.';
         }
     }
     elsif ($count > 1) {
-        $result = $games->last->to_string(100, $count, $count);
+        $result = $games->last->to_string(100, offset => $count, count => $count);
     }
     else {
         $result = 'No games found.';
