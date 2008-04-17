@@ -30,7 +30,7 @@ sub run {
     ) unless $games->_order_clause;
 
     if ($games->first) {
-        return $games->first->to_string(100, 0, $games->count);
+        return $games->first->to_string(100, count => $games->count);
     }
     else {
         return "$target has not been outfoxed.";
