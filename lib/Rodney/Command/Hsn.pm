@@ -35,10 +35,6 @@ sub run {
     my $games = $self->games($args, default => ($server ? 'server' : 'nick'));
     my $target = $self->target($args, default => ($server ? 'server' : 'nick'));
 
-    use DDS;
-    warn $target;
-    warn $offset;
-
     $games->add_order_by(
         column => 'score',
         order  => 'desc',
@@ -50,9 +46,10 @@ sub run {
     );
 
     my $count = $games->count;
+    $offset = 1 unless $offset;
 
     if ($games->first) {
-        return $games->first->to_string(100, $offset, $count);
+        return $games->first->to_string(100, offset => $offset, count => $count);
     }
     else {
         return "$target only has $count games";
