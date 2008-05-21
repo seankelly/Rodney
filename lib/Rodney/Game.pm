@@ -227,7 +227,12 @@ sub to_string {
     }
 
     if ($verbosity > 4) {
-        $result .= ', between ' . $self->startdate . ' and ' . $self->enddate;
+        if ($self->startdate == $self->enddate) {
+            $result .= ', on ' . $self->startdate;
+        }
+        else {
+            $result .= ', between ' . $self->startdate . ' and ' . $self->enddate;
+        }
     }
 
     if ($verbosity > 5) {
