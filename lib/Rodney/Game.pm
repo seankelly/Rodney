@@ -195,11 +195,16 @@ sub to_string {
     # offset/count (gamenum/total)
     my $prefix;
 
-    if ($args{count}) {
+    if ($args{count} > 1) {
         $prefix = "$args{offset}/$args{count}";
         if ($args{total}) {
-            $prefix .= " ($self->gamenum/$args{total})";
+            $prefix .= sprintf ' (%d/%d)',
+                $self->gamenum,
+                $args{total};
         }
+    }
+    elsif ($args{count} == 1) {
+        $prefix = $self->gamenum;
     }
     else {
         $prefix = $self->id;
