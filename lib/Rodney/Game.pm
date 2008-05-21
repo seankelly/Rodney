@@ -148,6 +148,23 @@ sub is_scum {
     $self->score < 1000 && ($self->quit || $self->escaped);
 }
 
+sub conducts {
+    my $self = shift;
+    return () unless defined $self->conduct;
+
+    my @conducts = ( "foodless", "vegan", "vegetarian", "atheist", "weaponless",
+        "pacifist", "illiterate", "polypileless", "polyselfless",
+        "wishless", "artifact wishless", "genocideless" );
+    my @achieved;
+
+    for (my $i = 0; $i <= $#conducts; $i++) {
+        push @achieved, $conducts[$i]
+            if $self->conduct & (1 << $i);
+    }
+
+    return @achieved;
+}
+
 sub _inflate_date {
     my $self = shift;
     my $date = shift;
@@ -203,6 +220,10 @@ sub to_string {
         $result .= ', ';
         if ($self->death eq 'ascended') {
             $result .= 'max depth: ' . $self->maxlvl;
+            my @conducts = $self->conducts;
+            if (@conducts) {
+                $result .= ', conducts: ' . scalar(@conducts);
+            }
         }
         else {
             if ($self->curlvl == -10) {
