@@ -68,7 +68,7 @@ sub cant_redispatch {
     }
 
     if ($count == 1) {
-        $result = $games->first->to_string(100);
+        $result = $games->first->to_string(100, count => $count);
     }
     elsif (($sort && $count > 0) || $offset) {
         $offset = 1 if $offset == 0;
