@@ -91,9 +91,15 @@ sub regex {
     my $message = shift;
     my @regex;
     my @sort;
+    # this matches
+    # num:N => $2 $3
+    # min|max:column => $2 $3
+    # conduct:list
+    # column/regex/flags => $3 $5 $6 $4
+    # column<=>N => $3 $7 $8
     while ($message =~ s#({(?:\s*(num|min|max):\s*)?\s*(\w+)(?:\s*(!)?/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})##) {
         if (defined($2)) {
-            # column, min|max
+            # column, min|max|num
             push @sort, [lc ($3), $2];
         }
         elsif (defined($7) && defined($8)) {
