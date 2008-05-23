@@ -230,6 +230,7 @@ sub Grep {
                 );
                 next;
             }
+            # column <=> foo
             if (defined($_->[2]) && Rodney::Game->column($_->[0])->is_numeric) {
                 $games->limit(
                     column   => $_->[0],
@@ -238,6 +239,7 @@ sub Grep {
                     entry_aggregator => 'and',
                 );
             }
+            # min and max
             else {
                 $sort = 1;
                 push @sort, {
