@@ -10,6 +10,22 @@ my $sort;
 my $error;
 my $offset;
 
+my %conducts = (
+    foodless     => 1,
+    vegan        => 2,
+    vegetarian   => 4,
+    atheist      => 8,
+    weaponless   => 16,
+    pacifist     => 32,
+    illiterate   => 64,
+    polypileless => 128,
+    polyselfless => 256,
+    wishless     => 512,
+    artiwishless => 1024,
+    genocideless => 2048,
+    genoless     => 2048,
+);
+
 sub help {
     my $self = shift;
     my $args = shift;
@@ -91,16 +107,24 @@ sub regex {
     my $message = shift;
     my @regex;
     my @sort;
+    my @conduct;
     # this matches
     # num:N => $2 $3
     # min|max:column => $2 $3
-    # conduct:list
+    # conduct:list => $2 $3
     # column/regex/flags => $3 $5 $6 $4
     # column<=>N => $3 $7 $8
-    while ($message =~ s#({(?:\s*(num|min|max):\s*)?\s*(\w+)(?:\s*(!)?/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})##) {
+    while ($message =~ s#({(?:\s*(num|min|max|conduct):\s*)?\s*([!\w,]+)(?:\s*(!)?/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})##) {
         if (defined($2)) {
             # column, min|max|num
-            push @sort, [lc ($3), $2];
+            if ($2 ne 'conduct') {
+                push @sort, [lc ($3), $2];
+            }
+            else {
+                push @conduct, split ',', lc($3);
+                # make sure no duplicates in list
+                @conduct = keys %{{ map { $_ => 1 } @conduct } };
+            }
         }
         elsif (defined($7) && defined($8)) {
             # column, operator, compared to what
@@ -131,7 +155,7 @@ sub regex {
         $message = '';
     }
 
-    return (sort => \@sort, regex => \@regex);
+    return (sort => \@sort, regex => \@regex, conduct => \@conduct);
 }
 
 # just limits the collection
@@ -167,6 +191,31 @@ sub Grep {
                         . ($_->[2] =~ /i/ ? '~*' : '~'),
             entry_aggregator => 'and',
         ) if length($_->[1]) > 0;
+    }
+
+    if (@{$regex{conduct}} > 0) {
+        for my $conduct (@{$regex{conduct}}) {
+            my $negate = $conduct =~ s/^!//;
+            next unless $conducts{$conduct};
+            my $clauseid = 'conduct-' . $conduct;
+            my $bit = $conducts{$conduct};
+            my $equal = $negate ? 0 : $bit;
+            $games->limit(
+                subclause => $clauseid,
+                column    => 'conduct',
+                value     => $bit,
+                operator  => '&',
+                entry_aggregator => '=',
+            );
+            $games->limit(
+                subclause => $clauseid,
+                column    => '',
+                value     => $equal,
+                operator  => '',
+                alias     => '',
+                entry_aggregator => '=',
+            );
+        }
     }
 
     # and then sorting..
