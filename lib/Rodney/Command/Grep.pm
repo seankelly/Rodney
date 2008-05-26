@@ -42,6 +42,10 @@ sub help {
     return 'Syntax is: !grep PERSON /DEATH/'
         if $args->{text} eq 'usage';
 
+    return 'Available conducts: ' . join(', ', keys %conducts)
+        . '; aliases: ' . join(', ', keys %conduct_aliases)
+        if $args->{text} =~ /^conducts?/;
+
     return 'Greps the database for games matching the arguments. Available subtopics: fields usage';
 }
 
