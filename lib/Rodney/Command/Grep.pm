@@ -22,8 +22,14 @@ my %conducts = (
     polyselfless => 256,
     wishless     => 512,
     artiwishless => 1024,
-    genocideless => 2048,
     genoless     => 2048,
+);
+
+my %conduct_aliases = (
+    weapless     => 16,
+    illit        => 64,
+    polyless     => 384,
+    genocideless => 2048,
 );
 
 sub help {
@@ -196,9 +202,9 @@ sub Grep {
     if (@{$regex{conduct}} > 0) {
         for my $conduct (@{$regex{conduct}}) {
             my $negate = $conduct =~ s/^!//;
-            next unless $conducts{$conduct};
+            next unless $conducts{$conduct} || $conduct_aliases{$conduct};
             my $clauseid = 'conduct-' . $conduct;
-            my $bit = $conducts{$conduct};
+            my $bit = $conducts{$conduct} || $conduct_aliases{$conduct};
             my $equal = $negate ? 0 : $bit;
             $games->limit(
                 subclause => $clauseid,
