@@ -32,6 +32,26 @@ my %conduct_aliases = (
     genocideless => 2048,
 );
 
+my %achieve = (
+    bell        => 1,    # obtained Bell
+    gehennom    => 2,    # entered Gehennom
+    candelabrum => 4,    # obtained candelabrum
+    book        => 8,    # obtained Book
+    invocation  => 16,   # performed ritual
+    amulet      => 32,   # obtained amulet
+    planes      => 64,   # reached Planes
+    astral      => 128,  # reached Astral
+    ascended    => 256,
+    mines       => 512,  # completed Mines
+    sokoban     => 1024, # completed Sokoban
+    medusa      => 2048, # killed Medusa
+);
+
+my %achieve_aliases = (
+    ritual => 16,
+    ascend => 256,
+);
+
 sub help {
     my $self = shift;
     my $args = shift;
