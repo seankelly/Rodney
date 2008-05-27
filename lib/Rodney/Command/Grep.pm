@@ -237,6 +237,7 @@ sub Grep {
         my $alias = $column eq 'conduct' ? \%conduct_aliases : \%achieve_aliases;
         my $clauseid = $column . '-' . $field;
         my $bit = $hash->{$field} || $alias->{$field};
+        next unless $bit;
         my $equal = $negate ? 0 : $bit;
         $games->limit(
             subclause => $clauseid,
