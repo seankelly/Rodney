@@ -66,6 +66,10 @@ sub help {
         . '; aliases: ' . join(', ', keys %conduct_aliases)
         if $args->{text} =~ /^conducts?/;
 
+    return 'Available achievements: ' . join(', ', keys %achieve)
+        . '; aliases: ' . join(', ', keys %achieve_aliases)
+        if $args->{text} =~ /^achieve(?:ments)?/;
+
     return 'Greps the database for games matching the arguments. Available subtopics: fields usage';
 }
 
