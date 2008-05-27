@@ -141,23 +141,26 @@ sub regex {
     my $message = shift;
     my @regex;
     my @sort;
-    my @conduct;
+    my %bitfields; # this is currently for achieve and conduct
     # this matches
     # num:N => $2 $3
     # min|max:column => $2 $3
     # conduct:list => $2 $3
+    # achieve:list => $2 $3
     # column/regex/flags => $3 $5 $6 $4
     # column<=>N => $3 $7 $8
-    while ($message =~ s#({(?:\s*(num|min|max|conduct):\s*)?\s*([!\w,]+)(?:\s*(!)?/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})##) {
+    while ($message =~ s#({(?:\s*(num|min|max|conduct|achieve):\s*)?\s*([!\w,]+)(?:\s*(!)?/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})##) {
         if (defined($2)) {
-            # column, min|max|num
-            if ($2 ne 'conduct') {
-                push @sort, [lc ($3), $2];
+            if ($2 eq 'conduct' || $2 eq 'achieve') {
+                warn $2;
+                my @list = split ',', lc($3);
+                for (@list) {
+                    $bitfields{$_} = $2;
+                }
             }
+            # column, min|max|num
             else {
-                push @conduct, split ',', lc($3);
-                # make sure no duplicates in list
-                @conduct = keys %{{ map { $_ => 1 } @conduct } };
+                push @sort, [lc ($3), $2];
             }
         }
         elsif (defined($7) && defined($8)) {
@@ -189,7 +192,7 @@ sub regex {
         $message = '';
     }
 
-    return (sort => \@sort, regex => \@regex, conduct => \@conduct);
+    return (sort => \@sort, regex => \@regex, bitfields => \%bitfields);
 }
 
 # just limits the collection
@@ -227,29 +230,29 @@ sub Grep {
         ) if length($_->[1]) > 0;
     }
 
-    if (@{$regex{conduct}} > 0) {
-        for my $conduct (@{$regex{conduct}}) {
-            my $negate = $conduct =~ s/^!//;
-            next unless $conducts{$conduct} || $conduct_aliases{$conduct};
-            my $clauseid = 'conduct-' . $conduct;
-            my $bit = $conducts{$conduct} || $conduct_aliases{$conduct};
-            my $equal = $negate ? 0 : $bit;
-            $games->limit(
-                subclause => $clauseid,
-                column    => 'conduct',
-                value     => $bit,
-                operator  => '&',
-                entry_aggregator => '=',
-            );
-            $games->limit(
-                subclause => $clauseid,
-                column    => '',
-                value     => $equal,
-                operator  => '',
-                alias     => '',
-                entry_aggregator => '=',
-            );
-        }
+    for my $field (keys %{ $regex{bitfields} }) {
+        my $column = $regex{bitfields}->{$field};
+        my $negate = $field =~ s/^!//;
+        my $hash = $column eq 'conduct' ? \%conducts : \%achieve;
+        my $alias = $column eq 'conduct' ? \%conduct_aliases : \%achieve_aliases;
+        my $clauseid = $column . '-' . $field;
+        my $bit = $hash->{$field} || $alias->{$field};
+        my $equal = $negate ? 0 : $bit;
+        $games->limit(
+            subclause => $clauseid,
+            column    => $column,
+            value     => $bit,
+            operator  => '&',
+            entry_aggregator => '=',
+        );
+        $games->limit(
+            subclause => $clauseid,
+            column    => '',
+            value     => $equal,
+            operator  => '',
+            alias     => '',
+            entry_aggregator => '=',
+        );
     }
 
     # and then sorting..
