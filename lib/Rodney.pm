@@ -51,6 +51,17 @@ sub said {
     return $ret;
 }
 
+sub chanjoin {
+    my $self = shift;
+    my $args = shift;
+
+    Rodney::Seen->seen(
+        handle  => $self->{handle},
+        nick    => $args->{who},
+        message => "joining the channel.",
+    );
+}
+
 sub nick_change {
     my $self = shift;
     my $args = shift;
