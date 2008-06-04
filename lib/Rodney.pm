@@ -51,6 +51,17 @@ sub said {
     return $ret;
 }
 
+sub nick_change {
+    my $self = shift;
+    my $args = shift;
+
+    Rodney::Seen->seen(
+        handle  => $self->{handle},
+        nick    => $args->{from},
+        message => "changing nick to $args->{to}.",
+    );
+}
+
 sub connected {
     my $self = shift;
     if (defined(Rodney::Config->password)) {
