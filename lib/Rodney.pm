@@ -58,7 +58,7 @@ sub chanjoin {
     Rodney::Seen->seen(
         handle  => $self->{handle},
         nick    => $args->{who},
-        message => "joining the channel.",
+        message => "joining $args->{channel}.",
     );
 }
 
