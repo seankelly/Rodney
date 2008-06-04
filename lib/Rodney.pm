@@ -51,6 +51,17 @@ sub said {
     return $ret;
 }
 
+sub connected {
+    my $self = shift;
+    if (defined(Rodney::Config->password)) {
+        $self->say(
+            who => 'nickserv',
+            channel => 'msg',
+            body => 'identify ' . Rodney::Config->nick . ' ' . Rodney::Config->password
+        );
+    }
+}
+
 sub dispatch {
     my $self = shift;
     my $args = shift;
