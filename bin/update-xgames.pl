@@ -107,7 +107,21 @@ while (<>) {
 
     my $player = Rodney::Player->new(handle => $handle);
     $player->load_by_cols(name => $converted{player});
-    $player->id or do {
+    if ($player->id) {
+        # load player's last gamenum
+        my $game = Rodney::Game->new(handle => $handle);
+        $game->limit(
+            column => 'player',
+            value  => $converter{player},
+        );
+        $game->order_by(
+            column => 'gamenum',
+            order  => 'desc',
+        );
+        $game->rows_per_page(1);
+        $gamenum{$converted{player}} = $game->next->gamenum;
+    }
+    else {
         my $newplayer = Rodney::Player->new(handle => $handle);
         $newplayer->create(name => $converted{player});
     };
