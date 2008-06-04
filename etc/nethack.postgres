@@ -43,3 +43,11 @@ CREATE TABLE seens (
   lastseen integer,
   message varchar
 );
+
+CREATE TABLE bugs (
+    id SERIAL PRIMARY KEY,
+    bugid varchar(10) UNIQUE,
+    status varchar(15),
+    description varchar
+);
+create index bugs_bugid_idx on bugs (lower(bugid));
