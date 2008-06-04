@@ -62,6 +62,17 @@ sub chanjoin {
     );
 }
 
+sub chanpart {
+    my $self = shift;
+    my $args = shift;
+
+    Rodney::Seen->seen(
+        handle  => $self->{handle},
+        nick    => $args->{who},
+        message => "leaving $args->{channel}.",
+    );
+}
+
 sub nick_change {
     my $self = shift;
     my $args = shift;
