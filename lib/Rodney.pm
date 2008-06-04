@@ -60,6 +60,8 @@ sub chanjoin {
         nick    => $args->{who},
         message => "joining $args->{channel}.",
     );
+
+    return undef;
 }
 
 sub chanpart {
@@ -71,6 +73,8 @@ sub chanpart {
         nick    => $args->{who},
         message => "leaving $args->{channel}.",
     );
+
+    return undef;
 }
 
 sub nick_change {
@@ -82,6 +86,8 @@ sub nick_change {
         nick    => $args->{from},
         message => "changing nick to $args->{to}.",
     );
+
+    return undef;
 }
 
 sub connected {
