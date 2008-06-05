@@ -109,10 +109,10 @@ while (<>) {
     $player->load_by_cols(name => $converted{player});
     if ($player->id) {
         # load player's last gamenum
-        my $game = Rodney::Game->new(handle => $handle);
+        my $game = Rodney::GameCollection->new(handle => $handle);
         $game->limit(
             column => 'player',
-            value  => $converter{player},
+            value  => $converted{player},
         );
         $game->order_by(
             column => 'gamenum',
