@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use parent 'Bot::BasicBot';
 use Module::Refresh;
+use POE;
 use Jifty::DBI::Handle;
 
 use Rodney::Dispatcher;
@@ -28,6 +29,8 @@ sub new {
         driver   => Rodney::Config->database->{driver},
         database => Rodney::Config->database->{database},
     );
+
+    $self->register('quit');
 
     return $self;
 }
@@ -75,6 +78,19 @@ sub chanpart {
     );
 
     return undef;
+}
+
+sub irc_quit {
+    my ($self, $nick, $msg) = @_[OBJECT, ARG0, ARG1];
+    $nick = $self->nick_strip($nick);
+
+    Rodney::Seen->seen(
+        handle  => $self->{handle},
+        nick    => $nick,
+        message => $msg
+                   ? "quitting with message: $msg."
+                   : "quitting without a message.",
+    );
 }
 
 sub nick_change {
