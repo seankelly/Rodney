@@ -102,6 +102,11 @@ sub nick_change {
         nick    => $args->{from},
         message => "changing nick to $args->{to}.",
     );
+    Rodney::Seen->seen(
+        handle  => $self->{handle},
+        nick    => $args->{to},
+        message => "changing nick from $args->{from}.",
+    );
 
     return undef;
 }
