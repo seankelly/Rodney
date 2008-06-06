@@ -95,17 +95,18 @@ sub irc_quit {
 
 sub nick_change {
     my $self = shift;
-    my $args = shift;
+    my $from = shift;
+    my $to   = shift;
 
     Rodney::Seen->seen(
         handle  => $self->{handle},
-        nick    => $args->{from},
-        message => "changing nick to $args->{to}.",
+        nick    => $from,
+        message => "changing nick to $to.",
     );
     Rodney::Seen->seen(
         handle  => $self->{handle},
-        nick    => $args->{to},
-        message => "changing nick from $args->{from}.",
+        nick    => $to,
+        message => "changing nick from $from.",
     );
 
     return undef;
