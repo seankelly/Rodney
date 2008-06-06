@@ -107,7 +107,7 @@ while (<>) {
 
     my $player = Rodney::Player->new(handle => $handle);
     $player->load_by_cols(name => $converted{player});
-    if ($player->id) {
+    if ($player->id && !$gamenum{$converted{player}}) {
         # load player's last gamenum
         my $game = Rodney::GameCollection->new(handle => $handle);
         $game->limit(
