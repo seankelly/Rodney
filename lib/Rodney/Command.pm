@@ -98,7 +98,7 @@ sub games {
     return $games;
 }
 
-=head 2 help
+=head2 help
 
 Override this for command specific help.
 
