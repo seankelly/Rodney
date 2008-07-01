@@ -38,4 +38,10 @@ CREATE TABLE seens (
   lastseen varchar NOT NULL,
   message varchar NOT NULL
 );
+CREATE TABLE bugs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    bugid varchar UNIQUE NOT NULL,
+    status varchar NOT NULL,
+    description varchar NOT NULL
+);
 
