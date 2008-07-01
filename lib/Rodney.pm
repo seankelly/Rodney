@@ -112,6 +112,18 @@ sub nick_change {
     return undef;
 }
 
+sub got_names {
+    my $self = shift;
+    my $args = shift;
+    for my $nick (keys %{ $args->{names} }) {
+        Rodney::Seen->seen(
+            handle  => $self->{handle},
+            nick    => $nick,
+            message => "when I joined $args->{channel}.",
+        );
+    }
+}
+
 sub connected {
     my $self = shift;
     if (defined(Rodney::Config->password)) {
