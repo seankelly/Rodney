@@ -47,6 +47,8 @@ while ($bug_content =~ s{
     my ($id, $status, $text) = ($1, $2, $3);
     $text =~ s/\n/ /g;
 
+    $status = 'NextVersion' if $status eq 'Fixed';
+
     my %create = (
         bugid       => $id,
         status      => $status,
