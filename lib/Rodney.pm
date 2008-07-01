@@ -80,15 +80,15 @@ sub chanpart {
     return undef;
 }
 
-sub irc_quit {
-    my ($self, $nick, $msg) = @_[OBJECT, ARG0, ARG1];
-    $nick = $self->nick_strip($nick);
+sub chanquit {
+    my $self = shift;
+    my $args = shift;
 
     Rodney::Seen->seen(
         handle  => $self->{handle},
-        nick    => $nick,
-        message => $msg
-                   ? "quitting with message: $msg."
+        nick    => $args->{who},
+        message => $args->{body}
+                   ? "quitting with message: $args->{body}."
                    : "quitting without a message.",
     );
 }
