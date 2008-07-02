@@ -39,6 +39,25 @@ sub normalize {
     return ($1, $2);
 }
 
+sub setup {
+    return if (caller(1))[3] =~ /::run$/;
+
+    my $learndb = shift;
+    my $term = shift;
+    my $entry = shift;
+
+    $learndb->unlimit;
+
+    $learndb->limit(
+        column => 'term',
+        value  => $term,
+    );
+    $learndb->limit(
+        column => 'entry',
+        value  => $entry,
+    ) if defined $entry;
+}
+
 # commands
 sub add {
     my $self = shift;
@@ -141,12 +160,9 @@ sub info {
 
     my ($term, $entry) = normalize($arguments[1]);
 
-    $learndb->unlimit;
-
     if (defined $entry) {
     }
     else {
-        $learndb->limit
     }
 }
 
