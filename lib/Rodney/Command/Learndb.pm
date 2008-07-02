@@ -21,11 +21,7 @@ sub entries {
     my $learndb = shift;
     my $term = shift;
 
-    $learndb->unlimit;
-    $learndb->limit(
-        column => 'term',
-        value  => $term,
-    );
+    setup($learndb, $term);
 
     return $learndb->count + 1;
 }
@@ -93,18 +89,9 @@ sub del {
 
     my ($term, $entry) = normalize($arguments[1]);
 
-    $learndb->unlimit;
+    setup($learndb, $term, $entry);
 
     if (defined $entry) {
-        $learndb->limit(
-            column => 'term',
-            value  => $term,
-        );
-        $learndb->limit(
-            column => 'entry',
-            value  => $entry,
-        );
-
         return 'Entry not found.' if $learndb->count == 0;
         return 'Too many entries matched.' if $learndb->count > 1;
 
@@ -130,11 +117,6 @@ sub del {
     }
     else {
         # delete entire term
-        $learndb->limit(
-            column => 'term',
-            value  => $term,
-        );
-
         my $deleted = 0;
 
         while (my $entry = $learndb->next) {
