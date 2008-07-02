@@ -51,3 +51,23 @@ CREATE TABLE bugs (
     description varchar
 );
 create index bugs_bugid_idx on bugs (lower(bugid));
+
+CREATE table learndb (
+    id SERIAL PRIMARY KEY,
+    term varchar,
+    entry integer DEFAULT 0,
+    author varchar,
+    updated integer,
+    definition varchar
+);
+create index learndb_term_idx on learndb (lower(term));
+create index learndb_term_entry_idx on learndb (lower(term),entry);
+
+CREATE table learndb_undo (
+    id SERIAL PRIMARY KEY,
+    entryid integer, -- references learndb (id)
+    who varchar,
+    updated integer,
+    definition varchar
+);
+create index learndb_undo_entryid_idx on learndb_undo (entryid);
