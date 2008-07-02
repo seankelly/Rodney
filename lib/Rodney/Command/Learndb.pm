@@ -160,9 +160,30 @@ sub info {
 
     my ($term, $entry) = normalize($arguments[1]);
 
+    setup($learndb, $term, $entry);
+
     if (defined $entry) {
+        return 'Entry not found.' if $learndb->count == 0;
+
+        my $dbentry = $learndb->first;
+
+        return sprintf '%s[%d] was created by %s and last updated %s.',
+               $term,
+               $entry,
+               $dbentry->author,
+               scalar gmtime($dbentry->updated);
     }
     else {
+        return 'Term not found.' if $learndb->count == 0;
+
+        my @info;
+        while (my $dbentry = $learndb->next) {
+            push @info, $dbentry->author;
+        }
+
+        return sprintf '%s has contributions by: %s.',
+               $term,
+               join(', ', @info);
     }
 }
 
