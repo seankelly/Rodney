@@ -104,16 +104,7 @@ sub del {
         my $text = $learndb->first->to_string;
         $learndb->first->delete;
 
-        $learndb->unlimit;
-        $learndb->limit(
-            column => 'term',
-            value  => $term,
-        );
-        $learndb->limit(
-            column   => 'entry',
-            value    => $entry,
-            operator => '>',
-        );
+        setup($learndb, $term, $entry, '>');
 
         while (my $next = $learndb->next) {
             $next->set_entry($next->entry - 1);
