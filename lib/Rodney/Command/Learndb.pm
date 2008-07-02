@@ -41,6 +41,7 @@ sub setup {
     my $learndb = shift;
     my $term = shift;
     my $entry = shift;
+    my $operator = shift;
 
     $learndb->unlimit;
 
@@ -48,10 +49,15 @@ sub setup {
         column => 'term',
         value  => $term,
     );
-    $learndb->limit(
+
+    my %entry = (
         column => 'entry',
         value  => $entry,
-    ) if defined $entry;
+    );
+
+    $entry{operator} = $operator if defined $operator;
+
+    $learndb->limit(%entry) if defined $entry;
 }
 
 # commands
