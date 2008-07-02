@@ -11,6 +11,7 @@ use Rodney::Command::Gamesby;
 use Rodney::Command::Grep;
 use Rodney::Command::Help;
 use Rodney::Command::Hsn;
+use Rodney::Command::Learndb;
 use Rodney::Command::Max;
 use Rodney::Command::Min;
 use Rodney::Command::Monsterify;
@@ -50,6 +51,7 @@ on qr{^!hsn\b\s*([^!]*)}i        => sub {
 }; 
 on qr{^!cmdlist\b\s*}i           => "Rodney::Command::Cmdlist";
 on qr{^!bugs?\b\s*}i             => "Rodney::Command::Bugdb";
+on qr{^!learn\b\s*}i             => "Rodney::Command::Learndb";
 
 # meta commands
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
