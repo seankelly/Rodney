@@ -30,8 +30,6 @@ sub new {
         database => Rodney::Config->database->{database},
     );
 
-    $self->register('quit');
-
     return $self;
 }
 
