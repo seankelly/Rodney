@@ -37,6 +37,8 @@ sub new {
         elements => 'Any',
     );
 
+    $self->{tick_enabled} = 0;
+
     return $self;
 }
 
