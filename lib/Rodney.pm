@@ -64,7 +64,10 @@ sub said {
 
 sub enqueue {
     my $self = shift;
+    my $data = shift;
     my $priority = shift || 1;
+
+    $self->{message_queue}->key_insert($priority, $data);
 }
 
 sub chanjoin {
