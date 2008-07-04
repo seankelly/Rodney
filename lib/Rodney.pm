@@ -12,8 +12,6 @@ use Rodney::Dispatcher;
 use Rodney::Seen;
 use Rodney::Config;
 
-my $msg_queue;
-
 sub new {
     my $class = shift;
     Rodney::Config->init;
@@ -34,7 +32,7 @@ sub new {
     );
 
     # create a max priority queue
-    $msg_queue = Heap::Simple->new(order => '>');
+    $self->{message_queue} = Heap::Simple->new(order => '>');
 
     return $self;
 }
