@@ -76,6 +76,25 @@ sub enqueue {
     my $priority = shift || 1;
 
     $self->{message_queue}->key_insert($priority, $data);
+
+    unless ($self->{tick_enabled}) {
+        $self->schedule_tick(1);
+        $self->{tick_enabled} = 1;
+    }
+}
+
+sub tick {
+    my $self = shift;
+
+    if ($self->{message_queue}->count) {
+        my $msg = $self->{message_queue}->extract_top;
+        $self->say(%$msg);
+    }
+
+    return 2 if $self->{message_queue}->count;
+
+    $self->{tick_enabled} = 0;
+    return 0;
 }
 
 sub chanjoin {
