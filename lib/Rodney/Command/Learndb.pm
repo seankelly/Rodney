@@ -167,8 +167,19 @@ sub swap {
     my $args = shift;
     my $learndb = shift;
 
-    my ($termA, $entryA) = normalize($arguments[1]);
-    my ($termB, $entryB) = normalize($arguments[2]);
+    my ($termA, $entryA) = normalize($args->{arguments}->[1]);
+    my ($termB, $entryB) = normalize($args->{arguments}->[2]);
+
+    return if ($termA eq $termB) && ($entryA eq $entryB);
+
+    setup($learndb, $termA);
+    return "'$termA' not found in my dictionary." if $learndb->count == 0;
+
+    setup($learndb, $termB);
+    return "'$termB' not found in my dictionary." if $learndb->count == 0;
+
+    if (!defined($entryA) && !defined($entryB)) {
+    }
 }
 
 sub run {
