@@ -60,6 +60,11 @@ sub said {
 
     return unless $ret;
 
+    # give channel messages higher priority over private messages
+    my $priority = $args->{channel} eq 'msg'
+                   ? 5
+                   : 10;
+
     # handle if $ret is not an array ref
     unless (ref($ret) eq 'ARRAY') {
         $self->enqueue({
@@ -67,7 +72,7 @@ sub said {
             channel => $args->{channel},
             address => 0,
             body    => $ret,
-        });
+        }, $priority);
     }
     else {
         # if it is an array ref, enqueue the lines together
@@ -79,7 +84,7 @@ sub said {
             body    => $_,
         } for @{ $ret };
 
-        $self->enqueue(\@msg);
+        $self->enqueue(\@msg, $priority);
     }
 
     return;
