@@ -62,7 +62,7 @@ sub said {
 
     # give channel messages higher priority over private messages
     my $priority = $args->{channel} ne 'msg'
-                   ? 10,
+                   ? 10
                    : 5;
 
     # handle if $ret is not an array ref
