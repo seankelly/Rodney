@@ -145,7 +145,6 @@ sub query {
     my $self = shift;
     my $args = shift;
     my $learndb = shift;
-    my $bot = shift;
 
     my ($term, $entry) = normalize($args->{arguments}->[1]);
 
@@ -194,7 +193,7 @@ sub run {
 
     my $learndb = Rodney::LearndbCollection->new(handle => $args->{handle});
 
-    $self->can($args[0])->($self, $args, $learndb, $bot);
+    $self->can($args[0])->($self, $args, $learndb);
 }
 
 1;
