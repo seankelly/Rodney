@@ -141,6 +141,27 @@ sub info {
     }
 }
 
+sub query {
+    my $self = shift;
+    my $args = shift;
+    my $learndb = shift;
+    my $bot = shift;
+
+    my ($term, $entry) = normalize($args->{arguments}->[1]);
+
+    my @results = Rodney::Learndb->query(
+        handle => $args->{handle},
+        term   => $term,
+        entry  => $entry,
+    );
+
+    return "${term}[$entry] not found in the dictionary." if @results == 0;
+
+    return $results[0] if @results == 1;
+
+    \@results;
+}
+
 sub swap {
     my $self = shift;
     my $args = shift;
