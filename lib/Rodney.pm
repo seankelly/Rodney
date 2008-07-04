@@ -33,7 +33,7 @@ sub new {
 
     # create a max priority queue
     $self->{message_queue} = Heap::Simple->new(
-        order    => '>'
+        order    => '>',
         elements => 'Any',
     );
 
