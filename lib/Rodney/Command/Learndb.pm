@@ -65,8 +65,8 @@ sub add {
     my $self = shift;
     my $args = shift;
     my $learndb = shift;
-    my @arguments = @_;
 
+    my @arguments = @{ $args->{arguments} };
     my $term = $arguments[1];
     my $definition = join(' ', @arguments[2..$#arguments]);
 
@@ -91,11 +91,8 @@ sub del {
     my $self = shift;
     my $args = shift;
     my $learndb = shift;
-    my @arguments = @_;
 
-    my ($term, $entry) = normalize($arguments[1]);
-
-    setup($learndb, $term, $entry);
+    my ($term, $entry) = normalize($args->{arguments}->[1]);
 
     if (defined $entry) {
         return 'Entry not found.' if $learndb->count == 0;
@@ -128,16 +125,14 @@ sub edit {
     my $self = shift;
     my $args = shift;
     my $learndb = shift;
-    my @arguments = @_;
 }
 
 sub info {
     my $self = shift;
     my $args = shift;
     my $learndb = shift;
-    my @arguments = @_;
 
-    my ($term, $entry) = normalize($arguments[1]);
+    my ($term, $entry) = normalize($args->{arguments}->[1]);
 
     setup($learndb, $term, $entry);
 
@@ -170,7 +165,6 @@ sub swap {
     my $self = shift;
     my $args = shift;
     my $learndb = shift;
-    my @arguments = @_;
 
     my ($termA, $entryA) = normalize($arguments[1]);
     my ($termB, $entryB) = normalize($arguments[2]);
@@ -182,12 +176,13 @@ sub run {
 
     return unless $args->{args};
     my @args = split ' ', $args->{args};
+    $args->{arguments} = \@args;
 
     return unless $self->can($args[0]);
 
     my $learndb = Rodney::LearndbCollection->new(handle => $args->{handle});
 
-    $self->can($args[0])->($self, $args, $learndb, @args);
+    $self->can($args[0])->($self, $args, $learndb, $bot);
 }
 
 1;
