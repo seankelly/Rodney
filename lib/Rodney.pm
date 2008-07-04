@@ -98,8 +98,8 @@ sub enqueue {
     $self->{message_queue}->key_insert($priority, $data);
 
     unless ($self->{tick_enabled}) {
-        $self->schedule_tick(1);
         $self->{tick_enabled} = 1;
+        $self->schedule_tick(1);
     }
 }
 
