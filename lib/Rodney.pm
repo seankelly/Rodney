@@ -6,10 +6,13 @@ use parent 'Bot::BasicBot';
 use Module::Refresh;
 use POE;
 use Jifty::DBI::Handle;
+use Heap::Simple;
 
 use Rodney::Dispatcher;
 use Rodney::Seen;
 use Rodney::Config;
+
+my $msg_queue;
 
 sub new {
     my $class = shift;
@@ -30,6 +33,9 @@ sub new {
         database => Rodney::Config->database->{database},
     );
 
+    # create a max priority queue
+    $msg_queue = Heap::Simple->new(order => '>');
+
     return $self;
 }
 
@@ -49,7 +55,15 @@ sub said {
     my $ret = eval { $self->dispatch($args) };
     warn $@ if $@;
 
-    return $ret;
+    # handle if $ret is an array ref
+    return $ret if ref($ret) ne 'ARRAY';
+
+    $self->enqueue($_) for @{ $ret };
+}
+
+sub enqueue {
+    my $self = shift;
+    my $priority = shift || 1;
 }
 
 sub chanjoin {
