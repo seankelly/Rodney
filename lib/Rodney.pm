@@ -46,7 +46,7 @@ sub said {
     my $self = shift;
     my $args = shift;
 
-    print "<$args->{who}> $args->{body}\n";
+    print "<$args->{who}/$args->{channel}> $args->{body}\n";
     $args->{handle} = $self->{handle};
 
     Rodney::Seen->seen(
