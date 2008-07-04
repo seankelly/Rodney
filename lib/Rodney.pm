@@ -107,6 +107,7 @@ sub tick {
     my $self = shift;
 
     if ($self->{message_queue}->count) {
+        my $key = $self->{message_queue}->top_key;
         my $msg = $self->{message_queue}->extract_top;
 
         if (ref($msg) eq 'HASH') {
@@ -115,7 +116,7 @@ sub tick {
         elsif (ref($msg) eq 'ARRAY') {
             my %msg = %{ shift @{ $msg } };
             $self->say(%msg);
-            $self->enqueue($msg) if scalar @{ $msg } > 0;
+            $self->enqueue($msg, $key) if scalar @{ $msg } > 0;
         }
     }
 
