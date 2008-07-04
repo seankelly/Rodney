@@ -103,7 +103,15 @@ sub tick {
 
     if ($self->{message_queue}->count) {
         my $msg = $self->{message_queue}->extract_top;
-        $self->say(%$msg);
+
+        if (ref($msg) ne 'ARRAY') {
+            $self->say(%$msg);
+        }
+        else {
+            my %msg = %{ shift @{ $msg } };
+            $self->say(%msg);
+            $self->enqueue($msg) if scalar @{ $msg } > 0;
+        }
     }
 
     return 2 if $self->{message_queue}->count;
