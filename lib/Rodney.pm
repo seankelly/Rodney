@@ -61,9 +61,9 @@ sub said {
     return unless $ret;
 
     # give channel messages higher priority over private messages
-    my $priority = $args->{channel} eq 'msg'
-                   ? 5
-                   : 10;
+    my $priority = $args->{channel} ne 'msg'
+                   ? 10,
+                   : 5;
 
     # handle if $ret is not an array ref
     unless (ref($ret) eq 'ARRAY') {
