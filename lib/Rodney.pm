@@ -58,8 +58,16 @@ sub said {
     my $ret = eval { $self->dispatch($args) };
     warn $@ if $@;
 
-    # handle if $ret is an array ref
-    return $ret if ref($ret) ne 'ARRAY';
+    # handle if $ret is not an array ref
+    unless (ref($ret) eq 'ARRAY') {
+        $self->enqueue({
+            who     => $args->{who},
+            channel => $args->{channel},
+            address => 0,
+            body    => $ret,
+        });
+        return;
+    }
 
     for (@{ $ret }) {
         my %msg = (
