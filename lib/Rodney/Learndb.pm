@@ -158,11 +158,13 @@ sub info {
 
         my $dbentry = $collection->first;
 
+        my $date = scalar gmtime($dbentry->updated);
+        $date =~ s/  / /;
         return sprintf '%s[%d] was created by %s and last updated %s.',
                $dbentry->term,
                $dbentry->entry,
                $dbentry->author,
-               scalar gmtime($dbentry->updated);
+               $date;
     }
     else {
         return 'Term not found.' if $collection->count == 0;
