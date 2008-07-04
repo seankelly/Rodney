@@ -66,6 +66,8 @@ sub add {
     my $args = shift;
     my $learndb = shift;
 
+    return if $args->{channel} eq 'msg';
+
     my @arguments = @{ $args->{arguments} };
     my $term = $arguments[1];
     my $definition = join(' ', @arguments[2..$#arguments]);
@@ -91,6 +93,8 @@ sub del {
     my $self = shift;
     my $args = shift;
     my $learndb = shift;
+
+    return if $args->{channel} eq 'msg';
 
     my ($term, $entry) = normalize($args->{arguments}->[1]);
 
