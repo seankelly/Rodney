@@ -70,19 +70,19 @@ sub add {
     my $term = $arguments[1];
     my $definition = join(' ', @arguments[2..$#arguments]);
 
-    my $entries = entries($learndb, $term);
-
     my $id = Rodney::Learndb->add(
         handle     => $args->{handle},
         term       => $term,
-        entry      => $entries,
         author     => $args->{who},
         definition => $definition,
     );
 
     my $entry = Rodney::Learndb->load_by_cols(id => $id, _handle => $args->{handle});
 
-    return $entry->to_string if $entry;
+    return sprintf 'Term %s[%d] successfully added.',
+           $entry->term,
+           $entry->entry
+           if $id;
 
     return 'Entry not created';
 }
