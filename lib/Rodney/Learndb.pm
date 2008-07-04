@@ -25,6 +25,68 @@ use Jifty::DBI::Record schema {
         is mandatory;
 };
 
+# helper methods
+####################
+
+# returns number of entries for a term
+sub _entries {
+    my $handle = shift;
+    my $term = shift;
+
+    my $collection = Rodney::LearndbCollection->new(handle => $handle);
+
+    _setup($collection, $term);
+
+    return $collection->count;
+}
+
+# tests to see if the term (and possibly entry) exist
+sub _exists {
+    my $handle = shift;
+    my $term = shift;
+    my $entry = shift;
+
+    my $collection = Rodney::LearndbCollection->new(handle => $handle);
+
+    _setup($term, $entry);
+
+    return $collection->count;
+}
+
+sub _normalize {
+    my $arg = shift;
+
+    # term = $1, entry = $2
+    $arg =~ /^(.*?)(?:\[(\d+)\])?$/;
+    return ($1, $2);
+}
+
+sub _setup {
+    my $collection = shift;
+    my $term = shift;
+    my $entry = shift;
+    my $operator = shift;
+
+    $collection->unlimit;
+
+    $collection->limit(
+        column => 'term',
+        value  => $term,
+    );
+
+    my %entry = (
+        column => 'entry',
+        value  => $entry,
+    );
+
+    $entry{operator} = $operator if defined $operator;
+
+    $collection->limit(%entry) if defined $entry;
+}
+
+# "public" methods
+####################
+
 sub add {
     my $self = shift;
     my %args = (
@@ -34,6 +96,8 @@ sub add {
 
     my $entry = Rodney::Learndb->new(handle => $args{handle});
 
+    $args{entry} = _entries($args{handle}, $args{term}) + 1;
+
     $entry->create(
         term       => $args{term},
         entry      => $args{entry},
@@ -41,6 +105,76 @@ sub add {
         updated    => $args{updated},
         definition => $args{definition},
     );
+}
+
+sub del {
+    my $self = shift;
+    my %args = (@_);
+
+    return unless defined $args{term} && defined $args{handle};
+
+    my $collection = Rodney::LearndbCollection->new(handle => $args{handle});
+
+    _setup($collection, $args{term}, $args{entry});
+
+    if (defined $args{entry}) {
+        return 'Entry not found.' if $collection->count == 0;
+        return 'Too many entries matched.' if $collection->count > 1;
+
+        my $text = $collection->first->to_string;
+        $collection->first->delete;
+
+        _setup($collection, $args{term}, $args{entry}, '>');
+
+        while (my $next = $collection->next) {
+            $next->set_entry($next->entry - 1);
+        }
+
+        return $text;
+    }
+    else {
+        # delete entire term
+        return 'Term not found.' if $collection->count == 0;
+        my $deleted = 0;
+
+        while (my $entry = $collection->next) {
+            $deleted++ if $entry->delete;
+        }
+
+        return 'Deleted ' . $deleted . ' entries.';
+   }
+}
+
+sub info {
+    my $self = shift;
+    my %args = (@_);
+}
+
+sub query {
+    my $self = shift;
+    my %args = (@_);
+
+    my $collection = Rodney::LearndbCollection->new(handle => $args{handle});
+
+    _setup($collection, $args{term}, $args{entry});
+    return if $collection->count == 0;
+
+    if (defined $args{entry}) {
+        return ($collection->first->to_string);
+    }
+    else {
+        $collection->order_by(
+            column => 'entry',
+            order  => 'asc',
+        );
+
+        my @results;
+        while (my $entry = $collection->next) {
+            push @results, $entry->to_string;
+        }
+
+        return @results;
+    }
 }
 
 sub to_string {
