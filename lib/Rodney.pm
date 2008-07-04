@@ -59,7 +59,15 @@ sub said {
     # handle if $ret is an array ref
     return $ret if ref($ret) ne 'ARRAY';
 
-    $self->enqueue($_) for @{ $ret };
+    for (@{ $ret }) {
+        my %msg = (
+            who     => $args->{who},
+            channel => $args->{channel},
+            address => 0,
+            body    => $_,
+        );
+        $self->enqueue(\%msg);
+    }
 }
 
 sub enqueue {
