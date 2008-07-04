@@ -148,6 +148,35 @@ sub del {
 sub info {
     my $self = shift;
     my %args = (@_);
+
+    my $collection = Rodney::LearndbCollection->new(handle => $args{handle});
+
+    _setup($collection, $args{term}, $args{entry});
+
+    if (defined $args{entry}) {
+        return 'Entry not found.' if $collection->count == 0;
+
+        my $dbentry = $collection->first;
+
+        return sprintf '%s[%d] was created by %s and last updated %s.',
+               $dbentry->term,
+               $dbentry->entry,
+               $dbentry->author,
+               scalar gmtime($dbentry->updated);
+    }
+    else {
+        return 'Term not found.' if $collection->count == 0;
+
+        my @info;
+        while (my $dbentry = $collection->next) {
+            push @info, $dbentry->author;
+        }
+
+        return sprintf '%s has contributions by: %s.',
+               $args{term},
+               join(', ', @info);
+    }
+
 }
 
 sub query {
