@@ -94,31 +94,11 @@ sub del {
 
     my ($term, $entry) = normalize($args->{arguments}->[1]);
 
-    if (defined $entry) {
-        return 'Entry not found.' if $learndb->count == 0;
-        return 'Too many entries matched.' if $learndb->count > 1;
-
-        my $text = $learndb->first->to_string;
-        $learndb->first->delete;
-
-        setup($learndb, $term, $entry, '>');
-
-        while (my $next = $learndb->next) {
-            $next->set_entry($next->entry - 1);
-        }
-
-        return $text;
-    }
-    else {
-        # delete entire term
-        my $deleted = 0;
-
-        while (my $entry = $learndb->next) {
-            $deleted++ if $entry->delete;
-        }
-
-        return 'Deleted ' . $deleted . ' entries.';
-    }
+    Rodney::Learndb->del(
+        handle => $args->{handle},
+        term   => $term,
+        entry  => $entry,
+    );
 }
 
 sub edit {
