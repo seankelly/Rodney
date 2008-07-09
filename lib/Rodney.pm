@@ -99,7 +99,7 @@ sub enqueue {
 
     unless ($self->{tick_enabled}) {
         $self->{tick_enabled} = 1;
-        $self->schedule_tick(1);
+        $self->schedule_tick(.1);
     }
 }
 
