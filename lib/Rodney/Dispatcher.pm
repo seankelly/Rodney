@@ -25,6 +25,7 @@ use Rodney::Command::Rng;
 use Rodney::Command::Roles;
 use Rodney::Command::Rot13;
 use Rodney::Command::Seen;
+use Rodney::Command::Time;
 use Rodney::Command::Where;
 use Rodney::Command::Zscore;
 
@@ -49,6 +50,7 @@ on qr{^!outfoxed\b\s*}i          => "Rodney::Command::Outfoxed";
 on qr{^!hsn\b\s*([^!]*)}i        => sub {
     ("Rodney::Command::Hsn", message => $1);
 }; 
+on qr{^!pom\b\s*}i               => "Rodney::Command::Time";
 on qr{^!cmdlist\b\s*}i           => "Rodney::Command::Cmdlist";
 on qr{^!bugs?\b\s*}i             => "Rodney::Command::Bugdb";
 on qr{^!learn\b\s*}i             => "Rodney::Command::Learndb";
