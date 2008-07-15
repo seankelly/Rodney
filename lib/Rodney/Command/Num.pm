@@ -53,7 +53,7 @@ sub run {
             $result = 'Game not found.';
         }
     }
-    elsif ($count > 1) {
+    elsif ($count > 0) {
         $result = $games->last->to_string(100, offset => $count, count => $count);
     }
     else {
