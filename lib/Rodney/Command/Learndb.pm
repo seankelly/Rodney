@@ -145,6 +145,12 @@ sub query {
     \@results;
 }
 
+sub search {
+    my $self = shift;
+    my $args = shift;
+    my $learndb = shift;
+}
+
 sub swap {
     my $self = shift;
     my $args = shift;
