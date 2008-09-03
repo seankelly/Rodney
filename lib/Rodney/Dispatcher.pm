@@ -56,6 +56,7 @@ on qr{^!pom\b\s*}i               => "Rodney::Command::Time";
 on qr{^!cmdlist\b\s*}i           => "Rodney::Command::Cmdlist";
 on qr{^!bugs?\b\s*}i             => "Rodney::Command::Bugdb";
 on qr{^!learn\b\s*}i             => "Rodney::Command::Learndb";
+on qr{^\?.+}i                    => "Rodney::Command::Learndb";
 
 # meta commands
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";

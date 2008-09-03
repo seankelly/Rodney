@@ -177,9 +177,24 @@ sub run {
     my $self = shift;
     my $args = shift;
 
+    if ($args->{body} =~ /^\?(\W+)\s*(.+)/) {
+        $args->{args} = "$1 $2";
+        warn $args->{args};
+    }
+
     return unless $args->{args};
     my @args = split ' ', $args->{args};
     $args->{arguments} = \@args;
+
+    my %alias = (
+        '?' => 'query',
+        '>' => 'query',
+        '<' => 'query',
+        '!' => 'info',
+        '*' => 'search',
+    );
+
+    $args[0] = $alias{$args[0]} || $args[0];
 
     return unless $self->can($args[0]);
 
