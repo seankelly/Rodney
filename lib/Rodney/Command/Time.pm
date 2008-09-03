@@ -36,7 +36,7 @@ sub pom {
     my ($phase, $illum, $age) = phase();
 
     if ($vagueness == 0) {
-        return sprintf '%d%% full.',
+        return sprintf 'The Moon is %d%% full.',
                int($illum * 100 + 0.5);
     }
     elsif ($vagueness == 1) {
