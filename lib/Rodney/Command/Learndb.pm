@@ -150,6 +150,8 @@ sub swap {
     my $args = shift;
     my $learndb = shift;
 
+    return if $args->{channel} eq 'msg';
+
     my ($termA, $entryA) = normalize($args->{arguments}->[1]);
     my ($termB, $entryB) = normalize($args->{arguments}->[2]);
 
