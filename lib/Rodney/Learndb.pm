@@ -248,6 +248,16 @@ use Jifty::DBI::Record schema {
         is mandatory;
 };
 
+sub add {
+    my $self = shift;
+    my %args = (@_);
+}
+
+sub undo {
+    my $self = shift;
+    my %args = (@_);
+}
+
 sub TABLE_NAME { 'learndb_undo' }
 
 package Rodney::LearndbUndoCollection;
