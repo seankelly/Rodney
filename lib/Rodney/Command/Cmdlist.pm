@@ -12,8 +12,7 @@ sub run {
     my $self = shift;
     my $args = shift;
 
-    my @packages = qw/Ascensions Gamesby Min Recent Asconly Grep Monsterify Rng
-            Where Help Noscum Roles Zscore Max Num Rot13 Date Player Seen/;
+    my @packages = qw/Ascensions Asconly Bugs Date Gamesby Grep Help Max Min Monsterify Noscum Num Player Recent Rng Roles Rot13 Seen Where Zscore/;
 
     my %commands;
 
