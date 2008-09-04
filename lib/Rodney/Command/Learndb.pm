@@ -140,8 +140,6 @@ sub query {
 
     return "${term}[$entry] not found in the dictionary." if @results == 0;
 
-    return $results[0] if @results == 1;
-
     \@results;
 }
 
