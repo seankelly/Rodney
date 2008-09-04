@@ -60,34 +60,41 @@ sub said {
 
     return unless $ret;
 
-    # give channel messages higher priority over private messages
-    my $priority = $args->{channel} ne 'msg'
-                   ? 10
-                   : 5;
-
-    # handle if $ret is not an array ref
-    unless (ref($ret) eq 'ARRAY') {
-        $self->enqueue({
+    if (ref($ret) eq '' || ref($ret) eq 'ARRAY') {
+        $self->msg(
             who     => $args->{who},
             channel => $args->{channel},
             address => 0,
             body    => $ret,
-        }, $priority);
+        );
     }
-    else {
-        # if it is an array ref, enqueue the lines together
-        my @msg;
-        push @msg, {
-            who     => $args->{who},
-            channel => $args->{channel},
+    elsif (ref($ret) eq 'HASH') {
+        $self->msg(
+            who     => $ret->{who},
+            channel => $ret->{channel},
             address => 0,
-            body    => $_,
-        } for @{ $ret };
-
-        $self->enqueue(\@msg, $priority);
+            body    => $ret->{body},
+        );
     }
 
     return;
+}
+
+sub msg {
+    my $self = shift;
+    my %args;
+    if (ref($_[0]) eq 'HASH') {
+        %args = %{ $_[0] };
+    }
+    else {
+        %args = (@_);
+    }
+
+    my $priority = $args{channel} =~ /^#/
+                   ? 10
+                   : 5;
+
+    $self->enqueue(\%args, $priority);
 }
 
 sub enqueue {
@@ -110,13 +117,17 @@ sub tick {
         my $key = $self->{message_queue}->top_key;
         my $msg = $self->{message_queue}->extract_top;
 
-        if (ref($msg) eq 'HASH') {
-            $self->say(%$msg);
-        }
-        elsif (ref($msg) eq 'ARRAY') {
-            my %msg = %{ shift @{ $msg } };
+        if (ref($msg->{body}) eq 'ARRAY') {
+            my %msg = %$msg;
+            my $body = delete $msg{body};
+            my $tosend = shift @{ $body };
+            $msg->{body} = $body;
+            $msg{body} = $tosend;
             $self->say(%msg);
-            $self->enqueue($msg, $key) if scalar @{ $msg } > 0;
+            $self->enqueue($msg, $key) if scalar @{ $body } > 0;
+        }
+        else {
+            $self->say(%$msg);
         }
     }
 
