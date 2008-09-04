@@ -39,10 +39,12 @@ sub run {
             if ($streak{current} > $streak{max}) {
                 $streak{max} = $streak{current};
                 $streak{maxlist} = $streak{list};
+                $streak{maxbegin} = $streak{begin}
             }
         }
         else {
             # end current streak
+            $streak{begin} = 0;
             $streak{current} = 0;
             $streak{list} = [];
             $streak{since}++;
@@ -68,8 +70,9 @@ sub run {
         my $res;
 
         if ($streak{max} > 1) {
-            $res = sprintf '%s has %d consecutive ascensions: %s',
-                           $nick, $streak{max},
+            $res = sprintf '%s has %d consecutive ascensions (#%d-%d): %s',
+                           $nick, $streak{max}, $streak{maxbegin},
+                           $streak{maxbegin} + $streak{max} - 1,
                            join(', ', @{ $streak{maxlist} });
         }
         else {
@@ -78,8 +81,14 @@ sub run {
         }
 
         if ($streak{max} > $streak{current} && $streak{current} > 0) {
-            $res .= sprintf ', and has ascended past %d games: %s.',
-                            $streak{current}, join(', ', @{ $streak{list} });
+            my $plural = $streak{current} > 1 ? 's' : '';
+            my $range = $streak{begin} .
+                        ($streak{current} > 1
+                        ? '-' . $streak{begin} + $streak{current} - 1
+                        : '');
+            $res .= sprintf '; and has ascended past %d game%s (#%s): %s.',
+                            $streak{current}, $plural, $range,
+                            join(', ', @{ $streak{list} });
         }
         else {
             # ooh, exciting, I know
