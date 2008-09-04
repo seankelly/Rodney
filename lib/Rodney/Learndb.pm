@@ -96,6 +96,10 @@ sub add {
 
     my $entry = Rodney::Learndb->new(handle => $args{handle});
 
+    # normalize term to strip trailing spaces and convert _ to spaces
+    $args{term} =~ s/ +$//;
+    $args{term} =~ tr/_/ /;
+
     $args{entry} = _entries($args{handle}, $args{term}) + 1;
 
     $entry->create(
@@ -114,6 +118,8 @@ sub del {
     return unless defined $args{term} && defined $args{handle};
 
     my $collection = Rodney::LearndbCollection->new(handle => $args{handle});
+
+    $args{term} =~ tr/_/ /;
 
     _setup($collection, $args{term}, $args{entry});
 
@@ -151,6 +157,8 @@ sub info {
 
     my $collection = Rodney::LearndbCollection->new(handle => $args{handle});
 
+    $args{term} =~ tr/_/ /;
+
     _setup($collection, $args{term}, $args{entry});
 
     if (defined $args{entry}) {
@@ -187,6 +195,8 @@ sub query {
 
     my $collection = Rodney::LearndbCollection->new(handle => $args{handle});
 
+    $args{term} =~ tr/_/ /;
+
     _setup($collection, $args{term}, $args{entry});
     return if $collection->count == 0;
 
@@ -208,10 +218,17 @@ sub query {
     }
 }
 
+sub normal_term {
+    my $self = shift;
+    my $term;
+    ($term = $self->term) =~ tr/ /_/;
+    return $term;
+}
+
 sub to_string {
     my $self = shift;
     return sprintf "%s[%d]: %s",
-           $self->term,
+           $self->normal_term,
            $self->entry,
            $self->definition;
 }

@@ -69,7 +69,7 @@ sub add {
     my $entry = Rodney::Learndb->load_by_cols(id => $id, _handle => $args->{handle});
 
     return sprintf 'Term %s[%d] successfully added.',
-           $entry->term,
+           $entry->normal_term,
            $entry->entry
            if $id;
 
