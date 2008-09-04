@@ -191,13 +191,26 @@ sub run {
         '*' => 'search',
     );
 
-    $args[0] = $alias{$args[0]} || $args[0];
+    my $cmd = $alias{$args[0]} || $args[0];
 
-    return unless $self->can($args[0]);
+    return unless $self->can($cmd);
 
     my $learndb = Rodney::LearndbCollection->new(handle => $args->{handle});
 
-    $self->can($args[0])->($self, $args, $learndb);
+    my $res = $self->can($cmd)->($self, $args, $learndb);
+
+    my %method = (
+        query => 'msg',
+        '?'   => 'msg',
+    );
+
+    my $msg = {
+        channel => $method{$args[0]} || $args->{channel},
+        who     => $args->{who},
+        body    => $res,
+    };
+
+    return $msg;
 }
 
 1;
