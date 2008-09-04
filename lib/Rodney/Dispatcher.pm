@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Rodney::Command::Ascensions;
 use Rodney::Command::Asconly;
+use Rodney::Command::Ascstreak;
 use Rodney::Command::Bugdb;
 use Rodney::Command::Cmdlist;
 use Rodney::Command::Date;
@@ -57,6 +58,7 @@ on qr{^!cmdlist\b\s*}i           => "Rodney::Command::Cmdlist";
 on qr{^!bugs?\b\s*}i             => "Rodney::Command::Bugdb";
 on qr{^!learn\b\s*}i             => "Rodney::Command::Learndb";
 on qr{^\?.+}i                    => "Rodney::Command::Learndb";
+on qr{^!ascstreak\b\s*}i         => "Rodney::Command::Ascstreak";
 
 # meta commands
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
