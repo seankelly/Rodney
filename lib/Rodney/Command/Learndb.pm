@@ -69,8 +69,8 @@ sub add {
     return if $args->{channel} eq 'msg';
 
     my @arguments = @{ $args->{arguments} };
-    my $term = $arguments[1];
-    my $definition = join(' ', @arguments[2..$#arguments]);
+    my $term = shift @arguments;
+    my $definition = join(' ', @arguments);
 
     my $id = Rodney::Learndb->add(
         handle     => $args->{handle},
@@ -96,7 +96,7 @@ sub del {
 
     return if $args->{channel} eq 'msg';
 
-    my ($term, $entry) = normalize($args->{arguments}->[1]);
+    my ($term, $entry) = normalize($args->{arguments}->[0]);
 
     Rodney::Learndb->del(
         handle => $args->{handle},
@@ -116,7 +116,7 @@ sub info {
     my $args = shift;
     my $learndb = shift;
 
-    my ($term, $entry) = normalize($args->{arguments}->[1]);
+    my ($term, $entry) = normalize($args->{arguments}->[0]);
 
     return Rodney::Learndb->info(
         handle => $args->{handle},
@@ -130,7 +130,9 @@ sub query {
     my $args = shift;
     my $learndb = shift;
 
-    my ($term, $entry) = normalize($args->{arguments}->[1]);
+    my @args = @{ $args->{arguments} };
+
+    my ($term, $entry) = normalize(join(' ', @args));
 
     my @results = Rodney::Learndb->query(
         handle => $args->{handle},
@@ -156,8 +158,8 @@ sub swap {
 
     return if $args->{channel} eq 'msg';
 
-    my ($termA, $entryA) = normalize($args->{arguments}->[1]);
-    my ($termB, $entryB) = normalize($args->{arguments}->[2]);
+    my ($termA, $entryA) = normalize($args->{arguments}->[0]);
+    my ($termB, $entryB) = normalize($args->{arguments}->[1]);
 
     return if ($termA eq $termB) && ($entryA eq $entryB);
 
@@ -181,7 +183,6 @@ sub run {
 
     return unless $args->{args};
     my @args = split ' ', $args->{args};
-    $args->{arguments} = \@args;
 
     my %alias = (
         '?' => 'query',
@@ -190,8 +191,17 @@ sub run {
         '!' => 'info',
         '*' => 'search',
     );
-
     my $cmd = $alias{$args[0]} || $args[0];
+
+    my %method = (
+        query => 'msg',
+        '?'   => 'msg',
+    );
+    my $chan = $method{$args[0]} || $args->{channel},
+
+    shift @args;
+    $args->{arguments} = \@args;
+
 
     return unless $self->can($cmd);
 
@@ -199,18 +209,13 @@ sub run {
 
     my $res = $self->can($cmd)->($self, $args, $learndb);
 
-    my %method = (
-        query => 'msg',
-        '?'   => 'msg',
-    );
-
     return 'That entry is too long.'
         if ref($res) eq 'ARRAY'
         && scalar @{ $res } > 2
-        && $method{$args[0]} ne 'msg';
+        && $chan ne 'msg';
 
     my $msg = {
-        channel => $method{$args[0]} || $args->{channel},
+        channel => $chan,
         who     => $args->{who},
         body    => $res,
     };
