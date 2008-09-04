@@ -177,7 +177,6 @@ sub run {
 
     if ($args->{body} =~ /^\?(\W+)\s*(.+)/) {
         $args->{args} = "$1 $2";
-        warn $args->{args};
     }
 
     return unless $args->{args};
