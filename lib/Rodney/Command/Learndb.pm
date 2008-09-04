@@ -13,19 +13,6 @@ sub help {
 }
 
 # helper methods
-sub entries {
-    # this is to prevent it being called from run because
-    # the arguments aren't passed correctly
-    # otherwise I wouldn't care
-    return if (caller(1))[3] =~ /::run$/;
-    my $learndb = shift;
-    my $term = shift;
-
-    setup($learndb, $term);
-
-    return $learndb->count + 1;
-}
-
 sub normalize {
     return if (caller(1))[3] =~ /::run$/;
 
