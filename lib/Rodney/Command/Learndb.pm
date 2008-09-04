@@ -204,6 +204,11 @@ sub run {
         '?'   => 'msg',
     );
 
+    return 'That entry is too long.'
+        if ref($res) eq 'ARRAY'
+        && scalar @{ $res } > 2
+        && $method{$args[0]} ne 'msg';
+
     my $msg = {
         channel => $method{$args[0]} || $args->{channel},
         who     => $args->{who},
