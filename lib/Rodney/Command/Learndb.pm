@@ -89,6 +89,7 @@ sub del {
         handle => $args->{handle},
         term   => $term,
         entry  => $entry,
+        who    => $args->{who},
     );
 }
 

@@ -121,6 +121,11 @@ sub add {
     );
 }
 
+sub _delete {
+    my $self = shift;
+    $self->set_deleted('t');
+}
+
 sub del {
     my $self = shift;
     my %args = (@_);
@@ -138,7 +143,7 @@ sub del {
         return 'Too many entries matched.' if $collection->count > 1;
 
         my $text = $collection->first->to_string;
-        $collection->first->delete;
+        $collection->first->_delete;
 
         _setup($collection, $args{term}, $args{entry}, '>');
 
@@ -154,7 +159,7 @@ sub del {
         my $deleted = 0;
 
         while (my $entry = $collection->next) {
-            $deleted++ if $entry->delete;
+            $deleted++ if $entry->_delete;
         }
 
         return 'Deleted ' . $deleted . ' entries.';
