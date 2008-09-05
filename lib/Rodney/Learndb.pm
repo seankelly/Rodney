@@ -79,6 +79,11 @@ sub _setup {
         value  => $term,
     );
 
+    $collection->limit(
+        column => 'deleted',
+        value  => 'f',
+    );
+
     my %entry = (
         column => 'entry',
         value  => $entry,
