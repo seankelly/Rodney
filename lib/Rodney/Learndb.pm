@@ -143,6 +143,7 @@ sub del {
         return 'Too many entries matched.' if $collection->count > 1;
 
         my $text = $collection->first->to_string;
+        $collection->first->set_updated(time);
         $collection->first->_delete;
 
         _setup($collection, $args{term}, $args{entry}, '>');
@@ -159,7 +160,9 @@ sub del {
         my $deleted = 0;
 
         while (my $entry = $collection->next) {
-            $deleted++ if $entry->_delete;
+            $deleted++;
+            $entry->set_updated(time);
+            $entry->_delete;
         }
 
         return 'Deleted ' . $deleted . ' entries.';
@@ -231,6 +234,40 @@ sub query {
 
         return @results;
     }
+}
+
+sub undelete {
+    my $self = shift;
+    my %args = (@_);
+
+    my $collection = Rodney::LearndbCollection->new(handle => $args{handle});
+
+    $args{term} =~ tr/_/ /;
+
+    my $entries = _entries($args{handle}, $args{term});
+
+    _setup($collection, $args{term}, $args{entry});
+
+    # override default
+    $collection->limit(
+        column => 'deleted',
+        value  => 't',
+    );
+
+    $collection->order_by(
+        column => 'entry',
+        value  => 'asc',
+    );
+
+    my $undeleted = 0;
+    while (my $entry = $collection->next) {
+        $undeleted++;
+        $entry->set_deleted('f');
+        $entry->set_entry(++$entries);
+        $entry->set_updated(time);
+    }
+
+    return $undeleted;
 }
 
 sub normal_term {

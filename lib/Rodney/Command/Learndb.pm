@@ -164,6 +164,25 @@ sub swap {
     }
 }
 
+sub undel {
+    my $self = shift;
+    my $args = shift;
+    my $learndb = shift;
+
+    return if $args->{channel} eq 'msg';
+
+    my ($term, $entry) = normalize($args->{arguments}->[0]);
+
+    my $undeleted = Rodney::Learndb->undelete(
+        handle => $args->{handle},
+        term   => $term,
+        entry  => $entry,
+    );
+
+    return 'No entries to undelete.' if $undeleted == 0;
+    return "Restored $undeleted entries.";
+}
+
 sub run {
     my $self = shift;
     my $args = shift;
