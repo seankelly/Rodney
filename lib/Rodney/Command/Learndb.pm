@@ -140,6 +140,74 @@ sub search {
     my $self = shift;
     my $args = shift;
     my $learndb = shift;
+
+    my $string = join ' ', @{ $args->{arguments} };
+    my $query = $string;
+
+    $query =~ s/%//;
+    $query =~ tr/ /%/;
+    $query =~ tr/_/ /;
+
+    $learndb->unlimit;
+    # first search titles..
+    $learndb->limit(
+        column   => 'term',
+        value    => $query,
+        operator => 'MATCHES',
+    );
+    $learndb->column(
+        column   => 'term',
+        function => 'DISTINCT',
+    );
+
+    my $count = $learndb->count;
+
+    return sprintf '%d results for "%s". Please narrow your search.',
+                   $count, $string
+        if $count > 25;
+
+    if ($count > 0) {
+        my @terms;
+
+        while (my $term = $learndb->next) {
+            push @terms, $term->normal_term;
+        }
+
+        return sprintf '%d results for "%s": %s',
+                       $count, $string,
+                       join(', ', @terms);
+    }
+
+    $learndb->unlimit;
+    # second search definitions
+    $learndb->limit(
+        column   => 'definition',
+        value    => $query,
+        operator => 'MATCHES',
+    );
+    $learndb->column(
+        column   => 'term',
+        function => 'DISTINCT',
+    );
+
+    $count = $learndb->count;
+    if ($count == 0) {
+        return 'fail';
+    }
+    elsif ($count <= 25) {
+        my @terms;
+
+        while (my $term = $learndb->next) {
+            push @terms, $term->normal_term;
+        }
+
+        return sprintf '%d results for "%s": %s',
+                       $count, $string,
+                       join(', ', @terms);
+    }
+    else {
+        return 'too many!';
+    }
 }
 
 sub swap {
