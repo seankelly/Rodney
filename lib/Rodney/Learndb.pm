@@ -4,6 +4,11 @@ use warnings;
 
 use Jifty::DBI::Schema;
 use Jifty::DBI::Record schema {
+    column deleted =>
+        type is 'boolean',
+        default is 'f',
+        is mandatory;
+
     column term =>
         type is 'varchar',
         is mandatory;
