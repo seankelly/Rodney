@@ -128,7 +128,10 @@ sub query {
         entry  => $entry,
     );
 
-    return "${term}[$entry] not found in the dictionary." if @results == 0;
+    return sprintf '%s%s not found in the dictionary.',
+        $term,
+        defined $entry ? "[$entry]" : '',
+        if @results == 0;
 
     \@results;
 }
