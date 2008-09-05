@@ -54,6 +54,7 @@ create index bugs_bugid_idx on bugs (lower(bugid));
 
 CREATE table learndb (
     id SERIAL PRIMARY KEY,
+    deleted boolean DEFAULT 'f',
     term varchar,
     entry integer DEFAULT 0,
     author varchar,
@@ -66,8 +67,6 @@ create index learndb_term_entry_idx on learndb (lower(term),entry);
 CREATE table learndb_undo (
     id SERIAL PRIMARY KEY,
     entryid integer, -- references learndb (id)
-    term varchar,
-    entry integer DEFAULT 0,
     who varchar,
     updated integer,
     definition varchar
