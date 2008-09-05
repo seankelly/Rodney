@@ -246,13 +246,23 @@ sub undelete {
 
     my $entries = _entries($args{handle}, $args{term});
 
-    _setup($collection, $args{term}, $args{entry});
-
     # override default
+    $collection->unlimit;
+
+    $collection->limit(
+        column => 'term',
+        value  => $args{term},
+    );
+
     $collection->limit(
         column => 'deleted',
         value  => 't',
     );
+
+    $collection->limit(
+        column => 'entry',
+        value  => $args{entry},
+    ) if defined $args{entry};
 
     $collection->order_by(
         column => 'entry',
