@@ -44,4 +44,19 @@ CREATE TABLE bugs (
     status varchar NOT NULL,
     description varchar NOT NULL
 );
-
+CREATE table learndb (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    deleted boolean DEFAULT 'f',
+    term varchar NOT NULL,
+    entry integer DEFAULT 0,
+    author varchar NOT NULL,
+    updated integer,
+    definition varchar NOT NULL
+);
+CREATE table learndb_undo (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    entryid integer, -- references learndb (id)
+    who varchar NOT NULL,
+    updated integer,
+    definition varchar NOT NULL
+);
