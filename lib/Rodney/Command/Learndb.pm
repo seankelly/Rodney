@@ -185,10 +185,6 @@ sub search {
         value    => $query,
         operator => 'MATCHES',
     );
-    $learndb->column(
-        column   => 'term',
-        function => 'DISTINCT',
-    );
 
     $count = $learndb->count;
     if ($count == 0) {
