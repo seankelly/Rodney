@@ -27,6 +27,7 @@ use Rodney::Command::Rng;
 use Rodney::Command::Roles;
 use Rodney::Command::Rot13;
 use Rodney::Command::Seen;
+use Rodney::Command::Since;
 use Rodney::Command::Time;
 use Rodney::Command::Where;
 use Rodney::Command::Zscore;
@@ -98,6 +99,10 @@ on qr{^!max\b\s*([^!]+)(.*)}i => sub {
 on qr{^!min\b\s*([^!]+)(.*)}i => sub {
     ("Rodney::Command::Min",
         text => $1, subcommand => (length($2) ? $2 : '!num #1'));
+};
+on qr{^!since\s*([^!]+)(.*)}i       => sub {
+    ( "Rodney::Command::Since",
+        text => $1, subcommand => (length($2) ? $2 : '!gamesby'));
 };
 
 my @rules;
