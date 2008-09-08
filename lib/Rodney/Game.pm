@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use DateTime;
 use Rodney::Util qw/ntimes plane/;
+use Time::Duration;
 
 use Jifty::DBI::Schema;
 use Jifty::DBI::Record schema {
@@ -228,6 +229,9 @@ sub to_string {
             my @conducts = $self->conducts;
             if (@conducts) {
                 $result .= ', conducts: ' . scalar(@conducts);
+            }
+            if (defined $self->realtime) {
+                $result .= ', realtime: ' . concise(duration_exact($self->realtime));
             }
         }
         else {
