@@ -231,7 +231,8 @@ sub to_string {
                 $result .= ', conducts: ' . scalar(@conducts);
             }
             if (defined $self->realtime) {
-                $result .= ', realtime: ' . concise(duration_exact($self->realtime));
+                $result .= ', T:' . $self->turns
+                    . ' real: ' . concise(duration_exact($self->realtime));
             }
         }
         else {
