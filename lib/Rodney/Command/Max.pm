@@ -5,7 +5,7 @@ use warnings;
 use parent 'Rodney::Command::Meta';
 
 sub help {
-    return 'Sorts the games by the given row, descending.';
+    return 'Sorts the games by the given column, descending.';
 }
 
 sub games_callback {
