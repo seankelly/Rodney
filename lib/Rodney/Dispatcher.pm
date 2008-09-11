@@ -91,16 +91,16 @@ on qr{^!asconly(\w+)\b\s*(.*)}i => sub {
     ("Rodney::Command::Asconly", subcommand => "!$1 $2");
 };
 
-on qr{^!max\b\s*([^!]+)(.*)}i => sub {
+on qr{^!max(?:\b\s*([^!]+)(.*)|$)}i => sub {
     ("Rodney::Command::Max",
         text => $1, subcommand => (length($2) ? $2 : '!num #1'));
 };
 
-on qr{^!min\b\s*([^!]+)(.*)}i => sub {
+on qr{^!min(?:\b\s*([^!]+)(.*)|$)}i => sub {
     ("Rodney::Command::Min",
         text => $1, subcommand => (length($2) ? $2 : '!num #1'));
 };
-on qr{^!since\s*([^!]+)(.*)}i       => sub {
+on qr{^!since(?:\s*([^!]+)(.*)|$)}i       => sub {
     ( "Rodney::Command::Since",
         text => $1, subcommand => (length($2) ? $2 : '!gamesby'));
 };
