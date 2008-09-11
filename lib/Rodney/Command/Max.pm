@@ -13,6 +13,7 @@ sub games_callback {
     my $games = shift;
     my $args = shift;
 
+    return unless defined $args->{text};
     $args->{text} =~ /:(\w+)/;
     return unless defined $1;
     return unless Rodney::Game->column($1);

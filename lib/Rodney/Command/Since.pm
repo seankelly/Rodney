@@ -13,8 +13,12 @@ sub games_callback {
     my $games = shift;
     my $args = shift;
 
-    $args->{text} =~ /#(\d+)/;
-    my $asc = $1;
+    my $asc;
+
+    if (defined $args->{text}) {
+        $args->{text} =~ /#(\d+)/;
+        $asc = $1;
+    }
 
     my $_games = $games->clone;
 
