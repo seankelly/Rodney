@@ -302,7 +302,7 @@ use parent 'Jifty::DBI::Collection';
 
 
 # then add the Undo part
-package Rodney::LearndbUndo;
+package Rodney::Learndb::Undo;
 use strict;
 use warnings;
 
@@ -347,7 +347,7 @@ sub undo {
 
 sub TABLE_NAME { 'learndb_undo' }
 
-package Rodney::LearndbUndoCollection;
+package Rodney::Learndb::UndoCollection;
 use parent 'Jifty::DBI::Collection';
 
 1;
