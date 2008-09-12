@@ -136,6 +136,32 @@ sub query {
     \@results;
 }
 
+sub replace {
+    my $self = shift;
+    my $args = shift;
+    my $learndb = shift;
+
+    return if $args->{channel} eq 'msg';
+
+    my ($term, $entry) = normalize($args->{arguments}->[0]);
+    my @args = @{ $args->{arguments} };
+    shift @args;
+    my $newdef = join ' ', @args;
+
+    my $res = Rodney::Learndb->replace(
+        handle     => $args->{handle},
+        who        => $args->{who},
+        term       => $term,
+        entry      => $entry,
+        definition => $newdef,
+    );
+
+    return $res if defined $res;
+
+    $args->{arguments} = [ $args->{arguments}->[0] ];
+    return $self->query($args, $learndb);
+}
+
 sub search {
     my $self = shift;
     my $args = shift;

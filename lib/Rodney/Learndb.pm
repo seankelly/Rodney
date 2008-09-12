@@ -236,6 +236,40 @@ sub query {
     }
 }
 
+sub replace {
+    my $self = shift;
+    my %args = (
+        updated => time,
+        @_
+    );
+
+    my $collection = Rodney::LearndbCollection->new(handle => $args{handle});
+
+    return 'Must specify entry.' unless defined $args{entry};
+
+    _setup($collection, $args{term}, $args{entry});
+
+    return 'Entry not found.' if $collection->count == 0;
+
+    my $entry = $collection->first;
+
+    warn 'just before Undo->new';
+    my $undo = Rodney::Learndb::Undo->new(handle => $args{handle});
+
+    warn 'just before undo->create';
+    $undo->create(
+        entryid    => $entry->id,
+        who        => $args{who},
+        updated    => $args{updated},
+        definition => $entry->definition,
+    ) or return 'Unable to create undo.';
+
+    $entry->set_definition($args{definition});
+    $entry->set_updated(time);
+
+    return undef;
+}
+
 sub undelete {
     my $self = shift;
     my %args = (@_);
