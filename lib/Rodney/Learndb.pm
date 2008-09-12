@@ -313,21 +313,12 @@ use Jifty::DBI::Record schema {
         references Rodney::Learndb by 'id',
         is mandatory;
 
-    column term =>
-        type is 'varchar',
-        is mandatory;
-
-    column entry =>
-        type is 'integer',
-        is mandatory;
-
     column who =>
         type is 'varchar',
         is mandatory;
 
     column updated =>
         type is 'integer',
-        default is time,
         is mandatory;
 
     column definition =>
