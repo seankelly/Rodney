@@ -30,6 +30,7 @@ use Rodney::Command::Rot13;
 use Rodney::Command::Seen;
 use Rodney::Command::Since;
 use Rodney::Command::Time;
+use Rodney::Command::Vlad;
 use Rodney::Command::Where;
 use Rodney::Command::Zscore;
 
@@ -62,6 +63,7 @@ on qr{^!learn\b\s*}i             => "Rodney::Command::Learndb";
 on qr{^\?.+}i                    => "Rodney::Command::Learndb";
 on qr{^!ascstreak\b\s*}i         => "Rodney::Command::Ascstreak";
 on qr{^!bribe\b\s*}i             => "Rodney::Command::Bribe";
+on qr{^!vlad\b\s*}i              => "Rodney::Command::Vlad";
 
 # meta commands
 on qr{^!r(?:ecent)?\s+}i => "Rodney::Command::Recent";
