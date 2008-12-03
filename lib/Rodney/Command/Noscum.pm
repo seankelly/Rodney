@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use parent 'Rodney::Command::Meta';
 
+# official: i just loosened the definition of a scum from score == 0 to
+#           score < 10   (and dlvl == 1 && (quit or escaped))
+
 sub games_callback {
     my ($self, $games) = @_;
     $games->limit(
