@@ -234,5 +234,9 @@ sub dispatch {
     $package->run({ %$args, subcommand => '', %args });
 }
 
+sub help {
+    return 'I recommend trying !help';
+}
+
 1;
 
