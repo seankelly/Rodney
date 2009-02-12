@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use parent 'Bot::BasicBot';
 use Module::Refresh;
-use POE;
 use Jifty::DBI::Handle;
 use Heap::Simple;
 
