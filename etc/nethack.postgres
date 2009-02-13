@@ -1,74 +1,64 @@
-CREATE TABLE games (
-  id SERIAL PRIMARY KEY NOT NULL  ,
-  player varchar NOT NULL  ,
-  gamenum integer NOT NULL,
-  version varchar(10) NOT NULL  ,
-  score integer NOT NULL DEFAULT 0 ,
-  dungeon varchar(20) NOT NULL  ,
-  curlvl integer NOT NULL  ,
-  maxlvl integer NOT NULL  ,
-  curhp integer NOT NULL  ,
-  maxhp integer NOT NULL  ,
-  deaths integer NOT NULL  ,
-  enddate varchar NOT NULL  ,
-  endtime integer DEFAULT NULL,
-  startdate varchar NOT NULL  ,
-  starttime integer DEFAULT NULL,
-  realtime integer DEFAULT NULL,
-  turns integer DEFAULT NULL,
-  uid integer NOT NULL  ,
-  role varchar(3) NOT NULL  ,
-  race varchar(3) NOT NULL  ,
-  gender varchar(3) NOT NULL  ,
-  startgender varchar(3) DEFAULT NULL,
-  alignment varchar(3) NOT NULL  ,
-  startalignment varchar(3) DEFAULT NULL,
-  death text NOT NULL  ,
-  conduct integer DEFAULT NULL,
-  achieve integer DEFAULT NULL,
-  ascended boolean NOT NULL DEFAULT 'f'
+CREATE TABLE game (
+    id SERIAL PRIMARY KEY NOT NULL,
+    player varchar NOT NULL,
+    gamenum integer NOT NULL,
+    version varchar(10) NOT NULL,
+    score integer NOT NULL DEFAULT 0 ,
+    dungeon varchar(20) NOT NULL,
+    curlvl integer NOT NULL,
+    maxlvl integer NOT NULL,
+    curhp integer NOT NULL,
+    maxhp integer NOT NULL,
+    deaths integer NOT NULL,
+    startdate timestamp with time zone NOT NULL,
+    enddate timestamp with time zone NOT NULL,
+    realtime interval DEFAULT NULL,
+    turns integer DEFAULT NULL,
+    uid integer NOT NULL,
+    role varchar(3) NOT NULL,
+    race varchar(3) NOT NULL,
+    gender varchar(3) NOT NULL,
+    startgender varchar(3) DEFAULT NULL,
+    alignment varchar(3) NOT NULL,
+    startalignment varchar(3) DEFAULT NULL,
+    death text NOT NULL,
+    conduct integer DEFAULT NULL,
+    conducts integer DEFAULT 0,
+    achieve integer DEFAULT NULL,
+    ascended boolean NOT NULL DEFAULT 'f'
 );
-create index games_player_idx on games (lower(player));
-create index games_score_idx on games (score);
+create index game_player_idx on game (lower(player));
+create index game_score_idx on game (score);
 
-CREATE TABLE players (
-  id SERIAL PRIMARY KEY NOT NULL  ,
-  name text NOT NULL
+CREATE TABLE player (
+    id SERIAL PRIMARY KEY NOT NULL,
+    name text NOT NULL
 );
-create index players_name_idx on players (lower(name));
+create index player_name_idx on player (lower(name));
 
-CREATE TABLE seens (
-  id SERIAL PRIMARY KEY,
-  nick varchar(30),
-  lastseen integer,
-  message varchar
-);
-
-CREATE TABLE bugs (
+CREATE TABLE seen (
     id SERIAL PRIMARY KEY,
-    bugid varchar(10) UNIQUE,
+    nick varchar(30),
+    lastseen timestamp with time zone,
+    message varchar
+);
+
+CREATE TABLE bug (
+    bugid varchar(10) PRIMARY KEY,
     status varchar(15),
     description varchar
 );
-create index bugs_bugid_idx on bugs (lower(bugid));
+create index bug_bugid_idx on bug (lower(bugid));
 
 CREATE table learndb (
     id SERIAL PRIMARY KEY,
     deleted boolean DEFAULT 'f',
+    outdated boolean DEFAULT 'f',
     term varchar,
-    entry integer DEFAULT 0,
+    entry varchar DEFAULT '0',
     author varchar,
-    updated integer,
+    updated timestamp with time zone,
     definition varchar
 );
 create index learndb_term_idx on learndb (lower(term));
 create index learndb_term_entry_idx on learndb (lower(term),entry);
-
-CREATE table learndb_undo (
-    id SERIAL PRIMARY KEY,
-    entryid integer, -- references learndb (id)
-    who varchar,
-    updated integer,
-    definition varchar
-);
-create index learndb_undo_entryid_idx on learndb_undo (entryid);
