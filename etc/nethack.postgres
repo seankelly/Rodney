@@ -1,5 +1,5 @@
 CREATE TABLE game (
-    id SERIAL PRIMARY KEY NOT NULL,
+    game_id SERIAL PRIMARY KEY NOT NULL,
     player varchar NOT NULL,
     gamenum integer NOT NULL,
     version varchar(10) NOT NULL,
@@ -30,12 +30,7 @@ CREATE TABLE game (
 create index game_player_idx on game (lower(player));
 create index game_score_idx on game (score);
 
-CREATE TABLE player (
-    id SERIAL PRIMARY KEY NOT NULL,
-    name text NOT NULL
-);
-create index player_name_idx on player (lower(name));
-
+-- irc seen table
 CREATE TABLE seen (
     id SERIAL PRIMARY KEY,
     nick varchar(30),
@@ -43,6 +38,7 @@ CREATE TABLE seen (
     message varchar
 );
 
+-- listing bugs from the nethack.org site
 CREATE TABLE bug (
     bugid varchar(10) PRIMARY KEY,
     status varchar(15),
@@ -50,6 +46,7 @@ CREATE TABLE bug (
 );
 create index bug_bugid_idx on bug (lower(bugid));
 
+-- yay learndb!
 CREATE table learndb (
     id SERIAL PRIMARY KEY,
     deleted boolean DEFAULT 'f',
