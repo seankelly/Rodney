@@ -11,3 +11,7 @@ my $schema = Fey::Loader->new(dbh => $source->dbh)->make_schema();
 has_schema $schema;
 
 __PACKAGE__->DBIManager()->add_source($source);
+
+no Fey::ORM::Schema;
+
+1;
