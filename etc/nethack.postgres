@@ -1,17 +1,17 @@
 CREATE TABLE game (
     game_id SERIAL PRIMARY KEY NOT NULL,
-    player varchar NOT NULL,
+    player_id integer NOT NULL,
     gamenum integer NOT NULL,
     version varchar(10) NOT NULL,
-    score integer NOT NULL DEFAULT 0 ,
+    score integer NOT NULL DEFAULT 0,
     dungeon varchar(20) NOT NULL,
     curlvl integer NOT NULL,
     maxlvl integer NOT NULL,
     curhp integer NOT NULL,
     maxhp integer NOT NULL,
     deaths integer NOT NULL,
-    startdate timestamp with time zone NOT NULL,
-    enddate timestamp with time zone NOT NULL,
+    "start" timestamp with time zone NOT NULL,
+    "end" timestamp with time zone NOT NULL,
     realtime interval DEFAULT NULL,
     turns integer DEFAULT NULL,
     uid integer NOT NULL,
@@ -27,35 +27,42 @@ CREATE TABLE game (
     achieve integer DEFAULT NULL,
     ascended boolean NOT NULL DEFAULT 'f'
 );
-create index game_player_idx on game (lower(player));
-create index game_score_idx on game (score);
+CREATE INDEX game_player_idx ON game (player_id);
+CREATE INDEX game_score_idx ON game (score);
+
+CREATE TABLE player (
+    id SERIAL PRIMARY KEY NOT NULL,
+    name varchar NOT NULL
+);
+CREATE INDEX player_name_idx ON player (lower(name));
 
 -- irc seen table
 CREATE TABLE seen (
-    id SERIAL PRIMARY KEY,
-    nick varchar(30),
-    lastseen timestamp with time zone,
-    message varchar
+    id SERIAL PRIMARY KEY NOT NULL,
+    nick varchar(30) NOT NULL,
+    lastseen timestamp with time zone NOT NULL,
+    message varchar NOT NULL,
+    channel varchar NOT NULL -- limit seens to a chan
 );
+CREATE INDEX seen_nick_idx ON seen (lower(nick));
 
 -- listing bugs from the nethack.org site
 CREATE TABLE bug (
-    bugid varchar(10) PRIMARY KEY,
-    status varchar(15),
-    description varchar
+    bugid varchar(10) PRIMARY KEY NOT NULL,
+    status varchar(15) NOT NULL,
+    description varchar NOT NULL
 );
-create index bug_bugid_idx on bug (lower(bugid));
 
 -- yay learndb!
 CREATE table learndb (
-    id SERIAL PRIMARY KEY,
-    deleted boolean DEFAULT 'f',
-    outdated boolean DEFAULT 'f',
-    term varchar,
-    entry varchar DEFAULT '0',
-    author varchar,
-    updated timestamp with time zone,
-    definition varchar
+    id SERIAL PRIMARY KEY NOT NULL,
+    deleted boolean DEFAULT 'f' NOT NULL,
+    outdated boolean DEFAULT 'f' NOT NULL,
+    term varchar NOT NULL,
+    entry integer DEFAULT 0 NOT NULL,
+    author varchar NOT NULL,
+    updated timestamp with time zone NOT NULL DEFAULT 'now()',
+    definition varchar NOT NULL
 );
-create index learndb_term_idx on learndb (lower(term));
-create index learndb_term_entry_idx on learndb (lower(term),entry);
+CREATE INDEX learndb_term_idx ON learndb (lower(term));
+CREATE INDEX learndb_term_entry_idx ON learndb (lower(term),entry);
