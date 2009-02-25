@@ -4,7 +4,7 @@ use Fey::DBIManager;
 use Fey::Loader;
 use Fey::ORM::Schema;
 
-my $source = Fey::DBIManager::Source->new(dsn => 'dbi:Pg:dbname=FOO');
+my $source = Fey::DBIManager::Source->new(dsn => 'dbi:Pg:dbname=nethack2');
 
 my $schema = Fey::Loader->new(dbh => $source->dbh)->make_schema();
 
