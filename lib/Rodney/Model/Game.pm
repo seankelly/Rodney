@@ -5,7 +5,9 @@ use DateTime::Format::Pg
 
 has_table(Rodney::Model::Schema->Schema()->table('game'));
 
-for my $col (qw/startdate enddate/) {
+has_one(Rodney::Model::Schema->Schema()->table('player'));
+
+for my $col (qw/start end/) {
     transform $col
         => inflate {
             defined $_[1]
