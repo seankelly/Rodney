@@ -24,12 +24,18 @@ my %convert = (
 
 my @dungeon = qw(dungeon gehennom mines quest sokoban ludios vlad planes);
 
-use Jifty::DBI::Handle;
-my $handle = Jifty::DBI::Handle->new;
-$handle->connect(
-    driver => 'SQLite',
-    database => 'nethack',
-);
+sub bits_set {
+    my $conduct = shift;
+
+    return unless defined $conduct;
+
+    my $conducts = 0;
+    $conducts += !!(2**$_ & $conduct) for 0..11;
+
+    return $conducts;
+}
+
+my %gamenum;
 
 while (<>) {
     my $game;
@@ -41,15 +47,10 @@ while (<>) {
 
     $converted{ascended} = $converted{death} eq 'ascended' ? 1 : 0;
     $converted{dungeon}  = $dungeon[$converted{dungeon}];
+    $converted{conduct}  = hex($converted{conduct}) if $converted{conduct};
+    $converted{conducts} = bits_set($converted{conduct});
+    $converted{achieve}  = hex($converted{achieve}) if $converted{achieve};
 
-    my $player = Rodney::Player->new(handle => $handle);
-    $player->load_by_cols(name => $converted{player});
-    $player->id or do {
-        my $newplayer = Rodney::Player->new(handle => $handle);
-        $newplayer->create(name => $converted{player});
-    };
-
-    my $game_obj = Rodney::Game->new(handle => $handle);
-    $game_obj->create(%converted);
+    ;
 }
 
