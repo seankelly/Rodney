@@ -3,8 +3,9 @@ use strict;
 use warnings;
 use lib 'lib';
 use NetHack::Logfile 'parse_logline';
-use Rodney::Game;
-use Rodney::Player;
+use Text::XLogfile 'parse_xlogline';
+use Rodney::Model::Game;
+use Rodney::Model::Player;
 
 my %convert = (
     name => 'player',
