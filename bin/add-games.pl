@@ -7,24 +7,19 @@ use Text::XLogfile 'parse_xlogline';
 use Rodney::Model::Game;
 use Rodney::Model::Player;
 
+# convert some of the field names to something better
 my %convert = (
     name => 'player',
-    version => 'version',
     points => 'score',
     deathdnum => 'dungeon',
     deathlev => 'curlvl',
-    maxlvl => 'maxlvl',
     hp => 'curhp',
-    maxhp => 'maxhp',
-    deaths => 'deaths',
     deathdate => 'enddate',
     birthdate => 'startdate',
-    uid => 'uid',
-    role => 'role',
-    race => 'race',
-    gender => 'gender',
     align => 'alignment',
     death => 'death',
+    gender0 => 'startgender',
+    align0 => 'startalignment',
 );
 
 my @dungeon = qw(dungeon gehennom mines quest sokoban ludios vlad planes);
@@ -37,8 +32,12 @@ $handle->connect(
 );
 
 while (<>) {
-    my $game = parse_logline($_);
-    my %converted = map { $convert{$_} => $game->{$_} } keys %$game;
+    my $game;
+    $game = parse_xlogline($_);
+    $game = parse_logline($_) unless defined $game;
+    die "Unable to parse logline '$_'" unless defined $game;
+
+    my %converted = map { ($convert{$_}||$_) => $game->{$_} } keys %{ $game };
 
     $converted{ascended} = $converted{death} eq 'ascended' ? 1 : 0;
     $converted{dungeon}  = $dungeon[$converted{dungeon}];
