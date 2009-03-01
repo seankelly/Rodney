@@ -166,7 +166,7 @@ sub chanpart {
     return undef;
 }
 
-sub chanquit {
+sub userquit {
     my $self = shift;
     my $args = shift;
 
