@@ -152,7 +152,6 @@ sub regex {
     while ($message =~ s#({(?:\s*(num|min|max|conduct|achieve):\s*)?\s*([!\w,]+)(?:\s*(!)?/([^/]*)/\s*([ri]*)|\s*([<=>])\s*(-?\d+))?\s*})##) {
         if (defined($2)) {
             if ($2 eq 'conduct' || $2 eq 'achieve') {
-                warn $2;
                 my @list = split ',', lc($3);
                 for (@list) {
                     $bitfields{$_} = $2;
