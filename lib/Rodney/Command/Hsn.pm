@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Rodney::Command::Hsn;
 use strict;
 use warnings;

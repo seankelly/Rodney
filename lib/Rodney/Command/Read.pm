@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Rodney::Command::Read;
 use strict;
 use warnings;

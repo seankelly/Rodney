@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Rodney::Command::Bribe;
 use strict;
 use warnings;

@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Rodney::Command::Roles;
 use strict;
 use warnings;

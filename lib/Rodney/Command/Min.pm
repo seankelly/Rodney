@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Rodney::Command::Min;
 use strict;
 use warnings;

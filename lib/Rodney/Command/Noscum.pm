@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Rodney::Command::Noscum;
 use strict;
 use warnings;

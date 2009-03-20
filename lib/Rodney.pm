@@ -1,4 +1,3 @@
-#!perl
 package Rodney;
 use strict;
 use warnings;

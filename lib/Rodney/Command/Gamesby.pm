@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Rodney::Command::Gamesby;
 use strict;
 use warnings;

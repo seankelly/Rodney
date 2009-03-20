@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Rodney::Command::Asconly;
 use strict;
 use warnings;
