@@ -1,11 +1,18 @@
 ---
+# bot options
 prefix: !
+
+# irc options
+nick: Rodney4
 server: irc.freenode.org
 channels:
     - "#rodney"
-nick: Rodney4
+
+# database options
 database:
     driver: SQLite
     database: nethack
+
+# override defaults in this file
 other_config: etc/site_config.yml
 
