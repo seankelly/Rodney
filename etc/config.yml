@@ -1,4 +1,5 @@
 ---
+prefix: !
 server: irc.freenode.org
 channels:
     - "#rodney"
