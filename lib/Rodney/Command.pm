@@ -27,6 +27,18 @@ sub dispatch {
         my %hash = (@_);
         $arghash = \%hash;
     }
+
+    # XXX: Should it be Rodney->config->foo?
+    # FIXME: make the following work
+    my $prefix = Rodney->config->prefix;
+    my $pipe_cmd = $prefix . $prefix;
+
+    # check if there is a command
+    return unless $arghash->{body} ~= /^$prefix/;
+
+    my @commands = split $pipe_cmd, $arghash->{body};
+    for my $command (@commands) {
+    }
 }
 
 =head2 canonicalize_name name
