@@ -42,16 +42,14 @@ sub said {
         $args->{channel} ne 'msg' ? $args->{channel} : '?',
         $args->{body};
 
-    $args->{handle} = $self->{handle};
-
     Rodney::Seen->seen(
         handle  => $args->{handle},
         nick    => $args->{who},
         message => "saying '$args->{body}'.",
     );
 
-    my $ret = eval { $self->dispatch($args) };
-    warn $@ if $@;
+    # XXX: dispatch goes here
+    my $ret = undef;
 
     return unless $ret;
 
@@ -211,18 +209,6 @@ sub connected {
             body => 'identify ' . Rodney::Config->nick . ' ' . Rodney::Config->password
         );
     }
-}
-
-sub dispatch {
-    my $self = shift;
-    my $args = shift;
-
-    Module::Refresh->refresh;
-
-    my ($package, %args) = Rodney::Dispatcher->dispatch($args);
-    return unless $package;
-
-    $package->run({ %$args, subcommand => '', %args });
 }
 
 sub help {
