@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use parent 'Bot::BasicBot';
 use Module::Refresh;
-use Jifty::DBI::Handle;
 use Heap::Simple;
 
 use Rodney::Dispatcher;
@@ -23,12 +22,6 @@ sub new {
     );
 
     my $self = $class->SUPER::new(%args);
-
-    $self->{handle} = Jifty::DBI::Handle->new;
-    $self->{handle}->connect(
-        driver   => Rodney::Config->database->{driver},
-        database => Rodney::Config->database->{database},
-    );
 
     # create a max priority queue
     $self->{message_queue} = Heap::Simple->new(
