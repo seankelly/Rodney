@@ -4,6 +4,21 @@ use strict;
 use warnings;
 use Rodney::Game;
 
+=head2 dispatch Arg-hash
+
+Executes commands, if present, in the arg-hash. The arg-hash
+should be in the format
+    
+    body    => String from message.
+    who     => Nickname for the string.
+    channel => Channel in which the string was sent. Use '?' for private messages.
+
+=cut
+
+sub dispatch {
+    my $self = shift;
+}
+
 =head2 canonicalize_name name
 
 =cut
