@@ -13,10 +13,20 @@ should be in the format
     who     => Nickname for the string.
     channel => Channel in which the string was sent. Use '?' for private messages.
 
+This can be passed as a hash ref or as a hash itself.
+
 =cut
 
 sub dispatch {
     my $self = shift;
+    my $arghash;
+    if (ref $_[0] eq 'HASH') {
+        $arghash = shift;
+    }
+    elsif (ref $_[0] eq '') {
+        my %hash = (@_);
+        $arghash = \%hash;
+    }
 }
 
 =head2 canonicalize_name name
