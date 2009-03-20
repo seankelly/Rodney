@@ -1,62 +1,68 @@
-CREATE TABLE games (
-  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  ,
-  player varchar NOT NULL  ,
-  gamenum integer NOT NULL,
-  version varchar(10) NOT NULL  ,
-  score integer NOT NULL DEFAULT 0 ,
-  dungeon varchar(20) NOT NULL  ,
-  curlvl integer NOT NULL  ,
-  maxlvl integer NOT NULL  ,
-  curhp integer NOT NULL  ,
-  maxhp integer NOT NULL  ,
-  deaths integer NOT NULL  ,
-  enddate varchar(20) NOT NULL  ,
-  endtime integer DEFAULT NULL,
-  startdate varchar(20) NOT NULL  ,
-  starttime integer DEFAULT NULL,
-  realtime integer DEFAULT NULL,
-  turns integer DEFAULT NULL,
-  uid integer NOT NULL  ,
-  role varchar(3) NOT NULL  ,
-  race varchar(3) NOT NULL  ,
-  gender varchar(3) NOT NULL  ,
-  startgender varchar(3) DEFAULT NULL,
-  alignment varchar(3) NOT NULL  ,
-  startalignment varchar(3) DEFAULT NULL,
-  death varchar NOT NULL  ,
-  conduct integer DEFAULT NULL,
-  achieve integer DEFAULT NULL,
-  ascended boolean NOT NULL DEFAULT 'f'
+CREATE TABLE game (
+    game_id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+    player_id integer NOT NULL,
+    gamenum integer NOT NULL,
+    version varchar(10) NOT NULL,
+    score integer NOT NULL DEFAULT 0,
+    dungeon varchar(20) NOT NULL,
+    curlvl integer NOT NULL,
+    maxlvl integer NOT NULL,
+    curhp integer NOT NULL,
+    maxhp integer NOT NULL,
+    deaths integer NOT NULL,
+    "start" timestamp NOT NULL,
+    "end" timestamp NOT NULL,
+    realtime interval DEFAULT NULL,
+    turns integer DEFAULT NULL,
+    uid integer NOT NULL,
+    role varchar(3) NOT NULL,
+    race varchar(3) NOT NULL,
+    gender varchar(3) NOT NULL,
+    startgender varchar(3) DEFAULT NULL,
+    alignment varchar(3) NOT NULL,
+    startalignment varchar(3) DEFAULT NULL,
+    death text NOT NULL,
+    conduct integer DEFAULT NULL,
+    conducts integer DEFAULT 0,
+    achieve integer DEFAULT NULL,
+    ascended boolean NOT NULL DEFAULT 'f'
 );
-CREATE TABLE players (
-  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  ,
-  name varchar NOT NULL
+CREATE INDEX game_player_idx ON game (player_id);
+CREATE INDEX game_score_idx ON game (score);
+
+CREATE TABLE player (
+    id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name varchar NOT NULL
 );
-CREATE TABLE seens (
-  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  ,
-  nick varchar NOT NULL,
-  lastseen varchar NOT NULL,
-  message varchar NOT NULL
+CREATE INDEX player_name_idx ON player (name);
+
+-- irc seen table
+CREATE TABLE seen (
+    id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+    nick varchar(30) NOT NULL,
+    lastseen timestamp NOT NULL,
+    message varchar NOT NULL,
+    channel varchar NOT NULL -- limit seens to a chan
 );
-CREATE TABLE bugs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    bugid varchar UNIQUE NOT NULL,
-    status varchar NOT NULL,
+CREATE INDEX seen_nick_idx ON seen (nick);
+
+-- listing bugs from the nethack.org site
+CREATE TABLE bug (
+    bugid varchar(10) PRIMARY KEY NOT NULL,
+    status varchar(15) NOT NULL,
     description varchar NOT NULL
 );
+
+-- yay learndb!
 CREATE table learndb (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    deleted boolean DEFAULT 'f',
+    id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+    deleted boolean DEFAULT 'f' NOT NULL,
+    outdated boolean DEFAULT 'f' NOT NULL,
     term varchar NOT NULL,
-    entry integer DEFAULT 0,
+    entry integer DEFAULT 0 NOT NULL,
     author varchar NOT NULL,
-    updated integer,
+    updated timestamp NOT NULL DEFAULT 'now()',
     definition varchar NOT NULL
 );
-CREATE table learndb_undo (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    entryid integer, -- references learndb (id)
-    who varchar NOT NULL,
-    updated integer,
-    definition varchar NOT NULL
-);
+CREATE INDEX learndb_term_idx ON learndb (term);
+CREATE INDEX learndb_term_entry_idx ON learndb (term,entry);
