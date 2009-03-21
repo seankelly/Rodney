@@ -2,7 +2,6 @@
 package Rodney::Command;
 use strict;
 use warnings;
-use Rodney::Game;
 
 =head2 canonicalize_name name
 
@@ -60,43 +59,6 @@ sub target_is_server {
     return $args->{args} =~ /\s*\*\s*/;
 }
 
-=head2 games Args
-
-Gets a GameCollection based on Args. You should use this instead of Rodney::GameCollection->new because of meta-commands (like !r).
-
-=cut
-
-sub games {
-    my $self = shift;
-    my $args = shift;
-    my %opts = (
-        @_
-    );
-
-    my $nick = $self->target($args, %opts);
-    # XXX: fix so target caches the target and stuff..
-    my $NAO = $nick eq 'nethack.alt.org';
-
-    my $games = Rodney::GameCollection->new(handle => $args->{handle});
-
-    if ($NAO) {
-        $games->unlimit;
-    }
-    else {
-        $games->limit(
-            column => 'player',
-            value => $nick,
-        );
-    }
-
-    for (@{ $args->{games_callback} || [] }) {
-        $args->{games_modified}++;
-        my ($code, $_args) = @{ $_ };
-        $code->($self, $games, $_args);
-    }
-
-    return $games;
-}
 
 =head2 help
 
