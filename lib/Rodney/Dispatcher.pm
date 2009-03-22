@@ -160,7 +160,7 @@ sub dispatch {
     my $pipe_cmd = $prefix . $prefix;
 
     # check if there is a command
-    return unless $arghash->{body} ~= /^$prefix/;
+    return unless $arghash->{body} =~ /^$prefix/;
 
     my @commands = split $pipe_cmd, $arghash->{body};
     for my $command (@commands) {
