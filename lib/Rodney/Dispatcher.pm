@@ -1,37 +1,6 @@
 package Rodney::Dispatcher;
 use strict;
 use warnings;
-use Rodney::Command::Ascensions;
-use Rodney::Command::Asconly;
-use Rodney::Command::Ascstreak;
-use Rodney::Command::Bribe;
-use Rodney::Command::Bugdb;
-use Rodney::Command::Cmdlist;
-use Rodney::Command::Date;
-use Rodney::Command::Gamesby;
-use Rodney::Command::Grep;
-use Rodney::Command::Help;
-use Rodney::Command::Halp;
-use Rodney::Command::Hsn;
-use Rodney::Command::Learndb;
-use Rodney::Command::Max;
-use Rodney::Command::Min;
-use Rodney::Command::Monsterify;
-use Rodney::Command::Noscum;
-use Rodney::Command::Num;
-use Rodney::Command::Outfoxed;
-use Rodney::Command::Player;
-use Rodney::Command::Read;
-use Rodney::Command::Recent;
-use Rodney::Command::Rng;
-use Rodney::Command::Roles;
-use Rodney::Command::Rot13;
-use Rodney::Command::Seen;
-use Rodney::Command::Since;
-use Rodney::Command::Time;
-use Rodney::Command::Vlad;
-use Rodney::Command::Where;
-use Rodney::Command::Zscore;
 
 sub on;
 
