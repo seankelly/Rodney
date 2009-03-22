@@ -1,7 +1,7 @@
 package Rodney::Model::Game;
 use Rodney::Model::Schema;
 use Fey::ORM::Table;
-use DateTime::Format::Pg
+use DateTime::Format::Pg;
 
 has_table(Rodney::Model::Schema->Schema()->table('game'));
 
