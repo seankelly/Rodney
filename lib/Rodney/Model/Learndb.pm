@@ -16,3 +16,6 @@ transform 'updated'
             ? DateTime::Format::Pg->format_datetime($_[1])
             : $_[1]
     };
+
+no Fey::ORM::Table;
+1;

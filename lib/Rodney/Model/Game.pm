@@ -20,3 +20,6 @@ for my $col (qw/start end/) {
                 : $_[1]
         };
 }
+
+no Fey::ORM::Table;
+1;

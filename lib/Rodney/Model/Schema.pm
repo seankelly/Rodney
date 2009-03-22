@@ -13,5 +13,4 @@ has_schema $schema;
 __PACKAGE__->DBIManager()->add_source($source);
 
 no Fey::ORM::Schema;
-
 1;
