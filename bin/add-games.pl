@@ -55,4 +55,9 @@ while (<>) {
     if (!defined $player) {
         $player = Rodney::Model::Player->insert(name => $converted{player});
     }
+
+    $converted{gamenum} = ++$gamenum{$converted{player}};
+    $converted{player_id} = $player->id;
+
+    Rodney::Model::Game->insert(%converted);
 }
