@@ -19,7 +19,7 @@ CREATE TABLE game (
     deaths integer NOT NULL,
     "start" timestamp with time zone NOT NULL,
     "end" timestamp with time zone NOT NULL,
-    realtime interval DEFAULT NULL,
+    realtime integer DEFAULT NULL,
     turns integer DEFAULT NULL,
     uid integer NOT NULL,
     role varchar(3) NOT NULL,

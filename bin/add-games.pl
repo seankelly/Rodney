@@ -50,7 +50,6 @@ while (<>) {
     $converted{achieve}  = hex($converted{achieve}) if $converted{achieve};
     $converter{start}    = 0;
     $converter{end}      = 0;
-    $converter{realtime} = 0;
 
     my $player = Rodney::Model::Player->new(name => $converted{player});
     if (!defined $player) {

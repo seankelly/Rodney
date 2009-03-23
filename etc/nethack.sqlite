@@ -12,7 +12,7 @@ CREATE TABLE game (
     deaths integer NOT NULL,
     "start" timestamp NOT NULL,
     "end" timestamp NOT NULL,
-    realtime interval DEFAULT NULL,
+    realtime integer DEFAULT NULL,
     turns integer DEFAULT NULL,
     uid integer NOT NULL,
     role varchar(3) NOT NULL,
