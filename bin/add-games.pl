@@ -14,8 +14,6 @@ my %convert = (
     deathdnum => 'dungeon',
     deathlev => 'curlvl',
     hp => 'curhp',
-    deathdate => 'enddate',
-    birthdate => 'startdate',
     align => 'alignment',
     death => 'death',
     gender0 => 'startgender',
@@ -50,6 +48,9 @@ while (<>) {
     $converted{conduct}  = hex($converted{conduct}) if $converted{conduct};
     $converted{conducts} = bits_set($converted{conduct});
     $converted{achieve}  = hex($converted{achieve}) if $converted{achieve};
+    $converter{start}    = 0;
+    $converter{end}      = 0;
+    $converter{realtime} = 0;
 
     my $player = Rodney::Model::Player->new(name => $converted{player});
     if (!defined $player) {
