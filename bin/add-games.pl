@@ -51,5 +51,8 @@ while (<>) {
     $converted{conducts} = bits_set($converted{conduct});
     $converted{achieve}  = hex($converted{achieve}) if $converted{achieve};
 
-    my $player = Rodney::Model::Player->lookup({name => $converted{player}});
+    my $player = Rodney::Model::Player->new(name => $converted{player});
+    if (!defined $player) {
+        $player = Rodney::Model::Player->insert(name => $converted{player});
+    }
 }
