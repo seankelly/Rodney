@@ -1,8 +1,9 @@
 -- table of all players
 CREATE TABLE player (
     id SERIAL PRIMARY KEY NOT NULL,
-    name varchar UNIQUE NOT NULL   -- creates implicit index
+    name varchar NOT NULL
 );
+CREATE INDEX player_name_idx ON player (lower(name));
 
 -- date for every game
 CREATE TABLE game (
