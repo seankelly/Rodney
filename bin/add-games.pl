@@ -22,8 +22,12 @@ my %convert = (
     align0 => 'startalignment',
 );
 
+# because we just get a number of the dungeon,
+# map it to something human readable
 my @dungeon = qw(dungeon gehennom mines quest sokoban ludios vlad planes);
 
+# counts the number of bits set in a word
+# this is for the conducts column
 sub bits_set {
     my $conduct = shift;
 
@@ -35,10 +39,12 @@ sub bits_set {
     return $conducts;
 }
 
+# create epoch object for parsing xlogfile times
 my $epoch = DateTime::Format::Epoch->new(
     epoch => DateTime->new(year => 1970, day => 1, month => 1)
 );
 
+# this stores the number of games a player has played
 my %gamenum;
 
 while (<>) {
