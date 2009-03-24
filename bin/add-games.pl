@@ -79,7 +79,8 @@ while (<>) {
     $converted{start}    = parse_time(epoch => $converted{starttime}, ymd => $converted{birthdate});
     $converted{end}      = parse_time(epoch => $converted{endtime}, ymd => $converted{deathdate});
 
-    my $player = Rodney::Model::Player->new(name => $converted{player});
+    my $iter = Rodney::Model::Player->load_name($converted{player});
+    my $player = $iter->next;
     if (!defined $player) {
         $player = Rodney::Model::Player->insert(name => $converted{player});
     }
