@@ -44,6 +44,30 @@ my $epoch = DateTime::Format::Epoch->new(
     epoch => DateTime->new(year => 1970, day => 1, month => 1)
 );
 
+my $iso8601 = DateTime::Format::ISO8601->new;
+
+sub parse_time {
+    my %date = (@_);
+
+    my $dt;
+    if (defined $date{epoch}) {
+        $dt = $epoch->parse_datetime($date{epoch});
+    }
+    else {
+        my ($year, $month, $day) = $date{ymd} =~ /^(\d{4})(\d\d)(\d\d)$/;
+        $dt = DateTime->new(
+            year   => $year,
+            month  => $month,
+            day    => $day,
+            hour   => 0,
+            minute => 0,
+            second => 0,
+        );
+    }
+
+    return $iso8601->format_datetime($dt);
+}
+
 # this stores the number of games a player has played
 my %gamenum;
 
@@ -60,8 +84,9 @@ while (<>) {
     $converted{conduct}  = hex($converted{conduct}) if $converted{conduct};
     $converted{conducts} = bits_set($converted{conduct});
     $converted{achieve}  = hex($converted{achieve}) if $converted{achieve};
-    $converter{start}    = 0;
-    $converter{end}      = 0;
+    $converted{start}    = parse_time(epoch => $converted{starttime}, ymd => $converted{birthdate});
+    $converted{end}      = parse_time(epoch => $converted{endtime}, ymd => $converted{deathdate});
+    delete @converted{qw/starttime birthdate endtime deathdate/};
 
     my $player = Rodney::Model::Player->new(name => $converted{player});
     if (!defined $player) {
