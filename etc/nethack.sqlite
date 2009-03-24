@@ -1,5 +1,5 @@
 CREATE TABLE game (
-    game_id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+    id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
     player_id integer NOT NULL,
     gamenum integer NOT NULL,
     version varchar(10) NOT NULL,

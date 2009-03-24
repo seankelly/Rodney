@@ -6,7 +6,7 @@ CREATE TABLE player (
 
 -- date for every game
 CREATE TABLE game (
-    game_id SERIAL PRIMARY KEY NOT NULL,
+    id SERIAL PRIMARY KEY NOT NULL,
     player_id integer NOT NULL REFERENCES player (id),
     gamenum integer NOT NULL,
     version varchar(10) NOT NULL,
