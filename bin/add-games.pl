@@ -83,7 +83,6 @@ while (<>) {
     $converted{achieve}  = hex($converted{achieve}) if $converted{achieve};
     $converted{start}    = parse_time(epoch => $converted{starttime}, ymd => $converted{birthdate});
     $converted{end}      = parse_time(epoch => $converted{endtime}, ymd => $converted{deathdate});
-    delete @converted{qw/starttime birthdate endtime deathdate/};
 
     my $player = Rodney::Model::Player->new(name => $converted{player});
     if (!defined $player) {
@@ -93,5 +92,6 @@ while (<>) {
     $converted{gamenum} = ++$gamenum{$converted{player}};
     $converted{player_id} = $player->id;
 
+    delete @converted{qw/starttime birthdate endtime deathdate player/};
     Rodney::Model::Game->insert(%converted);
 }
