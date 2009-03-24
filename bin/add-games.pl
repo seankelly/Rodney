@@ -6,7 +6,7 @@ use NetHack::Logfile 'parse_logline';
 use Text::XLogfile 'parse_xlogline';
 use Rodney::Model::Game;
 use Rodney::Model::Player;
-use DateTime::Format::Epoch;
+use DateTime;
 
 # convert some of the field names to something better
 my %convert = (
@@ -38,17 +38,12 @@ sub bits_set {
     return $conducts;
 }
 
-# create epoch object for parsing xlogfile times
-my $epoch = DateTime::Format::Epoch->new(
-    epoch => DateTime->new(year => 1970, day => 1, month => 1)
-);
-
 sub parse_time {
     my %date = (@_);
 
     my $dt;
     if (defined $date{epoch}) {
-        $dt = $epoch->parse_datetime($date{epoch});
+        $dt = DateTime->from_epoch(epoch => $date{epoch});
     }
     else {
         my ($year, $month, $day) = $date{ymd} =~ /^(\d{4})(\d\d)(\d\d)$/;
@@ -62,7 +57,7 @@ sub parse_time {
         );
     }
 
-    return $dt->iso8601;
+    return $dt->iso8601 . '+00';
 }
 
 # this stores the number of games a player has played
