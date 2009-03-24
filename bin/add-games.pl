@@ -6,6 +6,8 @@ use NetHack::Logfile 'parse_logline';
 use Text::XLogfile 'parse_xlogline';
 use Rodney::Model::Game;
 use Rodney::Model::Player;
+use DateTime::Format::ISO8601;
+use DateTime::Format::Epoch;
 
 # convert some of the field names to something better
 my %convert = (
@@ -32,6 +34,10 @@ sub bits_set {
 
     return $conducts;
 }
+
+my $epoch = DateTime::Format::Epoch->new(
+    epoch => DateTime->new(year => 1970, day => 1, month => 1)
+);
 
 my %gamenum;
 
