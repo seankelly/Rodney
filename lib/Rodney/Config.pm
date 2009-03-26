@@ -1,12 +1,18 @@
 package Rodney::Config;
-use strict;
-use warnings;
+use Moose;
 use YAML;
 use Hash::Merge 'merge';
 
-our %contents;
+has contents => (
+    is      => 'rw',
+    isa     => 'HashRef',
+    default => sub { {} },
+);
 
-sub init {
+sub BUILD {
+    my $self = shift;
+
+    # change this so can specify it at runtime
     my @config = "etc/config.yml";
 
     my %seen;
@@ -18,7 +24,7 @@ sub init {
         next if !-f $file;
 
         my $config = YAML::LoadFile($file);
-        %contents = %{ merge(\%contents, $config) };
+        $self->contents(merge($self->contents, $config));
 
         # if this config specified other files, load them too
         if ($config->{other_config}) {
@@ -39,9 +45,14 @@ sub init {
 # yes autoload is bad. but, I am lazy
 our $AUTOLOAD;
 sub AUTOLOAD {
+    my $self = shift;
     $AUTOLOAD =~ s{.*::}{};
-    return $contents{$AUTOLOAD};
+
+    if (@_) {
+        $self->contents->{$AUTOLOAD} = shift;
+    }
+    return $self->contents->{$AUTOLOAD};
 }
 
+no Moose;
 1;
-
