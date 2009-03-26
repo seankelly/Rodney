@@ -120,11 +120,11 @@ sub to_string {
     }
 
     if ($verbosity > 4) {
-        if ($self->startdate == $self->enddate) {
-            $result .= ', on ' . $self->startdate;
+        if ($self->start->ymd eq $self->end->ymd) {
+            $result .= ', on ' . $self->start->ymd;
         }
         else {
-            $result .= ', between ' . $self->startdate . ' and ' . $self->enddate;
+            $result .= ', between ' . $self->start->ymd . ' and ' . $self->end->ymd;
         }
     }
 
