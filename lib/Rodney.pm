@@ -6,7 +6,6 @@ use Module::Refresh;
 use Heap::Simple;
 
 use Rodney::Dispatcher;
-use Rodney::Seen;
 use Rodney::Config;
 
 sub new {
@@ -41,12 +40,6 @@ sub said {
         $args->{who},
         $args->{channel} ne 'msg' ? $args->{channel} : '?',
         $args->{body};
-
-    Rodney::Seen->seen(
-        handle  => $args->{handle},
-        nick    => $args->{who},
-        message => "saying '$args->{body}'.",
-    );
 
     # XXX: dispatch goes here
     my $ret = undef;
@@ -134,12 +127,6 @@ sub chanjoin {
     my $self = shift;
     my $args = shift;
 
-    Rodney::Seen->seen(
-        handle  => $self->{handle},
-        nick    => $args->{who},
-        message => "joining $args->{channel}.",
-    );
-
     return undef;
 }
 
@@ -147,43 +134,18 @@ sub chanpart {
     my $self = shift;
     my $args = shift;
 
-    Rodney::Seen->seen(
-        handle  => $self->{handle},
-        nick    => $args->{who},
-        message => "leaving $args->{channel}.",
-    );
-
     return undef;
 }
 
 sub userquit {
     my $self = shift;
     my $args = shift;
-
-    Rodney::Seen->seen(
-        handle  => $self->{handle},
-        nick    => $args->{who},
-        message => $args->{body}
-                   ? "quitting with message: $args->{body}."
-                   : "quitting without a message.",
-    );
 }
 
 sub nick_change {
     my $self = shift;
     my $from = shift;
     my $to   = shift;
-
-    Rodney::Seen->seen(
-        handle  => $self->{handle},
-        nick    => $from,
-        message => "changing nick to $to.",
-    );
-    Rodney::Seen->seen(
-        handle  => $self->{handle},
-        nick    => $to,
-        message => "changing nick from $from.",
-    );
 
     return undef;
 }
@@ -192,11 +154,6 @@ sub got_names {
     my $self = shift;
     my $args = shift;
     for my $nick (keys %{ $args->{names} }) {
-        Rodney::Seen->seen(
-            handle  => $self->{handle},
-            nick    => $nick,
-            message => "when I joined $args->{channel}.",
-        );
     }
 }
 
