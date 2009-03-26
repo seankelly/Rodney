@@ -127,14 +127,14 @@ sub chanjoin {
     my $self = shift;
     my $args = shift;
 
-    return undef;
+    return;
 }
 
 sub chanpart {
     my $self = shift;
     my $args = shift;
 
-    return undef;
+    return;
 }
 
 sub userquit {
@@ -147,7 +147,7 @@ sub nick_change {
     my $from = shift;
     my $to   = shift;
 
-    return undef;
+    return;
 }
 
 sub got_names {
