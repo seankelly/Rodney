@@ -15,5 +15,21 @@ transform 'updated'
             : $_[1]
     };
 
+
+sub normal_term {
+    my $self = shift;
+    my $term;
+    ($term = $self->term) =~ tr/ /_/;
+    return $term;
+}
+
+sub to_string {
+    my $self = shift;
+    return sprintf "%s[%d]: %s",
+           $self->normal_term,
+           $self->entry,
+           $self->definition;
+}
+
 no Fey::ORM::Table;
 1;
