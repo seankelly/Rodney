@@ -5,16 +5,6 @@ use parent 'Rodney::Command';
 
 use Time::Duration;
 
-sub seens {
-    package Rodney::SeenCollection;
-    use parent 'Jifty::DBI::Collection';
-    my $self = shift;
-    my $args = shift;
-
-    my $seen = Rodney::SeenCollection->new(handle => $args->{handle});
-    return $seen;
-}
-
 sub help {
     return 'Last time I saw someone.';
 }
@@ -23,7 +13,6 @@ sub run {
     my $self = shift;
     my $args = shift;
 
-    $args->{handle}->clear_sql_statement_log;
     my $nick;
     $args->{args} =~ /^(\w+)/;
     $nick = $1 if $1;
