@@ -1,36 +1,42 @@
 package Rodney;
-use strict;
-use warnings;
-use parent 'Bot::BasicBot';
-use Module::Refresh;
+use Moose;
+use MooseX::ClassAttribute;
+extends 'Bot::BasicBot';
+
 use Heap::Simple;
-
-use Rodney::Dispatcher;
+use Module::Refresh;
 use Rodney::Config;
+use Rodney::Dispatcher;
 
-sub new {
+class_has config => (
+    is       => 'ro',
+    isa      => 'Rodney::Config',
+    default  => sub { Rodney::Config->new },
+);
+
+has queue => (
+    is       => 'ro',
+    isa      => 'Heap::Simple',
+    default  => sub { Heap::Simple->new },
+);
+
+around new => sub {
+    my $orig  = shift;
     my $class = shift;
-    Rodney::Config->init;
 
-    my %args = (
-        server   => Rodney::Config->server,
-        channels => Rodney::Config->channels,
-        nick     => Rodney::Config->nick,
+    my %bot_args = (
+        server   => Rodney->Config->server,
+        channels => Rodney->Config->channels,
+        nick     => Rodney->Config->nick,
         @_,
     );
 
-    my $self = $class->SUPER::new(%args);
-
-    # create a max priority queue
-    $self->{message_queue} = Heap::Simple->new(
-        order    => '>',
-        elements => 'Any',
-    );
+    my $self = $class->$orig(%bot_args);
 
     $self->{tick_enabled} = 0;
 
     return $self;
-}
+};
 
 sub said {
     my $self = shift;
@@ -172,5 +178,6 @@ sub help {
     return 'I recommend trying !help';
 }
 
+no Moose;
+no MooseX::ClassAttribute;
 1;
-
