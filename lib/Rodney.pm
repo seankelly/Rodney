@@ -87,11 +87,11 @@ sub got_names {
 
 sub connected {
     my $self = shift;
-    if (defined(Rodney::Config->password)) {
+    if (defined(Rodney->config->password)) {
         $self->say(
             who => 'nickserv',
             channel => 'msg',
-            body => 'identify ' . Rodney::Config->nick . ' ' . Rodney::Config->password
+            body => 'identify ' . Rodney->config->nick . ' ' . Rodney->config->password
         );
     }
 }
