@@ -37,9 +37,12 @@ sub dispatch {
     if (ref $_[0] eq 'HASH') {
         $arghash = shift;
     }
-    elsif (ref $_[0] eq '') {
+    elsif (ref $_[0] eq '' && @_ > 1) {
         my %hash = (@_);
         $arghash = \%hash;
+    }
+    else {
+        die 'Invalid arguments to dispatch';
     }
 
     my $prefix = Rodney->config->prefix;
