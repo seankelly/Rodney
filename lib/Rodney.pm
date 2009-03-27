@@ -33,8 +33,6 @@ around new => sub {
 
     my $self = $class->$orig(%bot_args);
 
-    $self->{tick_enabled} = 0;
-
     return $self;
 };
 
@@ -50,83 +48,7 @@ sub said {
     # XXX: dispatch goes here
     my $ret = undef;
 
-    return unless $ret;
-
-    if (ref($ret) eq '' || ref($ret) eq 'ARRAY') {
-        $self->msg(
-            who     => $args->{who},
-            channel => $args->{channel},
-            address => 0,
-            body    => $ret,
-        );
-    }
-    elsif (ref($ret) eq 'HASH') {
-        $self->msg(
-            who     => $ret->{who},
-            channel => $ret->{channel},
-            address => 0,
-            body    => $ret->{body},
-        );
-    }
-
     return;
-}
-
-sub msg {
-    my $self = shift;
-    my %args;
-    if (ref($_[0]) eq 'HASH') {
-        %args = %{ $_[0] };
-    }
-    else {
-        %args = (@_);
-    }
-
-    my $priority = $args{channel} =~ /^#/
-                   ? 10
-                   : 5;
-
-    $self->enqueue(\%args, $priority);
-}
-
-sub enqueue {
-    my $self = shift;
-    my $data = shift;
-    my $priority = shift || 1;
-
-    $self->{message_queue}->key_insert($priority, $data);
-
-    unless ($self->{tick_enabled}) {
-        $self->{tick_enabled} = 1;
-        $self->schedule_tick(.1);
-    }
-}
-
-sub tick {
-    my $self = shift;
-
-    if ($self->{message_queue}->count) {
-        my $key = $self->{message_queue}->top_key;
-        my $msg = $self->{message_queue}->extract_top;
-
-        if (ref($msg->{body}) eq 'ARRAY') {
-            my %msg = %$msg;
-            my $body = delete $msg{body};
-            my $tosend = shift @{ $body };
-            $msg->{body} = $body;
-            $msg{body} = $tosend;
-            $self->say(%msg);
-            $self->enqueue($msg, $key) if scalar @{ $body } > 0;
-        }
-        else {
-            $self->say(%$msg);
-        }
-    }
-
-    return 2 if $self->{message_queue}->count;
-
-    $self->{tick_enabled} = 0;
-    return 0;
 }
 
 sub chanjoin {
