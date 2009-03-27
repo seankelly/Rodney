@@ -42,8 +42,6 @@ sub dispatch {
         $arghash = \%hash;
     }
 
-    # XXX: Should it be Rodney->config->foo?
-    # FIXME: make the following work
     my $prefix = Rodney->config->prefix;
     my $pipe_cmd = $prefix . $prefix;
 
