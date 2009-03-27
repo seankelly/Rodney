@@ -1,6 +1,16 @@
 package Rodney::Dispatcher;
-use strict;
-use warnings;
+use Moose;
+use Module::Pluggable
+    require => 1,
+    search_path => 'Rodney::Command',
+    sub_name => 'commands';
+use Path::Dispatcher;
+
+has dispatcher => (
+    is      => 'ro',
+    isa     => 'Path::Dispatcher',
+    default => sub { Path::Dispatcher->new },
+);
 
 #sub dispatch {
 #    my $self = shift;
@@ -50,11 +60,35 @@ sub dispatch {
 
     # check if there is a command
     return unless $arghash->{body} =~ /^$prefix/;
+    $arghash->{body} =~ s/^($prefix)//;
 
     my @commands = split $pipe_cmd, $arghash->{body};
+    my $index = 1;
     for my $command (@commands) {
+        $index++;
     }
 }
 
-1;
+sub BUILD {
+    my $self = shift;
 
+    for my $command ($self->commands) {
+        my @cmds = eval "\@${command}::COMMANDS";
+        if (@cmds) {
+            for my $cmd (@cmds) {
+                $self->dispatcher->add_rule(
+                    Path::Dispatcher::Rule::Tokens->new(
+                        tokens => [ $cmd ],
+                        block  => sub {
+                            # $command contains the package
+                            return $command;
+                        },
+                    )
+                );
+            }
+        }
+    }
+}
+
+no Moose;
+1;
