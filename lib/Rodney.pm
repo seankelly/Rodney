@@ -14,6 +14,13 @@ class_has config => (
     default  => sub { Rodney::Config->new },
 );
 
+has dispatcher => (
+    is       => 'ro',
+    isa      => 'Rodney::Dispatcher',
+    default  => sub { Rodney::Dispatcher->new },
+    handles  => [ qw/dispatch/ ],
+);
+
 has queue => (
     is       => 'ro',
     isa      => 'Heap::Simple',
