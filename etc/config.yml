@@ -1,6 +1,6 @@
 ---
 # bot options
-prefix: !
+prefix: '!'
 
 # irc options
 nick: Rodney4
