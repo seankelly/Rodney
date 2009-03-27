@@ -3,9 +3,6 @@ use strict;
 use warnings;
 use parent 'Rodney::Command';
 
-use Rodney::Bug;
-use LWP::Simple;
-
 sub help {
     return 'Help text for the bugdb';
 }

@@ -3,8 +3,6 @@ use strict;
 use warnings;
 use parent 'Rodney::Command';
 
-use Rodney::Player;
-
 sub help {
     return 'Returns URL for a player\' NAO page.';
 }

@@ -3,8 +3,6 @@ use strict;
 use warnings;
 use parent 'Rodney::Command::Meta';
 
-use Rodney::Game;
-
 my $sort;
 my $error;
 my $offset;

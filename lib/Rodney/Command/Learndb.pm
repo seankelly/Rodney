@@ -3,10 +3,6 @@ use strict;
 use warnings;
 use parent 'Rodney::Command';
 
-use Rodney::Learndb;
-
-use DDS;
-
 sub help {
     return 'Help text for STUB';
 }
