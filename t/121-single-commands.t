@@ -25,10 +25,8 @@ for my $package (@packages) {
     eval "do { package $namespace; our \@COMMANDS = qw/$package/; sub run { return \$_[1]->{body} } }";
 }
 
+
 my $dispatcher = Rodney::Dispatcher->new;
-
-
-use DDS;
 
 for (@packages) {
     my $args = {
