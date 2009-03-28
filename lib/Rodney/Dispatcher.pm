@@ -12,22 +12,6 @@ has dispatcher => (
     default => sub { Path::Dispatcher->new },
 );
 
-#sub dispatch {
-#    my $self = shift;
-#    my $args = shift;
-#    local $_ = $args->{body};
-#
-#    for my $rule (@rules) {
-#        my ($re, $code) = @$rule;
-#        if ($_ =~ $re) {
-#            return (ref($code) ? $code->($args) : $code),
-#                   args => $';
-#        }
-#    }
-#
-#    return;
-#}
-
 =head2 dispatch Arg-hash
 
 Executes commands, if present, in the arg-hash. The arg-hash
