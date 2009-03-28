@@ -42,9 +42,46 @@ sub dispatch {
 
     my @commands = $self->_find_commands($arghash->{body});
     my $index = 1;
+    my $base_args = $self->_build_base_args($arghash);
+    my $result;
     for my $command (@commands) {
         $index++;
     }
+}
+
+sub _build_base_args {
+    my %base_args;
+
+    %base_args = (
+        sql => {
+            bug => {
+                select => 'select object',
+                table  => 'table object',
+            },
+            game => {
+                select => 'select object',
+                table  => 'table object',
+            },
+            learndb => {
+                select => 'select object',
+                table  => 'table object',
+            },
+            player => {
+                select => 'select object',
+                table  => 'table object',
+            },
+            seen => {
+                select => 'select object',
+                table  => 'table object',
+            },
+        },
+        stdin => undef,
+        %$arghash,
+    );
+
+    delete %base_args{body};
+
+    return \%base_args;
 }
 
 sub _find_commands {
