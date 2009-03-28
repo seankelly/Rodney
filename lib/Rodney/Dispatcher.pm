@@ -39,18 +39,25 @@ sub dispatch {
         die 'Invalid arguments to dispatch';
     }
 
-    my $prefix = Rodney->config->prefix;
-    my $pipe_cmd = $prefix . $prefix;
 
-    # check if there is a command
-    return unless $arghash->{body} =~ /^$prefix/;
-    $arghash->{body} =~ s/^($prefix)//;
-
-    my @commands = split $pipe_cmd, $arghash->{body};
+    my @commands = $self->_find_commands($arghash->{body});
     my $index = 1;
     for my $command (@commands) {
         $index++;
     }
+}
+
+sub _find_commands {
+    my $self = shift;
+    my $cmd_string = shift;
+
+    my $prefix = Rodney->config->prefix;
+    my $pipe_cmd = $prefix . $prefix;
+
+    return unless $cmd_string =~ s/^($prefix)//;
+    my @commands = split $pipe_cmd, $cmd_string;
+
+    return @commands;
 }
 
 sub BUILD {
