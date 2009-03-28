@@ -50,6 +50,8 @@ sub dispatch {
 }
 
 sub _build_base_args {
+    my $self = shift;
+    my $arghash = shift;
     my %base_args;
 
     %base_args = (
@@ -79,7 +81,7 @@ sub _build_base_args {
         %$arghash,
     );
 
-    delete %base_args{body};
+    delete $base_args{body};
 
     return \%base_args;
 }
