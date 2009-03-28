@@ -45,8 +45,22 @@ sub dispatch {
     my $base_args = $self->_build_base_args($arghash);
     my $result;
     for my $command (@commands) {
+        my $match = $self->dispatcher->dispatch($command);
+
+        if ($match->has_matches) {
+            my $args = $base_args;
+            $args->{body} = $command;
+            eval {
+                $result = $match->run($args);
+            };
+        }
+        else {
+            return if $index == 1;
+        }
         $index++;
     }
+
+    return $result;
 }
 
 sub _build_base_args {
@@ -111,7 +125,7 @@ sub BUILD {
                         tokens => [ $cmd ],
                         block  => sub {
                             # $command contains the package
-                            return $command;
+                            return $command->run(@_);
                         },
                     )
                 );
