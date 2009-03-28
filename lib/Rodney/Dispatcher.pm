@@ -31,7 +31,7 @@ sub dispatch {
     if (ref $_[0] eq 'HASH') {
         $arghash = shift;
     }
-    elsif (ref $_[0] eq '' && @_ > 1) {
+    elsif (ref $_[0] eq '' && @_ > 1 && @_ % 2 == 0) {
         my %hash = (@_);
         $arghash = \%hash;
     }
