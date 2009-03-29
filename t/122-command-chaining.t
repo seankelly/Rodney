@@ -18,6 +18,8 @@ do {
 };
 
 my $lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+my $new_lorem;
+($new_lorem = $lorem) =~ tr/a-zA-Z/n-za-mN-ZA-M/;
 
 do {
     package Rodney::Command::TEST1;
@@ -27,9 +29,10 @@ do {
     sub run {
         my $self = shift;
         my $args = shift;
-        if ($args->{body} =~ /(\d+)/) {
+        my @opts = split ' ', $args->{body};
+        if (@opts > 1 && $opts[1] =~ /(\d+)/) {
             my @lorem = split ' ', $lorem, $1;
-            return @lorem;
+            return \@lorem;
         }
         return $lorem;
     }
@@ -46,9 +49,11 @@ do {
         my @input = $self->get_input($args);
         my @output;
         for (@input) {
-            push @output, tr/a-zA-Z/n-za-mN-ZA-M/;
+            my $new;
+            ($new = $_) =~ tr/a-zA-Z/n-za-mN-ZA-M/;
+            push @output, $new;
         }
-        return @output;
+        return join ' ', @output;
     }
 };
 
@@ -58,7 +63,7 @@ my $dispatcher = Rodney::Dispatcher->new;
 use DDS;
 
 my $args = {
-    body => "!TEST1",
+    body => "!TEST1 !!TEST2",
 };
 my $result = $dispatcher->dispatch($args);
-is($result, $lorem, "testing if command is run and args passed");
+is($result, $new_lorem, "output is passed to second command and transformed");
