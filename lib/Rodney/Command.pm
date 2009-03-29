@@ -1,6 +1,29 @@
 package Rodney::Command;
 use Moose;
 
+=head2 get_input Args
+
+=cut
+
+sub get_input {
+    my $self = shift;
+    my $args = shift;
+
+    my $stdin = $args->{stdin};
+    return unless defined $stdin;
+
+    if (ref $stdin eq 'ARRAY') {
+        return @$stdin if wantarray;
+    }
+    elsif (ref $stdin eq '') {
+        return ($stdin) if wantarray;
+    }
+    else {
+        die "get_input called with invalid stdin.";
+    }
+    return $stdin;
+}
+
 =head2 canonicalize_name name
 
 =cut
