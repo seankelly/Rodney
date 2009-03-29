@@ -12,8 +12,8 @@ do {
 
     sub run {
         shift;
-        my $cmd = shift;
-        return $cmd;
+        my $args = shift;
+        return $args->{body};
     }
 };
 
@@ -24,5 +24,5 @@ my $command = 'TEST' . (int(rand(scalar @Rodney::Command::TEST::COMMANDS))+1);
 my $d = $dispatcher->dispatcher->dispatch($command);
 ok($d->has_matches, "matches against $command");
 
-my $res = $d->run();
-is($res->run($command), $command, 'returns right result');
+my $res = $d->run({ body => $command});
+is($res, $command, 'returns right result');
