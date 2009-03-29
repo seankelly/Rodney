@@ -15,9 +15,6 @@ sub get_input {
     if (ref $stdin eq 'ARRAY') {
         return @$stdin if wantarray;
     }
-    elsif (ref $stdin eq '') {
-        return ($stdin) if wantarray;
-    }
     else {
         die "get_input called with invalid stdin.";
     }
