@@ -50,6 +50,19 @@ sub dispatch {
         if ($match->has_matches) {
             my $args = $base_args;
             $args->{body} = $command;
+
+            # set stdin properly for the command
+            $args->{stdin} = undef;
+            if ($result) {
+                my $ref = ref $result;
+                if ($ref eq 'ARRAY') {
+                    $args->{stdin} = $result;
+                }
+                elsif ($ref eq '' ) {
+                    $args->{stdin} = [ $result ];
+                }
+            }
+
             eval {
                 $result = $match->run($args);
             };
