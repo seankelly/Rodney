@@ -1,6 +1,5 @@
 package Rodney::Command;
-use strict;
-use warnings;
+use Moose;
 
 =head2 canonicalize_name name
 
