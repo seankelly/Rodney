@@ -18,7 +18,7 @@ do {
 };
 
 my @packages = map { 'TEST' . $_ } 1..3;
-plan tests => scalar @packages;
+plan tests => (scalar @packages) + 2;
 
 for my $package (@packages) {
     my $namespace = "Rodney::Command::$package";
@@ -35,3 +35,10 @@ for (@packages) {
     my $result = $dispatcher->dispatch($args);
     is($result, $_, "testing if command is run and args passed");
 }
+
+my $result = $dispatcher->dispatch({ body => '!TEST4' });
+is($result, undef, 'test invalid command to start a line');
+
+# test invalid command that isn't first
+$result = $dispatcher->dispatch({ body => '!TEST1 !!TEST4' });
+is($result, "Invalid command: TEST4.", "test invalid command that isn't first");

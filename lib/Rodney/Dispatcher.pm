@@ -71,6 +71,8 @@ sub dispatch {
         }
         else {
             return if $index == 1;
+            my ($c, @args) = split ' ', $command;
+            return "Invalid command: $c.";
         }
         $index++;
     }
