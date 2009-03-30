@@ -33,14 +33,13 @@ around new => sub {
     my $class = shift;
 
     my %bot_args = (
-        server   => Rodney->Config->server,
-        channels => Rodney->Config->channels,
-        nick     => Rodney->Config->nick,
+        server   => Rodney->config->server,
+        channels => Rodney->config->channels,
+        nick     => Rodney->config->nick,
         @_,
     );
 
     my $self = $class->$orig(%bot_args);
-
     return $self;
 };
 
