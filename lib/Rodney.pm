@@ -1,7 +1,8 @@
 package Rodney;
 use Moose;
+extends 'Bot::BasicBot';
+with 'MooseX::Alien';
 use MooseX::ClassAttribute;
-extends 'Bot::BasicBot', 'Moose::Object';
 
 use Heap::Simple;
 use Module::Refresh;
