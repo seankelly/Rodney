@@ -1,9 +1,14 @@
 package Rodney::Dispatcher;
 use Moose;
 use Module::Pluggable
-    require => 1,
+    require     => 1,
     search_path => 'Rodney::Command',
-    sub_name => 'commands';
+    sub_name    => 'commands';
+use Module::Pluggable
+    require     => 1,
+    search_path => 'Rodney::Model',
+    except      => 'Rodney::Model::Schema',
+    sub_name    => 'tables';
 use Path::Dispatcher;
 
 has dispatcher => (
@@ -87,31 +92,19 @@ sub _build_base_args {
     my %base_args;
 
     %base_args = (
-        sql => {
-            bug => {
-                select => 'select object',
-                table  => 'table object',
-            },
-            game => {
-                select => 'select object',
-                table  => 'table object',
-            },
-            learndb => {
-                select => 'select object',
-                table  => 'table object',
-            },
-            player => {
-                select => 'select object',
-                table  => 'table object',
-            },
-            seen => {
-                select => 'select object',
-                table  => 'table object',
-            },
-        },
+        sql => { },
         stdin => undef,
         %$arghash,
     );
+
+    for my $table ($self->tables) {
+        my $base;
+        ($base = $table) =~ s/.*:://;
+        $base_args{sql}->{$base} = {
+            select => $table->SchemaClass->SQLFactoryClass->new_select,
+            table  => $table,
+        };
+    }
 
     delete $base_args{body};
 
