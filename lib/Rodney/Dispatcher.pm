@@ -66,6 +66,8 @@ sub dispatch {
             eval {
                 $result = $match->run($args);
             };
+            # if a command dies, return the error
+            return $@ if $@;
         }
         else {
             return if $index == 1;

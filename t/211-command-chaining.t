@@ -1,7 +1,7 @@
 #!perl -T
 use strict;
 use warnings;
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Rodney::Dispatcher;
 
 do {
@@ -55,15 +55,21 @@ do {
         }
         return join ' ', @output;
     }
+
+    package Rodney::Command::TEST3;
+    our @COMMANDS = qw/TEST3/;
+
+    # generate some text
+    sub run {
+        die 'Some fatal error!'
+    }
 };
 
 my $dispatcher = Rodney::Dispatcher->new;
 
 
-use DDS;
-
-my $args = {
-    body => "!TEST1 !!TEST2",
-};
-my $result = $dispatcher->dispatch($args);
+my $result = $dispatcher->dispatch({ body => "!TEST1 !!TEST2" });
 is($result, $new_lorem, "output is passed to second command and transformed");
+
+$result = $dispatcher->dispatch({ body => "!TEST3" });
+like($result, qr/^Some fatal error!/, 'Commands can safely die');
