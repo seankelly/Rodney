@@ -107,6 +107,15 @@ sub help {
     return 'I recommend trying !help';
 }
 
+# Overriding Bot::BasicBot's AUTOLOAD because I want to know when
+# it is used so I can avoid using it.
+sub AUTOLOAD {
+    my $self = shift;
+    our $AUTOLOAD;
+    $AUTOLOAD =~ s/.*.:://;
+    die "AUTOLOAD called: ${self}->$AUTOLOAD(@_)"
+}
+
 no Moose;
 no MooseX::ClassAttribute;
 1;
