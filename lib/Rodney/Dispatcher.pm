@@ -71,6 +71,7 @@ sub dispatch {
         }
         else {
             return if $index == 1;
+            # XXX: maybe move this up and only dispatch on $c then?
             my ($c, @args) = split ' ', $command;
             return "Invalid command: $c.";
         }
