@@ -4,8 +4,8 @@ use warnings;
 use lib 'lib';
 use NetHack::Logfile 'parse_logline';
 use Text::XLogfile 'parse_xlogline';
-use Rodney::Model::Game;
-use Rodney::Model::Player;
+use Rodney::Model::Table::Game;
+use Rodney::Model::Table::Player;
 use DateTime;
 
 # convert some of the field names to something better
@@ -79,15 +79,15 @@ while (<>) {
     $converted{start}    = parse_time(epoch => $converted{starttime}, ymd => $converted{birthdate});
     $converted{end}      = parse_time(epoch => $converted{endtime}, ymd => $converted{deathdate});
 
-    my $iter = Rodney::Model::Player->load_name($converted{player});
+    my $iter = Rodney::Model::Table::Player->load_name($converted{player});
     my $player = $iter->next;
     if (!defined $player) {
-        $player = Rodney::Model::Player->insert(name => $converted{player});
+        $player = Rodney::Model::Table::Player->insert(name => $converted{player});
     }
 
     $converted{gamenum} = ++$gamenum{$converted{player}};
     $converted{player_id} = $player->id;
 
     delete @converted{qw/starttime birthdate endtime deathdate player/};
-    Rodney::Model::Game->insert(%converted);
+    Rodney::Model::Table::Game->insert(%converted);
 }

@@ -2,7 +2,7 @@ package Rodney::Command::Bug;
 use Moose;
 extends 'Rodney::Command';
 
-use Rodney::Model::Bug;
+use Rodney::Model::Table::Bug;
 
 our @COMMANDS = qw/bug bugs/;
 

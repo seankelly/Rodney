@@ -1,4 +1,4 @@
-package Rodney::Model::Game;
+package Rodney::Model::Table::Game;
 use Rodney::Model::Schema;
 use Fey::ORM::Table;
 use DateTime::Format::ISO8601;

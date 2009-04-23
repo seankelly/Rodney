@@ -1,4 +1,4 @@
-package Rodney::Model::Learndb;
+package Rodney::Model::Table::Learndb;
 use Rodney::Model::Schema;
 use Fey::ORM::Table;
 use DateTime::Format::ISO8601;

@@ -6,8 +6,7 @@ use Module::Pluggable
     sub_name    => 'commands';
 use Module::Pluggable
     require     => 1,
-    search_path => 'Rodney::Model',
-    except      => 'Rodney::Model::Schema',
+    search_path => 'Rodney::Model::Table',
     sub_name    => 'tables';
 use Path::Dispatcher;
 

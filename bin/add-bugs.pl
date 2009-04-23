@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use lib 'lib';
 use LWP::Simple;
-use Rodney::Model::Bug;
+use Rodney::Model::Table::Bug;
 use HTML::TreeBuilder;
 
 my @urls = (
@@ -31,12 +31,12 @@ for my $url (@urls) {
         $status = $status->as_text;
         $desc = $desc->as_text;
 
-        my $Bug = Rodney::Model::Bug->new(bugid => $id);
+        my $Bug = Rodney::Model::Table::Bug->new(bugid => $id);
         unless (defined $Bug) {
             # This is to ameliorate confusion between
             # 'fixed' and 'Fixed'.
             $status = 'NextVersion' if $status eq 'Fixed';
-            Rodney::Model::Bug->insert(
+            Rodney::Model::Table::Bug->insert(
                 bugid       => $id,
                 status      => $status,
                 description => $desc,

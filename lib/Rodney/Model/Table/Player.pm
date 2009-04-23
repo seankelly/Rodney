@@ -1,4 +1,4 @@
-package Rodney::Model::Player;
+package Rodney::Model::Table::Player;
 use Rodney::Model::Schema;
 use Fey::ORM::Table;
 use Fey::Object::Iterator;
@@ -30,7 +30,7 @@ sub load_name {
     my $dbh = $class->_dbh($select);
 
     return Fey::Object::Iterator->new(
-        classes => 'Rodney::Model::Player',
+        classes => 'Rodney::Model::Table::Player',
         dbh     => $dbh,
         select  => $select,
     );

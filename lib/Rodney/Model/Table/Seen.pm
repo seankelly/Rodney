@@ -1,4 +1,4 @@
-package Rodney::Model::Seen;
+package Rodney::Model::Table::Seen;
 use Rodney::Model::Schema;
 use Fey::ORM::Table;
 use DateTime::Format::ISO8601;

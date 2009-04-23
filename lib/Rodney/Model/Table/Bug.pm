@@ -1,4 +1,4 @@
-package Rodney::Model::Bug;
+package Rodney::Model::Table::Bug;
 use Rodney::Model::Schema;
 use Fey::ORM::Table;
 
