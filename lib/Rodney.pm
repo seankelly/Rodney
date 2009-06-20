@@ -1,7 +1,7 @@
 package Rodney;
 use Moose;
+use MooseX::NonMoose;
 extends 'Bot::BasicBot';
-with 'MooseX::Alien';
 use MooseX::ClassAttribute;
 
 use Heap::Simple;
@@ -27,21 +27,6 @@ has queue => (
     isa      => 'Heap::Simple',
     default  => sub { Heap::Simple->new },
 );
-
-around new => sub {
-    my $orig  = shift;
-    my $class = shift;
-
-    my %bot_args = (
-        server   => Rodney->config->server,
-        channels => Rodney->config->channels,
-        nick     => Rodney->config->nick,
-        @_,
-    );
-
-    my $self = $class->$orig(%bot_args);
-    return $self;
-};
 
 sub said {
     my $self = shift;
@@ -114,6 +99,17 @@ sub AUTOLOAD {
     our $AUTOLOAD;
     $AUTOLOAD =~ s/.*.:://;
     die "AUTOLOAD called: ${self}->$AUTOLOAD(@_)"
+}
+
+sub FOREIGNBUILDARGS {
+    my %bot_args = (
+        server   => Rodney->config->server,
+        channels => Rodney->config->channels,
+        nick     => Rodney->config->nick,
+        @_,
+    );
+
+    return %bot_args;
 }
 
 no Moose;
