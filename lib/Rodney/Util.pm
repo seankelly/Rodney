@@ -2,9 +2,12 @@ package Rodney::Util;
 use strict;
 use warnings;
 
-use Exporter 'import';
-our @EXPORT_OK = qw/plural ntimes once stats fstats plane races roles genders
-                    alignments/;
+use Sub::Exporter -setup => {
+    exports => [
+        qw/plural ntimes once stats fstats plane races roles genders/,
+        qw/alignments/,
+    ]
+};
 
 =head2 plural count, singular[, plural]
 
