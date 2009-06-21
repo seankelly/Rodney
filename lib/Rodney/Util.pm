@@ -87,7 +87,7 @@ sub fstats {
 
 }
 
-=head2 planes
+=head2 plane
 
 Returns which plane corresponds to the given level.
 
@@ -97,7 +97,7 @@ sub plane {
     my $level = shift;
     my $verbosity = shift || 2;
     my @planes = qw/Astral Water Fire Air Earth/;
-    my $name = $planes[$level] || 'Foo';
+    my $name = $planes[$level];
     $name .= ' Plane' if $verbosity == 2;
     return $name;
 }
