@@ -101,7 +101,7 @@ sub _build_base_args {
         ($base = $table) =~ s/.*:://;
         $base_args{sql}->{$base} = {
             select => $table->SchemaClass->SQLFactoryClass->new_select,
-            table  => $table,
+            table  => $table->SchemaClass->Schema->table(lc $table),
         };
     }
 
