@@ -142,4 +142,18 @@ sub alignments {
     return qw/Law Neu Cha/;
 }
 
+sub parse_arguments {
+    my $args = shift;
+
+    my @arguments;
+
+    while ($args =~ s#^\s*(\w+)([<>=/]+)##) {
+        # $1 = column
+        # $2 = operator
+        # $3 = first character of value
+    }
+
+    return \@arguments;
+}
+
 1;
