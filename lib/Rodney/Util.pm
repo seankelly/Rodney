@@ -5,7 +5,7 @@ use warnings;
 use Sub::Exporter -setup => {
     exports => [
         qw/plural ntimes once stats fstats plane races roles genders/,
-        qw/alignments/,
+        qw/alignments parse_arguments/,
     ]
 };
 
