@@ -150,7 +150,6 @@ sub parse_arguments {
     while ($args =~ s#^\s*(\w+)([<>=/]+)##) {
         # $1 = column
         # $2 = operator
-        # $3 = first character of value
     }
 
     return \@arguments;
