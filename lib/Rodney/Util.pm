@@ -147,9 +147,33 @@ sub parse_arguments {
 
     my @arguments;
 
-    while ($args =~ s#^\s*(\w+)([<>=/]+)##) {
+    while ($args =~ s#^\s*(\w+)([!<>=/:]+)##) {
         # $1 = column
         # $2 = operator
+
+        my %arg = (
+            column   => $1,
+            operator => $2,
+        );
+
+        my $first = substr($args, 0, 1);
+        my $value;
+        my $re;
+
+        # Need to allow double or single quoted strings,
+        # with the possibility of escaping a quote in the middle.
+        if ($first eq '"' || $first eq "'") {
+            $re = qr#^$first([^$first\\]++|\\.)*+$first#;
+        }
+        else {
+            $re = qr#^(\S+)#;
+        }
+        $args =~ s/$re//;
+        $value = $1;
+
+        $arg{value} = $value;
+
+        push @arguments, \%arg;
     }
 
     return \@arguments;
