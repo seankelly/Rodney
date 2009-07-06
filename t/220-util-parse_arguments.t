@@ -25,6 +25,15 @@ my @tests = (
             { column => 'xyzzy', operator => '=', value => "a string" },
         ]
     ],
+
+    # single value arguments
+    [ 'foobar', [ { column => undef, operator => undef, value => 'foobar' } ] ],
+
+    # regex arguments
+    [ '/foobar/', [ { column => undef, operator => '~', value => 'foobar', re_option => undef } ] ],
+    [ '/taeb/i', [ { column => undef, operator => '~', value => 'taeb', re_option => 'i' } ] ],
+    [ '/\btaeb|beat\b/', [ { column => undef, operator => '~', value => '\btaeb|beat\b', re_option => undef } ] ],
+    [ '/\btaeb|beat\b/i', [ { column => undef, operator => '~', value => '\btaeb|beat\b', re_option => 'i' } ] ],
 );
 
 plan tests => scalar @tests;
