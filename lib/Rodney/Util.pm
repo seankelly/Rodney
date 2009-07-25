@@ -142,6 +142,30 @@ sub alignments {
     return qw/Law Neu Cha/;
 }
 
+sub _find_quoted {
+    my ($self, $string) = (@_);
+
+    my $start = substr($string, 0, 1);
+
+    my %end = (
+        '<' => '>',
+        '{' => '}',
+        '(' => ')',
+        '[' => ']',
+    );
+
+    my $end = $end{$start} || $start;
+
+    $string =~ s/^$start(.*?)(?<!\\)$end//g;
+
+    my $quoted = $1;
+
+    # Replace escaped end characters with the end char.
+    $quoted =~ s/\\$end/$end/g;
+
+    return $quoted;
+}
+
 sub parse_arguments {
     my $args = shift;
 
