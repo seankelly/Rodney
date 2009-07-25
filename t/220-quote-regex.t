@@ -1,7 +1,7 @@
 #!/usr/bin/env perl -wT
 use strict;
 use warnings;
-
+use Rodney::Util;
 use Test::More;
 
 my @tests = (
@@ -26,29 +26,6 @@ plan tests => scalar @tests;
 
 for my $test (@tests) {
     my $expect = $test->[1];
-    my $got = transform($test->[0]);
+    my $got = Rodney::Util->_find_quoted($test->[0]);
     cmp_ok($got, 'eq', $expect, $test->[1]);
-}
-
-sub transform {
-    my $string = shift;
-
-    my $start = substr($string, 0, 1);
-
-    my %end = (
-        '<' => '>',
-        '{' => '}',
-        '(' => ')',
-        '[' => ']',
-    );
-
-    my $end = $end{$start} || $start;
-
-    my $re = qr/^$start(.*?)(?<!\\)$end/;
-    $string =~ $re;
-
-    my $quoted = $1;
-    $quoted =~ s/\\$end/$end/g;
-
-    return $quoted;
 }
