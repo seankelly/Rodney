@@ -160,6 +160,8 @@ sub _find_quoted {
 
     my $quoted = $1;
 
+    return unless defined $quoted;
+
     # Replace escaped end characters with the end char.
     $quoted =~ s/\\$end/$end/g;
 
