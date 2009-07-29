@@ -20,6 +20,8 @@ my @tests = (
     [ '<foo\>bar> other stuff',  'foo>bar' ],
     [ '<foo<bar> other stuff',   'foo<bar' ],
     [ "'bl\\\\'ah' other stuff", "bl\\'ah" ],
+    # failing quotes
+    [ "'foo bar", undef ],
 );
 
 plan tests => scalar @tests;
@@ -27,5 +29,5 @@ plan tests => scalar @tests;
 for my $test (@tests) {
     my $expect = $test->[1];
     my $got = Rodney::Util->_find_quoted($test->[0]);
-    cmp_ok($got, 'eq', $expect, $test->[1]);
+    is($got, $expect, $test->[1]);
 }
