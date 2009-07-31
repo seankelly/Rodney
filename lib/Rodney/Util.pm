@@ -143,9 +143,7 @@ sub alignments {
 }
 
 sub _find_quoted {
-    my ($self, $string) = (@_);
-
-    my $start = substr($string, 0, 1);
+    my ($self, $string, $start) = (@_);
 
     my %end = (
         '<' => '>',
