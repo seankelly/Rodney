@@ -163,7 +163,7 @@ sub _find_quoted {
     # Replace escaped end characters with the end char.
     $quoted =~ s/\\$end/$end/g;
 
-    return $quoted;
+    return ($string, $quoted);
 }
 
 sub parse_arguments {
