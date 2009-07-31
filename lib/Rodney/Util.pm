@@ -171,14 +171,24 @@ sub parse_arguments {
 
     my @arguments;
 
-    while ($args =~ s#^\s*(\w+)([!<>=/:]+)##) {
+    while ($args =~ s#^\s*(\w+)([!<>=/:]+)?##) {
         # $1 = column
         # $2 = operator
 
-        my %arg = (
-            column   => $1,
-            operator => $2,
-        );
+        my %arg;
+        if (defined $2) {
+            %arg = (
+                column   => $1,
+                operator => $2,
+            );
+        }
+        else {
+            %arg = (
+                column   => undef,
+                operator => $2,
+                value    => $1,
+            );
+        }
 
         my $first = substr($args, 0, 1);
         my $value;
