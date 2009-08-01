@@ -54,5 +54,8 @@ sub AUTOLOAD {
     return $self->contents->{$AUTOLOAD};
 }
 
+__PACKAGE__->meta->make_immutable;
+
 no Moose;
+
 1;

@@ -37,4 +37,5 @@ sub load_name {
 }
 
 no Fey::ORM::Table;
+
 1;

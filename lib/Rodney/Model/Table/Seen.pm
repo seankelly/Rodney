@@ -16,4 +16,5 @@ transform 'lastseen'
     };
 
 no Fey::ORM::Table;
+
 1;

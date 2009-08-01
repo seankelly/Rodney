@@ -88,5 +88,7 @@ sub help {
     return 'I need help text written for me!';
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 

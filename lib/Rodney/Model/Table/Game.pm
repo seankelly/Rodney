@@ -136,4 +136,5 @@ sub to_string {
 }
 
 no Fey::ORM::Table;
+
 1;
