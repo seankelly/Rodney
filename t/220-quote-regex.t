@@ -1,7 +1,7 @@
 #!/usr/bin/env perl -wT
 use strict;
 use warnings;
-use Rodney::Util;
+use Rodney::Util 'find_quoted';
 use Test::More;
 
 my @tests = (
@@ -28,6 +28,6 @@ plan tests => scalar @tests;
 
 for my $test (@tests) {
     my $expect = $test->[1];
-    my $got = Rodney::Util->_find_quoted($test->[0], substr($test->[0], 0, 1));
+    my $got = find_quoted($test->[0], substr($test->[0], 0, 1));
     is($got, $expect, $test->[1]);
 }

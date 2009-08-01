@@ -1,5 +1,7 @@
-package Rodney::Role::Command
+package Rodney::Role::Command;
 use Moose::Role;
+use List::MoreUtils 'any';
+use Rodney::Util 'find_quoted';
 
 # command method returns a list of commands.
 # run is what's used to run the command.
@@ -52,7 +54,7 @@ sub parse_arguments {
             my @quotes = ("'", '"', '/', '{', '[', '(', '<');
 
             if (any { $first eq $_ } @quotes) {
-                ($args, $value) = Rodney::Util->_find_quoted($args, $first);
+                ($args, $value) = find_quoted($args, $first);
             }
             else {
                 $args =~ s/^(\S+)//;
