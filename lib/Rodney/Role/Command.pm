@@ -1,9 +1,71 @@
 package Rodney::Role::Command
 use Moose::Role;
 
-# Command method returns a list of commands.
-# Run is what's used to run the command.
+# command method returns a list of commands.
+# run is what's used to run the command.
 requires qw/command run/;
+
+# This originally was in Rodney::Util but honestly, it's only going
+# to be used by commands. Makes sense to move it to the right place.
+sub parse_arguments {
+    my $args = shift;
+
+    my @arguments;
+
+    while ($args =~ s#^\s*(?:/([^/]+(?<!\\))/(\w+)?|(\w+)([!<>=/:]+)?)##) {
+        # $1 = regex
+        # $2 = regex option (optional)
+        # $3 = column
+        # $4 = operator (optional)
+
+        my %arg;
+        if (defined $4) {
+            %arg = (
+                column   => $3,
+                operator => $4,
+            );
+        }
+        else {
+            %arg = (
+                column    => undef,
+                operator  => undef,
+                value     => $1 || $3,
+            );
+
+            if (defined $1) {
+                %arg = (
+                    %arg,
+                    re_option => $2,
+                    operator  => '~',
+                );
+            }
+
+        }
+
+        # Only search for argument if an operator was provided.
+        if (defined $4) {
+            # For simplicity, allow pretty much any open "quote"
+            # character to start the string.
+
+            my $value;
+            my $first = substr($args, 0, 1);
+            my @quotes = ("'", '"', '/', '{', '[', '(', '<');
+
+            if (any { $first eq $_ } @quotes) {
+                ($args, $value) = Rodney::Util->_find_quoted($args, $first);
+            }
+            else {
+                $args =~ s/^(\S+)//;
+                $value = $1;
+            }
+            $arg{value} = $value;
+        }
+
+        push @arguments, \%arg;
+    }
+
+    return \@arguments;
+}
 
 no Moose::Role;
 
