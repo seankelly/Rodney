@@ -6,7 +6,7 @@ use List::MoreUtils 'any';
 use Sub::Exporter -setup => {
     exports => [
         qw/plural ntimes once stats fstats plane races roles genders/,
-        qw/alignments parse_arguments/,
+        qw/alignments find_quoted/,
     ]
 };
 
@@ -143,8 +143,8 @@ sub alignments {
     return qw/Law Neu Cha/;
 }
 
-sub _find_quoted {
-    my ($self, $string, $start) = (@_);
+sub find_quoted {
+    my ($string, $start) = (@_);
 
     my %end = (
         '<' => '>',
