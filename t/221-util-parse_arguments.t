@@ -39,11 +39,13 @@ my @tests = (
 );
 
 sub run {
+    my $self = shift;
+
     plan tests => scalar @tests;
 
     for my $test (@tests) {
         my ($arg, $expected) = @{ $test };
-        my $got = parse_arguments($arg);
+        my $got = $self->parse_arguments($arg);
         is_deeply($got, $expected, $arg);
     }
 }

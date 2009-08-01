@@ -10,11 +10,12 @@ requires qw/command run/;
 # This originally was in Rodney::Util but honestly, it's only going
 # to be used by commands. Makes sense to move it to the right place.
 sub parse_arguments {
-    my $args = shift;
+    my $self = shift;
+    my $string = shift;
 
     my @arguments;
 
-    while ($args =~ s#^\s*(?:/([^/]+(?<!\\))/(\w+)?|(\w+)([!<>=/:]+)?)##) {
+    while ($string =~ s#^\s*(?:/([^/]+(?<!\\))/(\w+)?|(\w+)([!<>=/:]+)?)##) {
         # $1 = regex
         # $2 = regex option (optional)
         # $3 = column
@@ -50,14 +51,14 @@ sub parse_arguments {
             # character to start the string.
 
             my $value;
-            my $first = substr($args, 0, 1);
+            my $first = substr($string, 0, 1);
             my @quotes = ("'", '"', '/', '{', '[', '(', '<');
 
             if (any { $first eq $_ } @quotes) {
-                ($args, $value) = find_quoted($args, $first);
+                ($string, $value) = find_quoted($string, $first);
             }
             else {
-                $args =~ s/^(\S+)//;
+                $string =~ s/^(\S+)//;
                 $value = $1;
             }
             $arg{value} = $value;
