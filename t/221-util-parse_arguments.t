@@ -1,9 +1,11 @@
 #!perl -T
-use strict;
-use warnings;
+package Rodney::t::parse_arguments;
+use Moose;
 use Test::More;
 
-use Rodney::Util 'parse_arguments';
+with 'Rodney::Role::Command';
+
+sub command {}
 
 my @tests = (
     # single argument tests
@@ -36,10 +38,16 @@ my @tests = (
     [ '/\btaeb|beat\b/i', [ { column => undef, operator => '~', value => '\btaeb|beat\b', re_option => 'i' } ] ],
 );
 
-plan tests => scalar @tests;
+sub run {
+    plan tests => scalar @tests;
 
-for my $test (@tests) {
-    my ($arg, $expected) = @{ $test };
-    my $got = parse_arguments($arg);
-    is_deeply($got, $expected, $arg);
+    for my $test (@tests) {
+        my ($arg, $expected) = @{ $test };
+        my $got = parse_arguments($arg);
+        is_deeply($got, $expected, $arg);
+    }
 }
+
+package main;
+my $parse_arguments = Rodney::t::parse_arguments->new;
+$parse_arguments->run;
