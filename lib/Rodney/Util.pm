@@ -1,6 +1,7 @@
 package Rodney::Util;
 use strict;
 use warnings;
+use List::MoreUtils 'any';
 
 use Sub::Exporter -setup => {
     exports => [
@@ -201,22 +202,24 @@ sub parse_arguments {
 
         }
 
-        my $first = substr($args, 0, 1);
-        my $value;
-        my $re;
+        # Only search for argument if an operator was provided.
+        if (defined $4) {
+            # For simplicity, allow pretty much any open "quote"
+            # character to start the string.
 
-        # Need to allow double or single quoted strings,
-        # with the possibility of escaping a quote in the middle.
-        if ($first eq '"' || $first eq "'") {
-            $re = qr#^$first([^$first\\]++|\\.)*+$first#;
-        }
-        else {
-            $re = qr#^(\S+)#;
-        }
-        $args =~ s/$re//;
-        $value = $1;
+            my $value;
+            my $first = substr($args, 0, 1);
+            my @quotes = ("'", '"', '/', '{', '[', '(', '<');
 
-        $arg{value} = $value;
+            if (any { $first eq $_ } @quotes) {
+                ($args, $value) = Rodney::Util->_find_quoted($args, $first);
+            }
+            else {
+                $args =~ s/^(\S+)//;
+                $value = $1;
+            }
+            $arg{value} = $value;
+        }
 
         push @arguments, \%arg;
     }
