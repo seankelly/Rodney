@@ -2,13 +2,10 @@ package Rodney::Dispatcher;
 use Moose;
 use Module::Pluggable
     require     => 1,
-    search_path => 'Rodney::Command',
-    sub_name    => 'commands';
-use Module::Pluggable
-    require     => 1,
     search_path => 'Rodney::Model::Table',
     sub_name    => 'tables';
 use Path::Dispatcher;
+use Rodney::Command;
 
 has dispatcher => (
     is      => 'ro',
@@ -126,20 +123,18 @@ sub _find_commands {
 sub BUILD {
     my $self = shift;
 
-    for my $command ($self->commands) {
-        my @cmds = eval "\@${command}::COMMANDS";
-        if (@cmds) {
-            for my $cmd (@cmds) {
-                $self->dispatcher->add_rule(
-                    Path::Dispatcher::Rule::Tokens->new(
-                        tokens => [ $cmd ],
-                        block  => sub {
-                            # $command contains the package
-                            return $command->run(@_);
-                        },
-                    )
-                );
-            }
+    for my $command (Rodney::Command->commands) {
+        my @cmds = $command->command;
+        for my $cmd (@cmds) {
+            $self->dispatcher->add_rule(
+                Path::Dispatcher::Rule::Tokens->new(
+                    tokens => [ $cmd ],
+                    block  => sub {
+                        # $command contains the package
+                        return $command->run(@_);
+                    },
+                )
+            );
         }
     }
 }
