@@ -21,8 +21,16 @@ my @packages = map { 'TEST' . $_ } 1..3;
 plan tests => (scalar @packages) + 2;
 
 for my $package (@packages) {
-    my $namespace = "Rodney::Command::$package";
-    eval "do { package $namespace; our \@COMMANDS = qw/$package/; sub run { return \$_[1]->{body} } }";
+    my $namespace = "Rodney::Plugin::$package";
+    eval <<"PACKAGE"
+    do {
+        package $namespace;
+        use Moose;
+        with 'Rodney::Role::Command';
+        sub command { qw/$package/ }
+        sub run { return \$_[1]->{body} }
+    };
+PACKAGE
 }
 
 

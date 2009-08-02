@@ -22,8 +22,10 @@ my $new_lorem;
 ($new_lorem = $lorem) =~ tr/a-zA-Z/n-za-mN-ZA-M/;
 
 do {
-    package Rodney::Command::TEST1;
-    our @COMMANDS = qw/TEST1/;
+    package Rodney::Plugin::TEST1;
+    use Moose;
+    with 'Rodney::Role::Command';
+    sub command { qw/TEST1/ }
 
     # generate some text
     sub run {
@@ -37,10 +39,11 @@ do {
         return $lorem;
     }
 
-    package Rodney::Command::TEST2;
+    package Rodney::Plugin::TEST2;
     use Moose;
+    with 'Rodney::Role::Command';
     extends 'Rodney::Command';
-    our @COMMANDS = qw/TEST2/;
+    sub command { qw/TEST2/ }
 
     # rot13 the text
     sub run {
@@ -56,8 +59,10 @@ do {
         return join ' ', @output;
     }
 
-    package Rodney::Command::TEST3;
-    our @COMMANDS = qw/TEST3/;
+    package Rodney::Plugin::TEST3;
+    use Moose;
+    with 'Rodney::Role::Command';
+    sub command { qw/TEST3/ }
 
     # generate some text
     sub run {
