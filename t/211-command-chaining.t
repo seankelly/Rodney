@@ -42,7 +42,6 @@ do {
     package Rodney::Plugin::TEST2;
     use Moose;
     with 'Rodney::Role::Command';
-    extends 'Rodney::Command';
     sub command { qw/TEST2/ }
 
     # rot13 the text
