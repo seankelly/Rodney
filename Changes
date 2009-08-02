@@ -1,5 +1,10 @@
 Revision history for Rodney
 
+0.04
+        use Moose
+        use Fey::ORM
+        Massive architecture changes.
+
 0.01    Sun Jan 27 11:36:58 2008
         First version, released on an unsuspecting world.
 
