@@ -2,10 +2,6 @@ package Rodney::Dispatcher;
 use Moose;
 use Module::Pluggable
     require     => 1,
-    search_path => 'Rodney::Command',
-    sub_name    => 'commands';
-use Module::Pluggable
-    require     => 1,
     search_path => 'Rodney::Model::Table',
     sub_name    => 'tables';
 use Path::Dispatcher;
