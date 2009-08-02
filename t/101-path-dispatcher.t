@@ -1,14 +1,15 @@
 #!perl -T
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 6;
 use Rodney::Dispatcher;
 
 do {
-    package Rodney::Command::TEST;
-    use strict;
-    use warnings;
-    our @COMMANDS = qw/TEST1 TEST2 TEST3/;
+    package Rodney::Plugin::TEST;
+    use Moose;
+    with 'Rodney::Role::Command';
+
+    sub command { qw/TEST1 TEST2 TEST3/ };
 
     sub run {
         shift;
@@ -19,10 +20,12 @@ do {
 
 my $dispatcher = Rodney::Dispatcher->new;
 
-my $command = 'TEST' . (int(rand(scalar @Rodney::Command::TEST::COMMANDS))+1);
+my @commands = Rodney::Plugin::TEST->command;
 
-my $d = $dispatcher->dispatcher->dispatch($command);
-ok($d->has_matches, "matches against $command");
+for my $command (@commands) {
+    my $d = $dispatcher->dispatcher->dispatch($command);
+    ok($d->has_matches, "matches against $command");
 
-my $res = $d->run({ body => $command});
-is($res, $command, 'returns right result');
+    my $res = $d->run({ body => $command});
+    is($res, $command, 'returns right result');
+}
