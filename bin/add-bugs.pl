@@ -2,8 +2,20 @@
 use strict;
 use warnings;
 use LWP::Simple;
-use Rodney::Model::Table::Bug;
+use Rodney::Config;
+use Rodney::Schema;
 use HTML::TreeBuilder;
+
+my $config = Rodney::Config->new;
+my $db_config = $config->database;
+
+my $schema = Rodney::Schema->connect(
+    "dbi:$db_config->{driver}:dbname=$db_config->{database}",
+    $db_config->{username},
+    $db_config->{password}
+);
+
+my $bug_rs = $schema->resultset('Bug');
 
 my @urls = (
     'http://www.nethack.org/v343/bugs.html',
@@ -30,16 +42,16 @@ for my $url (@urls) {
         $status = $status->as_text;
         $desc = $desc->as_text;
 
-        my $Bug = Rodney::Model::Table::Bug->new(bugid => $id);
+        my $Bug = $bug_rs->find({ bugid => $id });
         unless (defined $Bug) {
             # This is to ameliorate confusion between
             # 'fixed' and 'Fixed'.
             $status = 'NextVersion' if $status eq 'Fixed';
-            Rodney::Model::Table::Bug->insert(
+            $bug_rs->create({
                 bugid       => $id,
                 status      => $status,
                 description => $desc,
-            );
+            });
         }
     }
 
