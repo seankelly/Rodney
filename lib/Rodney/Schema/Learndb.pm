@@ -1,19 +1,21 @@
-package Rodney::Model::Table::Learndb;
-use Rodney::Model::Schema;
-use Fey::ORM::Table;
-use DateTime::Format::ISO8601;
+package Rodney::Schema::Learndb;
+use strict;
+use warnings;
+use base qw/DBIx::Class/;
 
-has_table(Rodney::Model::Schema->Schema()->table('learndb'));
-
-transform 'updated'
-    => inflate {
-        DateTime::Format::ISO8601->parse_datetime($_[1])
-    }
-    => deflate {
-        defined $_[1] && blessed $_[1]
-            ? DateTime::Format::ISO8601->format_datetime($_[1])
-            : $_[1]
-    };
+__PACKAGE__->load_components(qw/InflateColumn::DateTime Core/);
+__PACKAGE__->table('learndb');
+__PACKAGE__->add_columns(
+    id         => {},
+    deleted    => {},
+    outdated   => {},
+    term       => {},
+    entry      => {},
+    author     => {},
+    updated    => { data_type => 'datetime' },
+    definition => {},
+);
+__PACKAGE__->set_primary_key(qw/id/);
 
 
 sub normal_term {
@@ -30,7 +32,5 @@ sub to_string {
            $self->entry,
            $self->definition;
 }
-
-no Fey::ORM::Table;
 
 1;

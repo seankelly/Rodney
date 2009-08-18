@@ -1,9 +1,10 @@
-package Rodney::Model::Table::Bug;
-use Rodney::Model::Schema;
-use Fey::ORM::Table;
+package Rodney::Schema::Bug;
+use strict;
+use warnings;
+use base qw/DBIx::Class/;
 
-has_table(Rodney::Model::Schema->Schema()->table('bug'));
-
-no Fey::ORM::Table;
+__PACKAGE__->load_components(qw/Core/);
+__PACKAGE__->table('bug');
+__PACKAGE__->add_columns(qw/bugid status description/);
 
 1;

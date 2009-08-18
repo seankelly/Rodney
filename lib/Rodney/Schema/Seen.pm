@@ -1,20 +1,17 @@
-package Rodney::Model::Table::Seen;
-use Rodney::Model::Schema;
-use Fey::ORM::Table;
-use DateTime::Format::ISO8601;
+package Rodney::Schema::Seen;
+use strict;
+use warnings;
+use base qw/DBIx::Class/;
 
-has_table(Rodney::Model::Schema->Schema()->table('seen'));
-
-transform 'lastseen'
-    => inflate {
-        DateTime::Format::ISO8601->parse_datetime($_[1])
-    }
-    => deflate {
-        defined $_[1] && blessed $_[1]
-            ? DateTime::Format::ISO8601->format_datetime($_[1])
-            : $_[1]
-    };
-
-no Fey::ORM::Table;
+__PACKAGE__->load_components(qw/InflateColumn::DateTime Core/);
+__PACKAGE__->table('seen');
+__PACKAGE__->add_columns(
+    id       => {},
+    nick     => {},
+    lastseen => { data_type => 'datetime' },
+    message  => {},
+    channel  => {},
+);
+__PACKAGE__->set_primary_key(qw/id/);
 
 1;

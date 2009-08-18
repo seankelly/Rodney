@@ -1,23 +1,43 @@
-package Rodney::Model::Table::Game;
-use Rodney::Model::Schema;
-use Fey::ORM::Table;
-use DateTime::Format::ISO8601;
+package Rodney::Schema::Game;
+use strict;
+use warnings;
+use base qw/DBIx::Class/;
 
-has_table(Rodney::Model::Schema->Schema()->table('game'));
+__PACKAGE__->load_components(qw/InflateColumn::DateTime Core/);
+__PACKAGE__->table('game');
+__PACKAGE__->add_columns(
+    id             => {},
+    player_id      => {},
+    gamenum        => {},
+    version        => {},
+    score          => {},
+    dungeon        => {},
+    curlvl         => {},
+    maxlvl         => {},
+    curhp          => {},
+    maxhp          => {},
+    deaths         => {},
+    start          => { data_type => 'datetime' },
+    end            => { data_type => 'datetime' },
+    realtime       => {},
+    turns          => {},
+    uid            => {},
+    role           => {},
+    race           => {},
+    gender         => {},
+    startgender    => {},
+    alignment      => {},
+    startalignment => {},
+    death          => {},
+    conduct        => {},
+    conducts       => {},
+    achieve        => {},
+    ascended       => {},
+);
+__PACKAGE__->set_primary_key(qw/id/);
 
-has_one(Rodney::Model::Schema->Schema()->table('player'));
+__PACKAGE__->belongs_to(player_id => 'Rodney::Schema::Player');
 
-for my $col (qw/start end/) {
-    transform $col
-        => inflate {
-            DateTime::Format::ISO8601->parse_datetime($_[1])
-        }
-        => deflate {
-            defined $_[1] && blessed $_[1]
-                ? DateTime::Format::ISO8601->format_datetime($_[1])
-                : $_[1]
-        };
-}
 
 sub died {
     my $self = shift;
@@ -134,7 +154,5 @@ sub to_string {
 
     return $result;
 }
-
-no Fey::ORM::Table;
 
 1;
