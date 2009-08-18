@@ -35,8 +35,7 @@ __PACKAGE__->add_columns(
     ascended       => {},
 );
 __PACKAGE__->set_primary_key(qw/id/);
-
-__PACKAGE__->belongs_to(player_id => 'Rodney::Schema::Player');
+__PACKAGE__->belongs_to(player => 'Rodney::Schema::Player', 'player_id');
 
 
 sub died {
