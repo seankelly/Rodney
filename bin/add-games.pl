@@ -1,7 +1,6 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use lib 'lib';
 use NetHack::Logfile 'parse_logline';
 use Text::XLogfile 'parse_xlogline';
 use Rodney::Model::Table::Game;

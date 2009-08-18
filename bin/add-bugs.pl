@@ -1,7 +1,6 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use lib 'lib';
 use LWP::Simple;
 use Rodney::Model::Table::Bug;
 use HTML::TreeBuilder;
