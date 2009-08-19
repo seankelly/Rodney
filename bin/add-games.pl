@@ -13,7 +13,11 @@ my $db_config = $config->database;
 my $schema = Rodney::Schema->connect(
     "dbi:$db_config->{driver}:dbname=$db_config->{database}",
     $db_config->{username},
-    $db_config->{password}
+    $db_config->{password},
+    {
+        quote_char => '"',
+        name_sep   => '.',
+    }
 );
 
 my $game_rs = $schema->resultset('Game');
