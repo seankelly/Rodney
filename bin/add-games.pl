@@ -47,12 +47,13 @@ sub parse_time {
     else {
         my ($year, $month, $day) = $date{ymd} =~ /^(\d{4})(\d\d)(\d\d)$/;
         $dt = DateTime->new(
-            year   => $year,
-            month  => $month,
-            day    => $day,
-            hour   => 0,
-            minute => 0,
-            second => 0,
+            year      => $year,
+            month     => $month,
+            day       => $day,
+            hour      => 0,
+            minute    => 0,
+            second    => 0,
+            time_zone => 'UTC',
         );
     }
 
