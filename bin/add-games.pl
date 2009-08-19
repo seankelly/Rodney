@@ -139,6 +139,7 @@ match_last_games;
 
 # this stores the number of games a player has played
 my %gamenum;
+my %player_id;
 
 while (<>) {
     my $game = parse_game($_);
@@ -151,13 +152,22 @@ while (<>) {
     $game->{start}    = parse_time(epoch => $game->{starttime}, ymd => $game->{birthdate});
     $game->{end}      = parse_time(epoch => $game->{endtime}, ymd => $game->{deathdate});
 
-    my $player = $player_rs->find($game->{player});
-    if (!defined $player) {
-        $player = $player_rs->create({ name => $game->{player} });
+    unless ($gamenum{$game->{player}}) {
+        # Load of create the player.
+        my $player = $player_rs->search(
+            { name => $game->{player} }
+        )->first;
+        if (!defined $player) {
+            $player = $player_rs->create({ name => $game->{player} });
+        }
+
+        # Start with 0 games because of the pre-increment.
+        $gamenum{$game->{player}} = 0;
+        $player_id{$game->{player}} = $player->id;
     }
 
-    $game->{gamenum} = ++$gamenum{$game->{player}};
-    $game->{player_id} = $player->id;
+    $game->{gamenum}   = ++$gamenum{$game->{player}};
+    $game->{player_id} = $player_id{$game->{player}};
 
     delete @{$game}{qw/starttime birthdate endtime deathdate player/};
     $game_rs->create($game);
