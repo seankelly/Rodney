@@ -8,6 +8,7 @@ use Heap::Simple;
 use Module::Refresh;
 use Rodney::Config;
 use Rodney::Dispatcher;
+use Rodney::Schema;
 
 class_has config => (
     is       => 'ro',
@@ -26,6 +27,24 @@ has queue => (
     is       => 'ro',
     isa      => 'Heap::Simple',
     default  => sub { Heap::Simple->new },
+);
+
+has schema => (
+    is      => 'rw',
+    isa     => 'Rodney::Schema',
+    default => sub {
+        my $db_config = Rodney->config->database;
+        Rodney::Schema->connect(
+            "dbi:$db_config->{driver}:dbname=$db_config->{database}",
+            $db_config->{username},
+            $db_config->{password},
+            {
+                quote_char => '"',
+                name_sep   => '.',
+            }
+        );
+    },
+    lazy    => 1,
 );
 
 sub said {
