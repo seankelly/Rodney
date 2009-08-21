@@ -32,19 +32,6 @@ has queue => (
 has schema => (
     is      => 'rw',
     isa     => 'Rodney::Schema',
-    default => sub {
-        my $db_config = Rodney->config->database;
-        Rodney::Schema->connect(
-            "dbi:$db_config->{driver}:dbname=$db_config->{database}",
-            $db_config->{username},
-            $db_config->{password},
-            {
-                quote_char => '"',
-                name_sep   => '.',
-            }
-        );
-    },
-    lazy    => 1,
 );
 
 sub said {
@@ -118,6 +105,23 @@ sub AUTOLOAD {
     our $AUTOLOAD;
     $AUTOLOAD =~ s/.*.:://;
     die "AUTOLOAD called: ${self}->$AUTOLOAD(@_)"
+}
+
+sub BUILD {
+    my $self = shift;
+
+    my $db_config = Rodney->config->database;
+    my $schema = Rodney::Schema->connect(
+        "dbi:$db_config->{driver}:dbname=$db_config->{database}",
+        $db_config->{username},
+        $db_config->{password},
+        {
+            quote_char => '"',
+            name_sep   => '.',
+        }
+    );
+
+    $self->schema($schema);
 }
 
 sub FOREIGNBUILDARGS {
