@@ -3,7 +3,7 @@ use Moose;
 use MooseX::NonMoose;
 extends 'Bot::BasicBot';
 use MooseX::ClassAttribute;
-
+use Carp qw/cluck/;
 use Heap::Simple;
 use Module::Refresh;
 use Rodney::Config;
@@ -98,7 +98,8 @@ sub AUTOLOAD {
     my $self = shift;
     our $AUTOLOAD;
     $AUTOLOAD =~ s/.*.:://;
-    die "AUTOLOAD called: ${self}->$AUTOLOAD(@_)"
+    ## Will want to remove this eventually.
+    cluck "AUTOLOAD called: ${self}->$AUTOLOAD(@_)"
 }
 
 sub FOREIGNBUILDARGS {
