@@ -102,6 +102,7 @@ sub AUTOLOAD {
 }
 
 sub FOREIGNBUILDARGS {
+    my $class = shift;
     my %bot_args = (
         server   => Rodney->config->server,
         channels => Rodney->config->channels,
