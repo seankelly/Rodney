@@ -12,6 +12,8 @@ channels:
 database:
     driver: SQLite
     database: nethack
+    user:
+    password:
 
 # override defaults in this file
 other_config: etc/site_config.yml

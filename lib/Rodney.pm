@@ -8,6 +8,7 @@ use Heap::Simple;
 use Module::Refresh;
 use Rodney::Config;
 use Rodney::Dispatcher;
+use Rodney::Schema;
 
 class_has config => (
     is       => 'ro',
@@ -26,6 +27,11 @@ has queue => (
     is       => 'ro',
     isa      => 'Heap::Simple',
     default  => sub { Heap::Simple->new },
+);
+
+has schema => (
+    is      => 'rw',
+    isa     => 'Rodney::Schema',
 );
 
 sub said {
@@ -100,6 +106,23 @@ sub AUTOLOAD {
     $AUTOLOAD =~ s/.*.:://;
     ## Will want to remove this eventually.
     cluck "AUTOLOAD called: ${self}->$AUTOLOAD(@_)"
+}
+
+sub BUILD {
+    my $self = shift;
+
+    my $db_config = Rodney->config->database;
+    my $schema = Rodney::Schema->connect(
+        "dbi:$db_config->{driver}:dbname=$db_config->{database}",
+        $db_config->{username},
+        $db_config->{password},
+        {
+            quote_char => '"',
+            name_sep   => '.',
+        }
+    );
+
+    $self->schema($schema);
 }
 
 sub FOREIGNBUILDARGS {

@@ -3,9 +3,25 @@ use strict;
 use warnings;
 use NetHack::Logfile 'parse_logline';
 use Text::XLogfile 'parse_xlogline';
-use Rodney::Model::Table::Game;
-use Rodney::Model::Table::Player;
+use Rodney::Config;
+use Rodney::Schema;
 use DateTime;
+use Scalar::Util 'looks_like_number';
+
+my $config = Rodney::Config->new;
+my $db_config = $config->database;
+my $schema = Rodney::Schema->connect(
+    "dbi:$db_config->{driver}:dbname=$db_config->{database}",
+    $db_config->{username},
+    $db_config->{password},
+    {
+        quote_char => '"',
+        name_sep   => '.',
+    }
+);
+
+my $game_rs = $schema->resultset('Game');
+my $player_rs = $schema->resultset('Player');
 
 # convert some of the field names to something better
 my %convert = (
@@ -47,46 +63,116 @@ sub parse_time {
     else {
         my ($year, $month, $day) = $date{ymd} =~ /^(\d{4})(\d\d)(\d\d)$/;
         $dt = DateTime->new(
-            year   => $year,
-            month  => $month,
-            day    => $day,
-            hour   => 0,
-            minute => 0,
-            second => 0,
+            year      => $year,
+            month     => $month,
+            day       => $day,
+            hour      => 0,
+            minute    => 0,
+            second    => 0,
+            time_zone => 'UTC',
         );
     }
 
     return $dt->iso8601 . '+00';
 }
 
-# this stores the number of games a player has played
-my %gamenum;
+# Match last games in database with those in the file.
+sub match_last_games {
+    my $check_games = 10;
+    my $rs = $game_rs->search(undef,
+        {
+            order_by => { -desc => 'id' },
+            rows     => $check_games,
+        }
+    );
 
-while (<>) {
+    my @games;
+    my $g;
+    unshift @games, {
+        score     => $g->score,
+        curhp     => $g->curhp,
+        starttime => $g->start->epoch,
+        endtime   => $g->end->epoch,
+        player    => $g->player->name,
+    } while $g = $rs->next;
+
+    my @cmp = qw/score curhp starttime endtime player/;
+
+    # Now spin through games in the file.
+    my $count = $game_rs->search(undef)->count;
+    my $id = 0;
+    my $error = 0;
+    while (<>) {
+        $id++;
+        next if $id <= $count - $check_games;
+        last if $id == $count;
+
+        my $game = parse_game($_);
+        my $expected = shift @games;
+        for my $key (@cmp) {
+            if (looks_like_number($game->{$key})) {
+                if ($expected->{$key} != $game->{$key}) {
+                    warn $expected->{$key}, '!= ' ,$game->{$key};
+                    $error = 1;
+                }
+            }
+            elsif ($expected->{$key} ne $game->{$key}) {
+                warn $expected->{$key}, 'ne ' ,$game->{$key};
+                $error = 1;
+            }
+        }
+
+    }
+
+    die "Error in matching last games" if $error;
+}
+
+sub parse_game {
+    my $input = shift;
     my $game;
-    $game = parse_xlogline($_);
-    $game = parse_logline($_) unless defined $game;
-    die "Unable to parse logline '$_'" unless defined $game;
+    $game = parse_xlogline($input);
+    $game = parse_logline($input) unless defined $game;
+    die "Unable to parse logline '$input'" unless defined $game;
 
     my %converted = map { ($convert{$_}||$_) => $game->{$_} } keys %{ $game };
 
-    $converted{ascended} = $converted{death} eq 'ascended' ? 1 : 0;
-    $converted{dungeon}  = $dungeon[$converted{dungeon}];
-    $converted{conduct}  = hex($converted{conduct}) if $converted{conduct};
-    $converted{conducts} = bits_set($converted{conduct});
-    $converted{achieve}  = hex($converted{achieve}) if $converted{achieve};
-    $converted{start}    = parse_time(epoch => $converted{starttime}, ymd => $converted{birthdate});
-    $converted{end}      = parse_time(epoch => $converted{endtime}, ymd => $converted{deathdate});
+    return \%converted;
+}
 
-    my $iter = Rodney::Model::Table::Player->load_name($converted{player});
-    my $player = $iter->next;
-    if (!defined $player) {
-        $player = Rodney::Model::Table::Player->insert(name => $converted{player});
+match_last_games;
+
+# this stores the number of games a player has played
+my %gamenum;
+my %player_id;
+
+while (<>) {
+    my $game = parse_game($_);
+
+    $game->{ascended} = $game->{death} eq 'ascended' ? 1 : 0;
+    $game->{dungeon}  = $dungeon[$game->{dungeon}];
+    $game->{conduct}  = hex($game->{conduct}) if $game->{conduct};
+    $game->{conducts} = bits_set($game->{conduct});
+    $game->{achieve}  = hex($game->{achieve}) if $game->{achieve};
+    $game->{start}    = parse_time(epoch => $game->{starttime}, ymd => $game->{birthdate});
+    $game->{end}      = parse_time(epoch => $game->{endtime}, ymd => $game->{deathdate});
+
+    unless ($gamenum{$game->{player}}) {
+        # Load of create the player.
+        my $player = $player_rs->search(
+            { name => $game->{player} }
+        )->first;
+        if (!defined $player) {
+            $player = $player_rs->create({ name => $game->{player} });
+        }
+
+        # Start with 0 games because of the pre-increment.
+        $gamenum{$game->{player}} = 0;
+        $player_id{$game->{player}} = $player->id;
     }
 
-    $converted{gamenum} = ++$gamenum{$converted{player}};
-    $converted{player_id} = $player->id;
+    $game->{gamenum}   = ++$gamenum{$game->{player}};
+    $game->{player_id} = $player_id{$game->{player}};
 
-    delete @converted{qw/starttime birthdate endtime deathdate player/};
-    Rodney::Model::Table::Game->insert(%converted);
+    delete @{$game}{qw/starttime birthdate endtime deathdate player/};
+    $game_rs->create($game);
 }
